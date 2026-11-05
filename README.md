@@ -133,7 +133,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Download the DMG for your Mac, open it and drag VoiceStudio into Applications.
 
-[Download](https://github.com/debpalash/VoiceStudio/releases/latest) · [Guide](docs/install/macos.md)
+[Download](https://github.com/debpalash/VoiceStudio/releases/latest) · Guide
 
 </details>
 
@@ -151,12 +151,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 The app UI runs on Intel; connect it to a VoiceStudio backend on another computer.
 
-[Guide](docs/install/macos.md)
+Guide
 
 </details>
 
 > [!NOTE]
-> On macOS, "VoiceStudio is damaged and can't be opened" means Gatekeeper blocked the app, not that the download is broken. See the [Gatekeeper fix](docs/install/macos.md#gatekeeper-quarantine).
+> On macOS, "VoiceStudio is damaged and can't be opened" means Gatekeeper blocked the app, not that the download is broken. See the Gatekeeper fix.
 
 </blockquote>
 
@@ -294,11 +294,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Guide](docs/install/nix.md)
+Guide
 
 </details>
 
-[Guide](docs/install/linux.md)
+Guide
 
 </blockquote>
 
@@ -330,7 +330,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 Open http://localhost:3900 and use the API key printed below.
 
-[NVIDIA, AMD ROCm and Compose instructions](docs/install/docker.md)
+NVIDIA, AMD ROCm and Compose instructions
 
 [Docker Hub mirror](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

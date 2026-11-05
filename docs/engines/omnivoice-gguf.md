@@ -147,7 +147,7 @@ Windows on ARM (the x64 binary, run under emulation like the rest of the local
 backend), macOS Apple Silicon and the Linux AppImage/deb. The Windows binary
 carries its own Visual C++ runtime, so no redistributable install is needed.
 The Intel Mac download has no binary because Intel Macs cannot run the local
-backend at all ([macOS install](../install/macos.md)). Store builds (Microsoft
+backend at all (macOS install). Store builds (Microsoft
 Store, Mac App Store, Snap Store) and the Docker image do not include it yet;
 use the default in-process OmniVoice engine there, which is the same model.
 

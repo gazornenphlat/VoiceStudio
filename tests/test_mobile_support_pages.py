@@ -38,17 +38,3 @@ def test_every_support_label_is_translated_in_every_loaded_catalog():
         if path.stem == "en":
             assert catalog["mobile"]["support"] == shared["mobile"]["support"]
 
-
-def test_ios_resources_bundle_identical_support_content_and_offline_artwork(tmp_path):
-    import runpy
-
-    prepare = runpy.run_path(str(ROOT / "mobile/ios/scripts/prepare_resources.py"))
-    output = tmp_path / "bundle"
-    prepare["prepare"](output, tmp_path / "Info.plist")
-    assert (output / "Catalogs/support.json").read_bytes() == (CONTRACT / "support.json").read_bytes()
-    for project in json.loads((CONTRACT / "support.json").read_text(encoding="utf-8"))["projects"]:
-        image = CONTRACT / "support-artwork" / project["artwork"]
-        assert image.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
-        assert int.from_bytes(image.read_bytes()[16:20], "big") >= 144
-
-

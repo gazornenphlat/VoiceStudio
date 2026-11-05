@@ -54,7 +54,7 @@ sudo apt-get install -y \
   libwayland-dev libssl-dev pkg-config build-essential curl
 ```
 
-See the [Linux source-build guide](../docs/install/linux.md#building-from-source)
+See the Linux source-build guide
 for Fedora and Arch packages.
 
 ### Clone & Run

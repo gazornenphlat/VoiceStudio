@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 قم بتنزيل DMG لجهاز Mac الخاص بك، وافتحه واسحب VoiceStudio إلى التطبيقات.
 
-[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest) · [الدليل](../../docs/install/macos.md)
+[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest) · الدليل
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 تعمل واجهة مستخدم التطبيق على Intel؛ قم بتوصيله بواجهة VoiceStudio الخلفية على كمبيوتر آخر.
 
-[الدليل](../../docs/install/macos.md)
+الدليل
 
 </details>
 
 > [!NOTE]
-> في macOS، تعني رسالة «VoiceStudio تالف ولا يمكن فتحه» أن Gatekeeper حظر التطبيق، وليس أن الملف الذي نزّلته تالف. [طريقة تجاوز حظر Gatekeeper](../../docs/install/macos.md#gatekeeper-quarantine).
+> في macOS، تعني رسالة «VoiceStudio تالف ولا يمكن فتحه» أن Gatekeeper حظر التطبيق، وليس أن الملف الذي نزّلته تالف. طريقة تجاوز حظر Gatekeeper.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[الدليل](../../docs/install/nix.md)
+الدليل
 
 </details>
 
-[الدليل](../../docs/install/linux.md)
+الدليل
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 افتح http://localhost:3900 واستخدم مفتاح API المطبوع أدناه.
 
-[تعليمات NVIDIA وAMD ROCm وCompose](../../docs/install/docker.md)
+تعليمات NVIDIA وAMD ROCm وCompose
 
 [مرآة Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

@@ -137,7 +137,7 @@ brew install --cask debpalash/tap/voicestudio
 
 下载适合你的 Mac 的 DMG，打开后将 VoiceStudio 拖入 Applications。
 
-[下载](https://github.com/debpalash/VoiceStudio/releases/latest) · [指南](../../docs/install/macos.md)
+[下载](https://github.com/debpalash/VoiceStudio/releases/latest) · 指南
 
 </details>
 
@@ -155,12 +155,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 Intel Mac 可运行应用界面；请连接另一台电脑上的 VoiceStudio 后端。
 
-[指南](../../docs/install/macos.md)
+指南
 
 </details>
 
 > [!NOTE]
-> 在 macOS 上看到“VoiceStudio 已损坏，无法打开”，是 Gatekeeper 拦截了应用，并不是下载文件损坏。参见 [Gatekeeper 修复方法](../../docs/install/macos.md#gatekeeper-quarantine)。
+> 在 macOS 上看到“VoiceStudio 已损坏，无法打开”，是 Gatekeeper 拦截了应用，并不是下载文件损坏。参见 Gatekeeper 修复方法。
 
 </blockquote>
 
@@ -298,11 +298,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[指南](../../docs/install/nix.md)
+指南
 
 </details>
 
-[指南](../../docs/install/linux.md)
+指南
 
 </blockquote>
 
@@ -334,7 +334,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 打开 http://localhost:3900，并使用下方输出的 API 密钥。
 
-[NVIDIA、AMD ROCm 和 Compose 使用说明](../../docs/install/docker.md)
+NVIDIA、AMD ROCm 和 Compose 使用说明
 
 [Docker Hub 镜像](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

@@ -1,7 +1,6 @@
 # Hash-pinned legal texts (tests/test_cla_workflow.py): identical bytes on every OS.
 .github/CLA-*.md text eol=lf
 .github/CCLA-*.md text eol=lf
-mobile/ios/VoiceStudio/Resources/NativeLicences/*.txt text eol=lf
 mobile/android/app/src/main/assets/licenses/*.txt text eol=lf
 
 # Windows batch files break goto/labels with LF endings.
@@ -12,5 +11,3 @@ mobile/android/app/src/main/assets/licenses/*.txt text eol=lf
 /tests/test_scam_guard.py export-ignore
 
 # Pinned upstream MP3 encoder; provenance and checksums are reviewed separately.
-mobile/ios/VoiceStudioKit/Sources/VSNative/Lame/** text eol=lf linguist-vendored
-mobile/native/ios/patches/*.patch text eol=lf

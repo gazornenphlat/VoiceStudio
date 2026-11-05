@@ -24,12 +24,6 @@ def test_ci_cancels_superseded_pr_runs_but_never_main_commits():
     assert concurrency["cancel-in-progress"] == "${{ github.event_name == 'pull_request' }}"
 
 
-def test_docker_cancels_only_older_main_pushes_never_releases_or_backfills():
-    concurrency = _load("docker.yml")["concurrency"]
-    assert "run_id" in concurrency["group"], "release/dispatch runs must get their own group"
-    assert "event_name == 'push'" in concurrency["cancel-in-progress"]
-
-
 def test_scam_guard_skips_bots_but_still_checks_every_human():
     job = _load("scam-guard.yml")["jobs"]["guard"]
     condition = job["if"]
@@ -64,14 +58,3 @@ def test_platform_smokes_start_after_the_python_tests_not_the_whole_gate():
     needs = _load("ci.yml")["jobs"]["smoke-matrix"]["needs"]
     assert needs == "test-python", "waiting on `test` delays the smokes by the Electron jobs' runtime"
 
-
-def test_workflows_do_not_schedule_retired_macos_runners():
-    # Parse first: historical comments are fine, scheduling an unavailable image is not.
-    # macOS 14 is already in scheduled brownout and retires on November 2, 2026.
-    retired = re.compile(r"\bmacos-(?:1[0-4])(?:-(?:large|xlarge))?\b")
-    offenders = {}
-    for path in (ROOT / ".github/workflows").glob("*.y*ml"):
-        labels = retired.findall(yaml.safe_dump(_load(path.name)))
-        if labels:
-            offenders[path.name] = sorted(set(labels))
-    assert not offenders, f"Use a maintained macOS runner: {offenders}"

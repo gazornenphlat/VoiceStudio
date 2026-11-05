@@ -13,7 +13,7 @@ Snap Store packaging runs through `.github/workflows/snap-store.yml`. Each
 channel using `SNAPCRAFT_STORE_CREDENTIALS` from the `snap-store` environment.
 Stable is never automatic: after the runbook checks, the repository owner
 dispatches the workflow with `promote_revision`. Follow the
-[`Snap Store runbook`](store-publishing/snap-store.md) for confinement checks,
+`Snap Store runbook` for confinement checks,
 candidate verification, evidence and rollback. Do not add a Snap to the
 maintained-channel table below until its stable listing is independently
 install-verified.
@@ -26,7 +26,7 @@ immutable versioned URL requires owner approval; Partner Center submission and
 publication remain manual owner actions.
 
 Mac App Store preparation uses the manual, private `mac-app-store.yml` workflow
-and the [`Mac App Store runbook`](../store/mac-app-store.md). The workflow cannot
+and the `Mac App Store runbook`. The workflow cannot
 build while the bundled-runtime compliance gate is unresolved and never uploads
 to App Store Connect. MAS packages use App Store updates; direct macOS packages
 keep the existing application updater and Developer ID notarization path.
@@ -99,7 +99,7 @@ version only after validation.
    It first checks the setup screen, then installs and starts the managed Python
    runtime in a separate temporary profile on Linux, Windows and Apple Silicon.
    Intel Macs retain packaging/setup checks under their existing
-   [UI/remote-only contract](install/macos.md). The local-runtime test downloads
+   UI/remote-only contract. The local-runtime test downloads
    runtime packages, keeps model downloads disabled, verifies the live backend
    connection and clean shutdown, and removes the test profile. A setup-screen
    check alone is not evidence that runtime installation works.

@@ -76,7 +76,7 @@ Notes on the PIN gate (`NetworkAccessMiddleware`, `backend/main.py`):
 - It is completely inert when no PIN is set (including Docker until in-app
   network sharing is enabled). Docker's bridge can make the host's own browser
   a non-loopback client; if the PIN is lost, follow the
-  [Docker recovery steps](install/docker.md#recovering-from-a-lost-share-pin).
+  Docker recovery steps.
 
 ---
 
@@ -278,7 +278,7 @@ the default gateway, so only that exact socket address qualifies, only on the
 main port (not the LAN-share listener), and forwarded headers are never read
 for it. It grants the PIN's consumption rights only: the API-key gate and admin
 routes are unaffected. Default off. Risks and setup:
-[Docker install](install/docker.md#trust-host-loopback).
+Docker install.
 
 ---
 

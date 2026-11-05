@@ -137,7 +137,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Mac에 맞는 DMG를 내려받아 열고 VoiceStudio를 Applications로 드래그하세요.
 
-[다운로드](https://github.com/debpalash/VoiceStudio/releases/latest) · [가이드](../../docs/install/macos.md)
+[다운로드](https://github.com/debpalash/VoiceStudio/releases/latest) · 가이드
 
 </details>
 
@@ -155,12 +155,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 Intel Mac에서는 앱 UI를 사용할 수 있습니다. 다른 컴퓨터의 VoiceStudio 백엔드에 연결하세요.
 
-[가이드](../../docs/install/macos.md)
+가이드
 
 </details>
 
 > [!NOTE]
-> macOS에서 "VoiceStudio가 손상되었기 때문에 열 수 없습니다"라는 메시지는 Gatekeeper가 앱을 차단했다는 뜻이지, 다운로드한 파일이 손상되었다는 뜻이 아닙니다. [Gatekeeper 해결 방법](../../docs/install/macos.md#gatekeeper-quarantine)을 참고하세요.
+> macOS에서 "VoiceStudio가 손상되었기 때문에 열 수 없습니다"라는 메시지는 Gatekeeper가 앱을 차단했다는 뜻이지, 다운로드한 파일이 손상되었다는 뜻이 아닙니다. Gatekeeper 해결 방법을 참고하세요.
 
 </blockquote>
 
@@ -298,11 +298,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[가이드](../../docs/install/nix.md)
+가이드
 
 </details>
 
-[가이드](../../docs/install/linux.md)
+가이드
 
 </blockquote>
 
@@ -334,7 +334,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 http://localhost:3900을 열고 아래에 출력된 API 키를 사용하세요.
 
-[NVIDIA, AMD ROCm 및 Compose 안내](../../docs/install/docker.md)
+NVIDIA, AMD ROCm 및 Compose 안내
 
 [Docker Hub 미러](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

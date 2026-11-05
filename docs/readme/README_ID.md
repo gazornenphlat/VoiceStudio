@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Unduh DMG untuk Mac Anda, buka dan seret VoiceStudio ke dalam Aplikasi.
 
-[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest) · [Panduan](../../docs/install/macos.md)
+[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest) · Panduan
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 UI aplikasi berjalan pada Intel; sambungkan ke backend VoiceStudio di komputer lain.
 
-[Panduan](../../docs/install/macos.md)
+Panduan
 
 </details>
 
 > [!NOTE]
-> Di macOS, pesan «VoiceStudio rusak dan tidak dapat dibuka» berarti Gatekeeper memblokir aplikasi, bukan berkas unduhannya rusak. [Mengatasi blokir Gatekeeper](../../docs/install/macos.md#gatekeeper-quarantine).
+> Di macOS, pesan «VoiceStudio rusak dan tidak dapat dibuka» berarti Gatekeeper memblokir aplikasi, bukan berkas unduhannya rusak. Mengatasi blokir Gatekeeper.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Panduan](../../docs/install/nix.md)
+Panduan
 
 </details>
 
-[Panduan](../../docs/install/linux.md)
+Panduan
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 Buka http://localhost:3900 dan gunakan kunci API yang dicetak di bawah.
 
-[Panduan NVIDIA, AMD ROCm, dan Compose](../../docs/install/docker.md)
+Panduan NVIDIA, AMD ROCm, dan Compose
 
 [Cermin Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

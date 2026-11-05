@@ -37,19 +37,3 @@ def test_a_source_checkout_reads_its_own_head(monkeypatch):
     _fresh(monkeypatch)
     assert re.fullmatch(r"[0-9a-f]{9}|unknown", version.build_commit())
 
-
-def test_docker_images_receive_the_commit_as_a_late_build_arg():
-    dockerfile = (_REPO / "deploy/Dockerfile").read_text(encoding="utf-8")
-    assert "ARG BUILD_COMMIT=unknown\nENV OMNIVOICE_BUILD_COMMIT=${BUILD_COMMIT}" in dockerfile
-    # after the heavy layers, so a new commit never invalidates them
-    assert dockerfile.index("ARG BUILD_COMMIT") > dockerfile.index("ARG GPU_FLAVOR")
-    workflow = yaml.safe_load((_REPO / ".github/workflows/docker.yml").read_text(encoding="utf-8"))
-    builds = [
-        step
-        for job in workflow["jobs"].values()
-        for step in job["steps"]
-        if str(step.get("uses", "")).startswith("docker/build-push-action@")
-    ]
-    assert len(builds) == 3  # CUDA amd64, ROCm, CUDA arm64
-    for step in builds:
-        assert "BUILD_COMMIT=${{ steps.source.outputs.commit }}" in step["with"]["build-args"]

@@ -65,7 +65,7 @@ The **Docker** and **GitHub Container Registry** pages give a `docker run` (POSI
 Compose snippet for `palashdeb/omnivoice-studio:stable` and
 `ghcr.io/debpalash/voicestudio:stable`. `:stable` is the latest tagged
 release; `:latest` is the rolling preview built from `main`. See the
-[Docker install guide](install/docker.md) for GPU flags and the ROCm tags.
+Docker install guide for GPU flags and the ROCm tags.
 
 ## Automate speech with n8n
 

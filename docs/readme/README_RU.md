@@ -137,7 +137,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Скачайте DMG для своего Mac, откройте его и перетащите VoiceStudio в Applications.
 
-[Скачать](https://github.com/debpalash/VoiceStudio/releases/latest) · [Руководство](../../docs/install/macos.md)
+[Скачать](https://github.com/debpalash/VoiceStudio/releases/latest) · Руководство
 
 </details>
 
@@ -155,12 +155,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 На Intel Mac работает интерфейс приложения; подключите бэкенд VoiceStudio на другом компьютере.
 
-[Руководство](../../docs/install/macos.md)
+Руководство
 
 </details>
 
 > [!NOTE]
-> Сообщение macOS «Программа VoiceStudio повреждена, и её не удаётся открыть» означает, что приложение заблокировал Gatekeeper, а не что загрузка повреждена. [Как снять блокировку](../../docs/install/macos.md#gatekeeper-quarantine).
+> Сообщение macOS «Программа VoiceStudio повреждена, и её не удаётся открыть» означает, что приложение заблокировал Gatekeeper, а не что загрузка повреждена. Как снять блокировку.
 
 </blockquote>
 
@@ -298,11 +298,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Руководство](../../docs/install/nix.md)
+Руководство
 
 </details>
 
-[Руководство](../../docs/install/linux.md)
+Руководство
 
 </blockquote>
 
@@ -334,7 +334,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 Откройте http://localhost:3900 и используйте API-ключ, напечатанный ниже.
 
-[Инструкции для NVIDIA, AMD ROCm и Compose](../../docs/install/docker.md)
+Инструкции для NVIDIA, AMD ROCm и Compose
 
 [Зеркало Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

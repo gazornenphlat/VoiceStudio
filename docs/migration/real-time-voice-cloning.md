@@ -91,12 +91,12 @@ Grab the installer for your OS from the
 [Releases page](https://github.com/debpalash/VoiceStudio/releases/latest),
 then follow the guide for your platform end-to-end:
 
-* macOS — [docs/install/macos.md](../install/macos.md)
+* macOS — docs/install/macos.md
   (Apple Silicon; Intel Macs can't run the local backend — PyTorch
   dropped Intel-Mac wheels — but can point the UI at a remote backend)
 * Windows — [docs/install/windows.md](../install/windows.md)
-* Linux — [docs/install/linux.md](../install/linux.md)
-* Docker — [docs/install/docker.md](../install/docker.md)
+* Linux — docs/install/linux.md
+* Docker — docs/install/docker.md
 
 If anything breaks, start with
 [docs/install/troubleshooting.md](../install/troubleshooting.md) —

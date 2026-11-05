@@ -11,8 +11,8 @@ needs; after that the steps work offline.
 ## Before you start
 
 - **Install VoiceStudio** and finish first-run setup
-  ([macOS](../install/macos.md) · [Windows](../install/windows.md) ·
-  [Linux](../install/linux.md) · [Docker](../install/docker.md)).
+  (macOS · [Windows](../install/windows.md) ·
+  Linux · Docker).
 - **Turn on speaker detection.** Telling characters apart uses the pyannote
   diarization model, which needs a free Hugging Face token and a one-time
   licence click. Follow [Speaker diarization](../features/diarization.md#license-acceptance-flow).

@@ -69,7 +69,7 @@ def test_the_step_uses_the_pipefail_shell():
     ["scripts/release.py", "tests/backend/api/test_x.py"],
     ["mobile/android/app/build.gradle.kts", "mobile/contract/openapi.json"],
     [".github/ISSUE_TEMPLATE/bug.yml", "Makefile"],
-    [".github/workflows/docker.yml", ".github/workflows/mobile.yml"],
+    [".github/workflows/mobile.yml"],
     [".github/scripts/scam_guard.py", ".github/CONTRIBUTING.md"],
 ])
 def test_python_docs_and_mobile_edits_skip_the_electron_jobs(tmp_path, files):
@@ -299,47 +299,3 @@ def test_security_change_detection_runs_everything_off_pull_requests(tmp_path):
     assert _security_detect("modified\tdocs/a.md", tmp_path, event="push") == "code=true"
 
 
-# --- docker.yml: skip the image build for changes that cannot alter the image -----------
-
-DOCKER = yaml.safe_load((ROOT / ".github/workflows/docker.yml").read_text(encoding="utf-8"))
-
-
-def test_docker_main_pushes_skip_docs_and_tests_but_keep_runtime_changes():
-    ignored = set(DOCKER[True]["push"]["paths-ignore"])
-    assert {"docs/**", "mobile/**", "changelog.d/**"} <= ignored
-    # Markdown and tests skip images by owner policy. Docker Hub text publishes
-    # separately; test_docker_workflow.py validates that lightweight trigger.
-    for path in ("README.md", "deploy/dockerhub-overview.md", "tests/test_api.py", "electron/tests/installer.test.mjs"):
-        assert any(_matches(path, pattern) for pattern in ignored), path
-    for path in ("deploy/Dockerfile", "backend/main.py",
-                 ".github/workflows/docker.yml", "pyproject.toml"):
-        assert not any(_matches(path, pattern) for pattern in ignored), path
-    assert "paths-ignore" not in (DOCKER[True].get("release") or {})
-
-
-def _matches(path, pattern):
-    import fnmatch
-    # GitHub's leading **/ also matches zero directory segments.
-    return fnmatch.fnmatchcase(path, pattern) or (
-        pattern.startswith("**/") and fnmatch.fnmatchcase(path, pattern[3:])
-    )
-
-
-def test_fork_pull_requests_wait_for_approval_before_any_job_runs():
-    jobs = WORKFLOW["jobs"]
-    gate = jobs["approve-external"]
-    assert gate["environment"] == "external-pr"
-    # only fork PRs wait; same-repo branches, pushes and the merge queue skip the job
-    assert "head.repo.full_name != github.repository" in gate["if"]
-    assert "pull_request" in gate["if"]
-    assert jobs["changes"]["needs"] == "approve-external"
-    # a skipped approval (internal PR) must not stop `changes`; a rejected one must
-    assert "needs.approve-external.result != 'failure'" in jobs["changes"]["if"]
-    # every job reachable without `changes` would let a fork PR use a runner unapproved
-    for name, job in jobs.items():
-        if name in {"approve-external", "changes"}:
-            continue
-        needs = job.get("needs", [])
-        needs = [needs] if isinstance(needs, str) else needs
-        assert needs, f"{name} has no needs, so it would run before the approval"
-        assert "changes" in needs or "test-python" in needs, name

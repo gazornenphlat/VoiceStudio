@@ -52,17 +52,6 @@ def test_every_setup_bun_step_uses_the_package_manager_version():
         )
 
 
-def test_docker_frontend_builder_uses_the_package_manager_version():
-    dockerfile = (_ROOT / "deploy" / "Dockerfile").read_text(encoding="utf-8")
-    images = re.findall(r"^FROM\s+oven/bun:(\S+)", dockerfile, flags=re.MULTILINE)
-    assert images, "deploy/Dockerfile no longer builds with oven/bun"
-    for image in images:
-        tag = image.split("@", 1)[0]
-        assert tag in (_bun_version(), f"{_bun_version()}-alpine"), (
-            f"deploy/Dockerfile uses oven/bun:{image}; pin {_bun_version()}-alpine"
-        )
-
-
 def test_the_root_bun_lock_is_the_only_lockfile():
     locks = _tracked("*bun.lock") + _tracked("*bun.lockb")
     assert locks == ["bun.lock"], f"nested bun lockfiles drift from the workspace lock: {locks}"

@@ -67,8 +67,6 @@ def test_rendered_files_satisfy_mobile_contract_parsers():
     assert re.findall(r"login: '([^']+)'", ts) == ["debpalash", "Chang-Jin-Lee"]
     assert uc.parse_core(ts) == ["debpalash", "velixio"] and uc.parse_date(ts) == "2026-01-02"
     assert "import avatar1 from './contributors/Chang-Jin-Lee.png';" in ts
-    swift = uc.render_swift('    static let logins = ["old"]\n', ["a", "b"])
-    assert swift == '    static let logins = ["a", "b"]\n'
     assert uc.render_kotlin('val logins = listOf("old", "x")', ["a"]) == 'val logins = listOf("a")'
     readme = '### Contributors\n\n<a href="https://github.com/old"><img src="https://github.com/old.png?size=96" x></a>\n\nThanks\n'
     out = uc.render_readme(readme, ["kevin9327"])
@@ -83,15 +81,10 @@ def test_current_files_round_trip_unchanged():
     people = [{"login": l, "commits": int(c)} for l, c in re.findall(r"login: '([^']+)', commits: (\d+)", ts)]
     assert uc.render_ts(people, uc.parse_core(ts), uc.parse_date(ts)) == ts
     logins = [p["login"] for p in people]
-    assert uc.render_swift(uc.SWIFT.read_text(), logins) == uc.SWIFT.read_text()
     assert uc.render_kotlin(uc.KOTLIN.read_text(), logins) == uc.KOTLIN.read_text()
     core = uc.parse_core(ts)
     for readme in uc.READMES:
         assert uc.render_readme(readme.read_text(), [l for l in logins if l not in core], readme) == readme.read_text()
-    for login in logins:
-        imageset = uc.XCASSETS / f"contributor-{login}.imageset"
-        assert (imageset / "Contents.json").read_text() == uc.imageset_contents(login)
-        assert (imageset / f"{login}.png").read_bytes() == (uc.AVATARS / f"{login}.png").read_bytes()
 
 
 @pytest.fixture
@@ -100,16 +93,13 @@ def sandbox(tmp_path, monkeypatch):
     (home / "contributors").mkdir(parents=True)
     (home / "contributors/gone.jpg").write_bytes(b"x")
     (home / "home-contributors-data.ts").write_text(uc.render_ts([], ["debpalash"], "2020-01-01"))
-    xcassets = tmp_path / "Contributors.xcassets"
-    (xcassets / "contributor-gone.imageset").mkdir(parents=True)
-    swift, kotlin = tmp_path / "H.swift", tmp_path / "H.kt"
-    swift.write_text("static let logins = []\n")
+    kotlin = tmp_path / "H.kt"
     kotlin.write_text("val logins = listOf()\n")
     readme = tmp_path / "README.md"
     readme.write_text('<a href="https://github.com/x"><img src="https://github.com/x.png?size=96"></a>\n')
     for name, value in {
         "ROOT": tmp_path, "DATA_TS": home / "home-contributors-data.ts", "AVATARS": home / "contributors",
-        "XCASSETS": xcassets, "SWIFT": swift, "KOTLIN": kotlin, "READMES": (readme,),
+        "KOTLIN": kotlin, "READMES": (readme,),
     }.items():
         monkeypatch.setattr(uc, name, value)
     return tmp_path
@@ -127,8 +117,6 @@ def test_main_writes_every_target_then_is_idempotent(sandbox):
     ts = uc.DATA_TS.read_text()
     assert re.findall(r"login: '([^']+)'", ts) == ["debpalash", "ana"] and "2020-01-01" not in ts
     assert sorted(p.name for p in uc.AVATARS.iterdir()) == ["ana.png", "debpalash.png"]
-    assert sorted(p.name for p in uc.XCASSETS.iterdir()) == ["contributor-ana.imageset", "contributor-debpalash.imageset"]
-    assert uc.SWIFT.read_text() == 'static let logins = ["debpalash", "ana"]\n'
     assert uc.KOTLIN.read_text() == 'val logins = listOf("debpalash", "ana")\n'
     assert "github.com/ana.png" in uc.READMES[0].read_text() and "github.com/debpalash" not in uc.READMES[0].read_text()
 

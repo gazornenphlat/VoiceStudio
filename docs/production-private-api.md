@@ -44,7 +44,7 @@ volume across container recreation.
 Pin an exact release tag. `:latest` and `:main` are rolling previews;
 `:stable` moves whenever a stable release is published. AMD hosts use the
 matching `:0.5.6-rocm` image and the device mapping documented in
-[Docker installation](install/docker.md#pull-and-run-amd-gpu--rocm).
+Docker installation.
 
 ## Network boundary
 

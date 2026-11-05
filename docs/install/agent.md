@@ -14,8 +14,8 @@ points here. Complete the setup, not just a plan.
 
 ## Steps
 
-1. **Load context.** Read the install guide for this OS ([macOS](macos.md) ·
-   [Windows](windows.md) · [Linux](linux.md); [Docker](docker.md) is a headless backend, not the desktop app),
+1. **Load context.** Read the install guide for this OS (macOS ·
+   [Windows](windows.md) · Linux; Docker is a headless backend, not the desktop app),
    [performance](../performance.md) and
    [`skills/voicestudio/SKILL.md`](../../skills/voicestudio/SKILL.md). If your agent
    supports skills, install it with `npx skills add debpalash/VoiceStudio`.

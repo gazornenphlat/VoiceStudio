@@ -18,21 +18,6 @@ def brand_paths(repository):
     return result
 
 
-def prepare_ios_icons(repository, output):
-    for kind, path in brand_paths(repository).items():
-        name = {'github': 'ContributorGitHub', 'x': 'ContributorX'}[kind]
-        directory = output / (name + '.imageset')
-        directory.mkdir(parents=True, exist_ok=True)
-        svg = ET.Element('svg', {'xmlns': 'http://www.w3.org/2000/svg', 'viewBox': '0 0 24 24'})
-        ET.SubElement(svg, 'path', {'d': path, 'fill': '#000000'})
-        ET.ElementTree(svg).write(directory / 'icon.svg', encoding='utf-8', xml_declaration=True)
-        (directory / 'Contents.json').write_text(json.dumps({
-            'images': [{'filename': 'icon.svg', 'idiom': 'universal'}],
-            'info': {'version': 1, 'author': 'xcode'},
-            'properties': {'preserves-vector-representation': True, 'template-rendering-intent': 'template'},
-        }), encoding='utf-8')
-
-
 def prepare_android_icons(repository, output):
     ET.register_namespace('android', ANDROID)
     def attrs(**values):

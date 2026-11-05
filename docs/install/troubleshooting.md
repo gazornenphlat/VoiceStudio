@@ -56,7 +56,7 @@ Install and startup failures show a code on the failure screen and in the in-app
 
 ### `WINDOWS_APP_CONTROL_BLOCKED`
 
-Windows Smart App Control, WDAC or AppLocker refused to run the engine or load one of its files. Antivirus exclusions cannot help. With Smart App Control, either turn it off (Windows Security → App & browser control → Smart App Control settings), connect VoiceStudio to an engine on another computer, or run the engine in WSL or [Docker](docker.md). On a work PC, ask IT to allow the runtime folder.
+Windows Smart App Control, WDAC or AppLocker refused to run the engine or load one of its files. Antivirus exclusions cannot help. With Smart App Control, either turn it off (Windows Security → App & browser control → Smart App Control settings), connect VoiceStudio to an engine on another computer, or run the engine in WSL or Docker. On a work PC, ask IT to allow the runtime folder.
 
 ### `ANTIVIRUS_BLOCKED`
 
@@ -68,7 +68,7 @@ The OS refused to run the engine and left no evidence of what refused it. Add th
 
 ### `GATEKEEPER_QUARANTINE`
 
-macOS quarantined the engine. See [Gatekeeper quarantine](macos.md#gatekeeper-quarantine).
+macOS quarantined the engine. See Gatekeeper quarantine.
 
 ### `EXEC_NOEXEC_MOUNT`
 
@@ -100,11 +100,11 @@ The runtime is inside OneDrive, Dropbox, iCloud Drive, Google Drive or Nextcloud
 
 ### `SYSTEM_LIBRARY_PROBLEM`
 
-A system library the engine needs is missing or too old. The setup screen names it; see the [Linux guide](linux.md).
+A system library the engine needs is missing or too old. The setup screen names it; see the Linux guide.
 
 ### `UNSUPPORTED_PLATFORM`
 
-This computer cannot run the local engine, or this is the wrong download for it. See the [macOS guide](macos.md), or connect to an engine on another computer.
+This computer cannot run the local engine, or this is the wrong download for it. See the macOS guide, or connect to an engine on another computer.
 
 ### `SOURCE_ENV_INCOMPLETE`
 
@@ -144,7 +144,7 @@ Another program holds the engine's port. See [Backend cannot bind its local port
 
 ### `ROCM_NOT_CONFIGURED`
 
-An AMD GPU needs ROCm, which is missing or incomplete. See [Windows ROCm](windows-rocm.md) or the [Linux guide](linux.md).
+An AMD GPU needs ROCm, which is missing or incomplete. See [Windows ROCm](windows-rocm.md) or the Linux guide.
 
 ## Backend cannot bind its local port
 
@@ -432,7 +432,7 @@ build is unsigned or ad-hoc signed (local `bun run dist` packages, or a release
 published without notarization; signing and notarization run in
 `electron-release.yml` when the Apple credentials are configured).
 
-**Fix:** see [macos.md#gatekeeper-quarantine](macos.md#gatekeeper-quarantine).
+**Fix:** see macos.md#gatekeeper-quarantine.
 
 ## 4. Linux: blank window or GPU errors
 
@@ -446,7 +446,7 @@ archived Tauri app, which rendered with WebKitGTK.)
 
 **Fix:** launch once with `--disable-gpu` (and on Wayland, optionally
 `--ozone-platform=x11`) — see
-[linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404](linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404).
+linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404.
 
 ## 5. Windows Triton / torch.compile OOM
 
@@ -561,7 +561,7 @@ engine choice. Models still load on demand when requested.
 `python-build-standalone` from GitHub. Common in China, intermittently in
 Russia, sometimes on corporate proxies.
 
-**Fix:** see [linux.md#restricted-networks-china--russia](linux.md#restricted-networks-china--russia)
+**Fix:** see linux.md#restricted-networks-china--russia
 (same env vars work on macOS and Windows — `UV_PYTHON_INSTALL_MIRROR`,
 `UV_HTTP_TIMEOUT=900`, `UV_HTTP_RETRIES=5`, `UV_PYTHON_PREFERENCE=only-system`).
 
@@ -575,7 +575,7 @@ Russia, sometimes on corporate proxies.
 "VoiceStudio bundled ffprobe" instead of the system ffmpeg, breaking other apps
 that rely on `/usr/bin/ffprobe`.
 
-**Fix:** see [linux.md#deb-ffprobe-conflict](linux.md#deb-ffprobe-conflict).
+**Fix:** see linux.md#deb-ffprobe-conflict.
 
 ## 7b. "Media engine unavailable" / FFmpeg questions
 
@@ -644,7 +644,7 @@ When running behind a reverse proxy where the UI and API are on different
 origins, set the runtime override `OMNIVOICE_PUBLIC_API_BASE` (works on the
 prebuilt image via `docker run -e`) and list the UI's origin in
 `OMNIVOICE_ALLOWED_ORIGINS` — see
-[docker.md#lan-access](docker.md#lan-access).
+docker.md#lan-access.
 
 ## 9. Apple Silicon `mlx-whisper` unavailable on Intel mac
 
@@ -656,7 +656,7 @@ falling back to faster-whisper`.
 **Fix:** none needed on Apple Silicon setups that log this transiently. Note
 that Intel Macs can no longer run the local backend at all — PyTorch dropped
 Intel-Mac wheels, so this entry only applies to historical installs (see
-[macos.md](macos.md) and
+macos.md and
 [#889](https://github.com/debpalash/VoiceStudio/issues/889)).
 
 ## 10. Windows: `Could not locate cudnn_ops_infer64_8.dll` during transcription
@@ -785,7 +785,7 @@ PyTorch build and, for every engine, whether it uses the GPU.
   CPU; engines with their own GPU runtime — today audio.cpp (Vulkan) — still use
   a Radeon: install its runtime from **Settings → Models**.
 - **Linux:** set `OMNIVOICE_TORCH_VARIANT=rocm` and run setup again, or use the
-  ROCm Docker image — [linux.md — AMD GPU (ROCm)](linux.md#amd-gpu-rocm). The
+  ROCm Docker image — linux.md — AMD GPU (ROCm). The
   ROCm build supports RX 9000 (RDNA4) cards natively; do not set
   `HSA_OVERRIDE_GFX_VERSION=11.0.0` for them. If the
   panel says PyTorch has ROCm but cannot open the device, check that the `amdgpu`
@@ -1183,7 +1183,7 @@ backend's Python environment exists. If the window never comes up, read the
 terminal output plus `omnivoice.log` and `backend_err.log` in your VoiceStudio
 data folder. If a packaging build (`bun run dist`) stops while compiling the
 Rust native helper with a missing `pkg-config` library, install the package
-block in the [Linux source-build guide](linux.md#building-from-source).
+block in the Linux source-build guide.
 
 **Still stuck?** Open the details, copy the output, and file it with **Report**
 — that output is the thing that makes the failure diagnosable.
@@ -1529,7 +1529,7 @@ has no per-app exceptions. Your options:
   updates can turn it back on from the same page; older Windows versions may
   need a reset to re-enable it.
 - **Keep it on and run the engine where it does not apply:** a WSL2 Linux distro
-  or [Docker](docker.md) on the same PC (both run Linux binaries, which Smart App
+  or Docker on the same PC (both run Linux binaries, which Smart App
   Control does not check), or another computer, then connect to it in
   Settings → Sharing → **Remote backend** ([remote-gpu.md](../remote-gpu.md)).
   A source checkout on Windows itself does not help: it downloads the same

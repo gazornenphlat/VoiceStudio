@@ -13,7 +13,7 @@ setup can be wiped and restored in under a minute.
 > can reproduce or adapt it. If you only need a Radeon-accelerated engine
 > without any of this, use [audio.cpp](../engines/audio-cpp.md) (Vulkan) on
 > Windows instead. The Docker variant of this setup is in
-> [docker.md — AMD GPU on WSL2](docker.md#amd-gpu-on-wsl2).
+> docker.md — AMD GPU on WSL2.
 
 ## Tested configuration (2026-10-22)
 
@@ -427,7 +427,7 @@ scripts above.
 
 When this guide was written, VoiceStudio's [windows.md](windows.md#gpu-support)
 said PyTorch engines run on CPU on Radeon (the native
-[Windows ROCm guide](windows-rocm.md) came later). [docker.md](docker.md#amd-gpu-on-wsl2) documents a Docker plus
+[Windows ROCm guide](windows-rocm.md) came later). docker.md documents a Docker plus
 ROCDXG route marked *Unverified*. Research for this guide found:
 
 - **The current route is ROCDXG.** AMD documents it in the

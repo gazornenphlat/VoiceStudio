@@ -1,6 +1,6 @@
 """Write the backend's OpenAPI schema to mobile/contract/openapi.json.
 
-The iOS and Android apps generate their API clients from this file;
+The Android app generates their API clients from this file;
 tests/test_mobile_contract.py fails when it drifts from the backend.
 
     uv run python scripts/export_openapi.py

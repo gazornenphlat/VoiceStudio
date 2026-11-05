@@ -24,12 +24,8 @@ BASH = shutil.which("bash") if os.name != "nt" else "C:/Program Files/Git/bin/ba
 # What backend/engines/omnivoice_gguf/backend.py::_platform_slug() returns on
 # each installer target. Windows on ARM runs the emulated x64 Python runtime.
 EXPECTED_SLUG = {
-    ("linux", "x64"): "linux-x86_64",
     ("win32", "x64"): "windows-x86_64",
     ("win32", "arm64"): "windows-x86_64",
-    ("darwin", "arm64"): "darwin-arm64",
-    # Intel Macs cannot run the local backend (docs/install/macos.md).
-    ("darwin", "x64"): "",
 }
 
 

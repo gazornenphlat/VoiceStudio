@@ -20,10 +20,10 @@ engine can do expressively in [expressive-speech](../expressive-speech.md);
 sidecar disk footprints in [disk-usage](disk-usage.md); the bar a new engine
 must clear in [engine-acceptance](../engine-acceptance.md).
 
-New to VoiceStudio? Install the app first — [macOS](../install/macos.md)
+New to VoiceStudio? Install the app first — macOS
 (first launch needs the one-time right-click → **Open** Gatekeeper
-approval), [Windows](../install/windows.md), [Linux](../install/linux.md),
-[Docker](../install/docker.md).
+approval), [Windows](../install/windows.md), Linux,
+Docker.
 
 ## Text-to-speech
 

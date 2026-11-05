@@ -283,7 +283,6 @@ function kotlin(): string {
 
 const outputs: [string, string][] = [
   [OUT.json, JSON.stringify(tokens, null, 2) + '\n'],
-  [OUT.swift, swift()],
   [OUT.kotlin, kotlin()],
 ];
 

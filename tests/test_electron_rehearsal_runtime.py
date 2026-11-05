@@ -14,10 +14,7 @@ def test_rehearsal_installs_runtime_in_a_separate_packaged_launch():
     assert runtime[0]['if'] == 'matrix.local_runtime'
     targets = workflow['jobs']['package']['strategy']['matrix']['include']
     assert {(t['platform'], t['arch']) for t in targets if t['local_runtime']} == {
-        ('linux', 'x64'), ('win32', 'x64'), ('win32', 'arm64'), ('darwin', 'arm64'),
-    }
-    assert {(t['platform'], t['arch']) for t in targets if not t['local_runtime']} == {
-        ('darwin', 'x64'),
+        ('win32', 'x64'), ('win32', 'arm64'),
     }
     assert '--setup' not in runtime[0]['run'], '--setup would bypass runtime installation'
     assert 'xvfb-run -a node tests/packaged-smoke.mjs --install' in runtime[0]['run']

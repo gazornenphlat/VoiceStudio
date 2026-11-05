@@ -95,27 +95,6 @@ def test_direct_construction_rejects_intel_mac(monkeypatch, mock_settings_store)
         _backend_cls()()
 
 
-def test_ci_verifies_intel_mac_as_the_documented_remote_only_host():
-    from pathlib import Path
-
-    workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/ci.yml").read_text(
-        "utf-8"
-    )
-    assert "label: macOS Intel\n            backend_supported: false" in workflow
-    assert "name: Verify the documented Intel Mac contract" in workflow
-    # What must hold is that the pockettts extra is installed ONLY on the
-    # backend-supported legs — not how the sync is invoked. Pinning the exact
-    # command made an unrelated CI hardening change (routing every sync through
-    # scripts/uv-sync-retry.sh) look like a broken Intel-Mac contract.
-    assert re.search(
-        r"if: matrix\.backend_supported\n        run: .*--extra pockettts", workflow
-    ), "the pockettts extra must be installed only on backend_supported legs"
-    assert re.search(
-        r"if: matrix\.backend_supported\n        run: uv run .*pytest tests/smoke/", workflow
-    ), "the smoke suite must run only on backend_supported legs"
-    assert "HF_HUB_CACHE: ${{ runner.temp }}/pockettts-empty-hf-cache" in workflow
-
-
 @pytest.mark.parametrize(
     ("ref", "valid"),
     [

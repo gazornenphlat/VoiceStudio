@@ -36,7 +36,7 @@ to weaken the shared policy.
 | macOS   | `mac-app-store`   | New sandboxed MAS app    | Mac App Store | Entitlements, sandbox file access, bundled executable/runtime licensing and StoreKit receipt behavior         |
 
 The Linux implementation and evidence checklist live in the
-[`Snap Store runbook`](store-publishing/snap-store.md).
+`Snap Store runbook`.
 
 Windows reuses the signed installer and updater contract; Linux introduces
 confinement; macOS requires sandboxed packaging with bundled executables.
@@ -55,7 +55,7 @@ The Mac App Store sandbox target and private packaging workflow are scaffolded
 in `electron/electron-builder.config.mjs` and `.github/workflows/mac-app-store.yml`.
 The workflow remains blocked by the bundled-runtime compliance gate and never
 submits to App Store Connect. Current blockers and owner actions are in the
-[`Mac App Store runbook`](../store/mac-app-store.md).
+`Mac App Store runbook`.
 
 ## Artifact and release contract
 

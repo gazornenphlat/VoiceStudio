@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Mac'iniz için DMG'yi indirin, açın ve VoiceStudio'yu Uygulamalar'a sürükleyin.
 
-[İndir](https://github.com/debpalash/VoiceStudio/releases/latest) · [Kılavuz](../../docs/install/macos.md)
+[İndir](https://github.com/debpalash/VoiceStudio/releases/latest) · Kılavuz
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 Uygulama kullanıcı arayüzü Intel'de çalışır; başka bir bilgisayardaki VoiceStudio arka ucuna bağlayın.
 
-[Kılavuz](../../docs/install/macos.md)
+Kılavuz
 
 </details>
 
 > [!NOTE]
-> macOS’ta «VoiceStudio hasarlı ve açılamıyor» mesajı, indirilen dosyanın bozuk olduğunu değil, Gatekeeper’ın uygulamayı engellediğini belirtir. [Gatekeeper engelini kaldırma](../../docs/install/macos.md#gatekeeper-quarantine).
+> macOS’ta «VoiceStudio hasarlı ve açılamıyor» mesajı, indirilen dosyanın bozuk olduğunu değil, Gatekeeper’ın uygulamayı engellediğini belirtir. Gatekeeper engelini kaldırma.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Kılavuz](../../docs/install/nix.md)
+Kılavuz
 
 </details>
 
-[Kılavuz](../../docs/install/linux.md)
+Kılavuz
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 http://localhost:3900'yu açın ve aşağıda yazılı olan API anahtarını kullanın.
 
-[NVIDIA, AMD ROCm ve Compose talimatları](../../docs/install/docker.md)
+NVIDIA, AMD ROCm ve Compose talimatları
 
 [Docker Hub aynası](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Tải tệp DMG cho máy Mac, mở tệp và kéo VoiceStudio vào thư mục Ứng dụng (Applications).
 
-[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest) · [Hướng dẫn](../../docs/install/macos.md)
+[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest) · Hướng dẫn
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 Giao diện ứng dụng chạy được trên máy Mac Intel; hãy kết nối với backend VoiceStudio trên một máy tính khác.
 
-[Hướng dẫn](../../docs/install/macos.md)
+Hướng dẫn
 
 </details>
 
 > [!NOTE]
-> Trên macOS, thông báo «VoiceStudio bị hỏng và không thể mở» nghĩa là Gatekeeper đã chặn ứng dụng, chứ không phải tệp tải xuống bị hỏng. [Cách xử lý Gatekeeper](../../docs/install/macos.md#gatekeeper-quarantine).
+> Trên macOS, thông báo «VoiceStudio bị hỏng và không thể mở» nghĩa là Gatekeeper đã chặn ứng dụng, chứ không phải tệp tải xuống bị hỏng. Cách xử lý Gatekeeper.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Hướng dẫn](../../docs/install/nix.md)
+Hướng dẫn
 
 </details>
 
-[Hướng dẫn](../../docs/install/linux.md)
+Hướng dẫn
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 Mở http://localhost:3900 và sử dụng khóa API được in bên dưới.
 
-[Hướng dẫn cho NVIDIA, AMD ROCm và Compose](../../docs/install/docker.md)
+Hướng dẫn cho NVIDIA, AMD ROCm và Compose
 
 [Gương Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

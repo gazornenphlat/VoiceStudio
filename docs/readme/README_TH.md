@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 ดาวน์โหลด DMG สำหรับ Mac ของคุณ เปิดแล้วลาก VoiceStudio ไปที่ Applications
 
-[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest) · [คำแนะนำ](../../docs/install/macos.md)
+[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest) · คำแนะนำ
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 UI ของแอปทำงานบน Intel เชื่อมต่อกับแบ็กเอนด์ VoiceStudio บนคอมพิวเตอร์เครื่องอื่น
 
-[คำแนะนำ](../../docs/install/macos.md)
+คำแนะนำ
 
 </details>
 
 > [!NOTE]
-> บน macOS ข้อความ «VoiceStudio เสียหายและเปิดไม่ได้» หมายถึง Gatekeeper บล็อกแอป ไม่ได้หมายความว่าไฟล์ที่ดาวน์โหลดมาเสียหาย [วิธีแก้ปัญหา Gatekeeper](../../docs/install/macos.md#gatekeeper-quarantine).
+> บน macOS ข้อความ «VoiceStudio เสียหายและเปิดไม่ได้» หมายถึง Gatekeeper บล็อกแอป ไม่ได้หมายความว่าไฟล์ที่ดาวน์โหลดมาเสียหาย วิธีแก้ปัญหา Gatekeeper.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[คำแนะนำ](../../docs/install/nix.md)
+คำแนะนำ
 
 </details>
 
-[คำแนะนำ](../../docs/install/linux.md)
+คำแนะนำ
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 เปิด http://localhost:3900 และใช้คีย์ API ที่พิมพ์ด้านล่าง
 
-[คำแนะนำสำหรับ NVIDIA, AMD ROCm และ Compose](../../docs/install/docker.md)
+คำแนะนำสำหรับ NVIDIA, AMD ROCm และ Compose
 
 [มิเรอร์ Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

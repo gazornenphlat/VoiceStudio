@@ -27,12 +27,12 @@ It is locked while an update is downloading or waiting to restart.
 There is no separate preview desktop feed. To try changes between betas:
 
 - **Run `main` from source** — see the platform install guides
-  ([macOS](install/macos.md#building-from-source) ·
+  (macOS ·
   [Windows](install/windows.md#building-from-source) ·
-  [Linux](install/linux.md#building-from-source)), or build and install a
+  Linux), or build and install a
   package from `main` with the [install script's `--main` mode](install/script.md#building-main).
 - **Docker** — `ghcr.io/debpalash/voicestudio:latest` follows `main`; see
-  [image tags](install/docker.md#image-tags).
+  image tags.
 
 Downloads show transferred size, total size, speed, percentage and ETA, and
 can continue while synthesis, transcription or dubbing work runs. VoiceStudio

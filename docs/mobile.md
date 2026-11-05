@@ -13,7 +13,7 @@ choose, per task, to run on **This phone** or **My computer**.
 | | iOS | Android |
 |---|---|---|
 | Minimum OS | iOS 17 (iPhone, iPad) | Android 10 (API 29) |
-| Source | [`mobile/ios/`](../mobile/ios/README.md) | [`mobile/android/`](../mobile/android/README.md) |
+| Source | `mobile/ios/` | [`mobile/android/`](../mobile/android/README.md) |
 
 ## Install
 

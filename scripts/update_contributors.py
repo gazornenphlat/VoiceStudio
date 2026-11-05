@@ -11,7 +11,6 @@ bundled, so the apps show current pictures with no runtime network call:
 
 * Electron: ``features/home/home-contributors-data.ts`` + ``features/home/contributors/``
   (Android copies that folder into its APK assets at build time)
-* iOS: ``Contributors.xcassets/contributor-<login>.imageset`` + ``HomeContributors.swift``
 * Android: ``HomeContributors.kt``
 * README Team contributor rows (English and every translation in ``docs/readme/``)
 
@@ -42,8 +41,6 @@ AVATAR_SIZE = 128  # 2x the largest Electron render (56px), 3x the iOS 34pt clus
 HOME = ROOT / "electron/src/renderer/src/features/home"
 DATA_TS = HOME / "home-contributors-data.ts"
 AVATARS = HOME / "contributors"
-XCASSETS = ROOT / "mobile/ios/VoiceStudio/Resources/Contributors.xcassets"
-SWIFT = ROOT / "mobile/ios/VoiceStudio/Features/HomeContributors.swift"
 KOTLIN = ROOT / "mobile/android/features/src/main/kotlin/com/voicestudio/mobile/features/HomeContributors.kt"
 READMES = (ROOT / "README.md", *sorted((ROOT / "docs/readme").glob("README_*.md")))
 
@@ -154,8 +151,6 @@ def replace_once(text: str, pattern: str, replacement: str, where: Path | str) -
     return new
 
 
-def render_swift(text: str, logins: list[str]) -> str:
-    return replace_once(text, r"static let logins = \[.*?\]", f"static let logins = [{_quoted(logins)}]", SWIFT)
 
 
 def render_kotlin(text: str, logins: list[str]) -> str:
@@ -176,14 +171,6 @@ def render_readme(text: str, logins: list[str], where: Path | str = "README") ->
     if len(row.findall(text)) != 1:
         raise SystemExit(f"{where}: expected exactly one contributor avatar row")
     return row.sub(lambda _m: readme_row(logins), text)
-
-
-def imageset_contents(login: str) -> str:
-    return json.dumps(
-        {"images": [{"filename": f"{login}.png", "idiom": "universal", "scale": "3x"}],
-         "info": {"author": "xcode", "version": 1}},
-        indent=2,
-    ) + "\n"  # byte-identical to scripts/export-mobile-contributors.ts
 
 
 def same_pixels(path: Path, png: bytes) -> bool:
@@ -212,18 +199,12 @@ def apply(people: list[dict], avatars: dict[str, bytes], today: str) -> list[str
     keep = set(logins)
 
     for login, png in avatars.items():
-        for path in (AVATARS / f"{login}.png", XCASSETS / f"contributor-{login}.imageset/{login}.png"):
-            if not same_pixels(path, png) and write_if_changed(path, png):
-                changed.append(path)
-        if write_if_changed(XCASSETS / f"contributor-{login}.imageset/Contents.json", imageset_contents(login)):
-            changed.append(XCASSETS / f"contributor-{login}.imageset/Contents.json")
+        path = AVATARS / f"{login}.png"
+        if not same_pixels(path, png) and write_if_changed(path, png):
+            changed.append(path)
     for path in sorted(AVATARS.iterdir()):
         if path.stem not in keep or path.suffix != ".png":
             path.unlink()
-            changed.append(path)
-    for path in sorted(XCASSETS.glob("contributor-*.imageset")):
-        if path.name.removeprefix("contributor-").removesuffix(".imageset") not in keep:
-            shutil.rmtree(path)
             changed.append(path)
 
     current = DATA_TS.read_text()
@@ -233,7 +214,7 @@ def apply(people: list[dict], avatars: dict[str, bytes], today: str) -> list[str
     if write_if_changed(DATA_TS, ts):
         changed.append(DATA_TS)
 
-    for path, render in ((SWIFT, render_swift), (KOTLIN, render_kotlin)):
+    for path, render in ((KOTLIN, render_kotlin),):
         if write_if_changed(path, render(path.read_text(), logins)):
             changed.append(path)
     readme_logins = [login for login in logins if login not in core]

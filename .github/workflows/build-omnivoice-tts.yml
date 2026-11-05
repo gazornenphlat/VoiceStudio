@@ -69,10 +69,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [linux-x86_64, linux-aarch64, windows-x86_64, darwin-arm64]
-        # The installers ship no Linux ARM64 build, so desktop calls skip it.
-        exclude:
-          - platform: ${{ inputs.desktop && 'linux-aarch64' || 'none' }}
+        platform: [windows-x86_64]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:

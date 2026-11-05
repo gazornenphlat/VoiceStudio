@@ -111,8 +111,8 @@ def test_all_workflows_share_the_conservative_runtime_classifier(filename):
     jobs = workflow["jobs"]
     assert jobs["changes"]["outputs"]["runtime"] == "${{ steps.scope.outputs.runtime }}"
     assert any(step.get("run") == "python3 .github/scripts/ci_scope.py" for step in jobs["changes"]["steps"])
-    names = {"ci.yml": ["installer", "test-python", "test-electron", "electron-smokes", "ui-crawler", "linux-native-package", "electron-ui"],
-             "mobile.yml": ["android", "ios", "ios-inference", "android-inference", "android-screenshots"],
+    names = {"ci.yml": ["installer", "test-python", "test-electron", "electron-smokes", "ui-crawler", "electron-ui"],
+             "mobile.yml": ["android", "android-inference", "android-screenshots"],
              "security.yml": ["codeql", "bandit", "dependencies"],
              "install-smoke.yml": ["install"], "cosyvoice-dependencies.yml": ["native-dependencies"]}
     for name in names[filename]:

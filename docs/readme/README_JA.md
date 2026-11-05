@@ -137,7 +137,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Mac に合う DMG をダウンロードして開き、VoiceStudio を Applications にドラッグしてください。
 
-[ダウンロード](https://github.com/debpalash/VoiceStudio/releases/latest) · [ガイド](../../docs/install/macos.md)
+[ダウンロード](https://github.com/debpalash/VoiceStudio/releases/latest) · ガイド
 
 </details>
 
@@ -155,12 +155,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 Intel Mac ではアプリの UI を利用できます。別のコンピューターの VoiceStudio バックエンドに接続してください。
 
-[ガイド](../../docs/install/macos.md)
+ガイド
 
 </details>
 
 > [!NOTE]
-> macOS で「VoiceStudio は壊れているため開けません」と表示されるのは、Gatekeeper がアプリをブロックしているためで、ダウンロードが壊れているわけではありません。[Gatekeeper の対処法](../../docs/install/macos.md#gatekeeper-quarantine)を参照してください。
+> macOS で「VoiceStudio は壊れているため開けません」と表示されるのは、Gatekeeper がアプリをブロックしているためで、ダウンロードが壊れているわけではありません。Gatekeeper の対処法を参照してください。
 
 </blockquote>
 
@@ -298,11 +298,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[ガイド](../../docs/install/nix.md)
+ガイド
 
 </details>
 
-[ガイド](../../docs/install/linux.md)
+ガイド
 
 </blockquote>
 
@@ -334,7 +334,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 http://localhost:3900 を開き、下に表示される API キーを使ってください。
 
-[NVIDIA、AMD ROCm、Compose の手順](../../docs/install/docker.md)
+NVIDIA、AMD ROCm、Compose の手順
 
 [Docker Hub ミラー](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

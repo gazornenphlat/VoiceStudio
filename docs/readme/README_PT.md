@@ -136,7 +136,7 @@ brew install --cask debpalash/tap/voicestudio
 
 Baixe o DMG para o seu Mac, abra-o e arraste VoiceStudio para Aplicativos.
 
-[Baixar](https://github.com/debpalash/VoiceStudio/releases/latest) · [Guia](../../docs/install/macos.md)
+[Baixar](https://github.com/debpalash/VoiceStudio/releases/latest) · Guia
 
 </details>
 
@@ -154,12 +154,12 @@ curl -fsSL https://voicestudio.sh/install | sh
 
 A IU do aplicativo é executada em Intel; conecte-o a um back-end do VoiceStudio em outro computador.
 
-[Guia](../../docs/install/macos.md)
+Guia
 
 </details>
 
 > [!NOTE]
-> No macOS, a mensagem «VoiceStudio está danificado e não pode ser aberto» significa que o Gatekeeper bloqueou o aplicativo, e não que o arquivo baixado esteja corrompido. [Resolver o bloqueio do Gatekeeper](../../docs/install/macos.md#gatekeeper-quarantine).
+> No macOS, a mensagem «VoiceStudio está danificado e não pode ser aberto» significa que o Gatekeeper bloqueou o aplicativo, e não que o arquivo baixado esteja corrompido. Resolver o bloqueio do Gatekeeper.
 
 </blockquote>
 
@@ -297,11 +297,11 @@ nix develop .#fhs
 bun run dev
 ```
 
-[Guia](../../docs/install/nix.md)
+Guia
 
 </details>
 
-[Guia](../../docs/install/linux.md)
+Guia
 
 </blockquote>
 
@@ -333,7 +333,7 @@ printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
 
 Abra http://localhost:3900 e use a chave API impressa abaixo.
 
-[Instruções para NVIDIA, AMD ROCm e Compose](../../docs/install/docker.md)
+Instruções para NVIDIA, AMD ROCm e Compose
 
 [Espelho do Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 

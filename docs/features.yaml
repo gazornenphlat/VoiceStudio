@@ -96,10 +96,7 @@ asr_engines:
 docs:
   - docs/downloading-models.md
   - docs/branding.md
-  - docs/install/macos.md
   - docs/install/windows.md
-  - docs/install/linux.md
-  - docs/install/docker.md
   - docs/install/troubleshooting.md
   - docs/features/dictation.md
   - docs/migration/real-time-voice-cloning.md
