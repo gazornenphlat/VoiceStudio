@@ -114,57 +114,6 @@ Mulailah dengan **VoiceStudio** (default, didukung oleh k2-fsa/OmniVoice), atau 
 
 Pilih sistem Anda, lalu perluas metode instalasi.
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · pemasang</summary>
-
-<blockquote>
-
-**Stabil · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: mesin lokal dengan Metal (MPS).
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-Unduh DMG untuk Mac Anda, buka dan seret VoiceStudio ke dalam Aplikasi.
-
-[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest) · Panduan
-
-</details>
-
-<details>
-<summary>Pemasang satu perintah</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · backend jarak jauh · Terbatas</summary>
-
-UI aplikasi berjalan pada Intel; sambungkan ke backend VoiceStudio di komputer lain.
-
-Panduan
-
-</details>
-
-> [!NOTE]
-> Di macOS, pesan «VoiceStudio rusak dan tidak dapat dibuka» berarti Gatekeeper memblokir aplikasi, bukan berkas unduhannya rusak. Mengatasi blokir Gatekeeper.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ UI aplikasi asli; backend Python x64 berjalan di bawah emulasi pada CPU.
 [Unduh](https://github.com/debpalash/VoiceStudio/releases/latest) · [Panduan](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**Stabil · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Vulkan untuk mesin GGUF yang didukung.
-
-<details>
-<summary>Pemasang satu perintah</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-Juga tersedia melalui `paru -S voicestudio-bin`.
-
-[Sumber pengembangan](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>Bangun dari AUR dan instal dengan pacman</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-Unduh `.deb` ke dalam folder saat ini, lalu instal:
-
-[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu, Fedora, openSUSE dan banyak lagi</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-Dengan [snapd terinstal](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-Untuk mengaktifkan akses mikrofon:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>Distribusi Linux apa pun · AppImage</summary>
-
-Unduh AppImage ke folder saat ini, lalu luncurkan:
-
-[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · lingkungan sumber</summary>
-
-Masuk ke lingkungan pengembangan FHS repositori, lalu jalankan dari sumber:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-Panduan
-
-</details>
-
-Panduan
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-Image kontainer stabil · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**Jalankan secara lokal di CPU (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-Buka http://localhost:3900 dan gunakan kunci API yang dicetak di bawah.
-
-Panduan NVIDIA, AMD ROCm, dan Compose
-
-[Cermin Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · melakukan sideload</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · Pratinjau · Di perangkat, offline setelah pengunduhan model.
-
-Unduh IPA dan ikuti instruksi penandatanganan dan sideload.
-
-[Unduh](https://github.com/debpalash/VoiceStudio/releases/latest) · [Panduan](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-Pemasang desktop dan ponsel ada di [rilis terbaru](https://github.com/debpalash/VoiceStudio/releases/latest); Gambar Docker berasal dari GHCR. Tidak ada GPU? Aplikasi ini dapat digunakan sepenuhnya pada CPU, hanya saja lebih lambat. Mesin GGUF asli juga dapat menggunakan Vulkan pada GPU AMD, Intel dan NVIDIA; OmniVoice GGUF memilih GPU dan ukuran modelnya secara otomatis di Windows dan Linux ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration), [CosyVoice](../../docs/engines/cosyvoice-gguf.md)). Kecepatan berdasarkan mesin dan perangkat keras: [kinerja](../../docs/performance.md).
-
-
 <a id="get-started"></a>
-
 ## Mulai
 
 Instal menggunakan opsi di atas. Kemudian buka **Kloning suara**, pilih suara atau tambahkan rekaman referensi yang bersih, ketik teks Anda dan buat. Aplikasi ini bertanya sebelum mengunduh model apa pun.
@@ -420,13 +200,10 @@ Instal menggunakan opsi di atas. Kemudian buka **Kloning suara**, pilih suara at
 <details>
 <summary><strong>Opsi pemasangan lainnya</strong>: versi tertentu, versi utama saat ini, uninstall, dari sumber, dengan agen pengkodean</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-Jika `voicestudio.sh` tidak dapat dijangkau, jalankan skrip langsung dari repositori: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`. Prasyarat dan perilaku: [panduan penginstal](../../docs/install/script.md).
 
 **Dari sumber**
 

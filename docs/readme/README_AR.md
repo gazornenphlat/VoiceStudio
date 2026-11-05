@@ -114,57 +114,6 @@
 
 اختر نظامك، ثم قم بتوسيع طريقة التثبيت.
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · البيرة · DMG · المثبت</summary>
-
-<blockquote>
-
-**مستقر · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: محركات محلية معدنية (MPS).
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-قم بتنزيل DMG لجهاز Mac الخاص بك، وافتحه واسحب VoiceStudio إلى التطبيقات.
-
-[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest) · الدليل
-
-</details>
-
-<details>
-<summary>المثبت بأمر واحد</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>إنتل ماك · الواجهة الخلفية البعيدة · محدودة</summary>
-
-تعمل واجهة مستخدم التطبيق على Intel؛ قم بتوصيله بواجهة VoiceStudio الخلفية على كمبيوتر آخر.
-
-الدليل
-
-</details>
-
-> [!NOTE]
-> في macOS، تعني رسالة «VoiceStudio تالف ولا يمكن فتحه» أن Gatekeeper حظر التطبيق، وليس أن الملف الذي نزّلته تالف. طريقة تجاوز حظر Gatekeeper.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ irm https://voicestudio.sh/install.ps1 | iex
 [تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest) · [الدليل](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**مستقر · x64**<br />Linux x64 · NVIDIA CUDA · وحدة المعالجة المركزية · Vulkan لمحركات GGUF المدعومة.
-
-<details>
-<summary>المثبت بأمر واحد</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-متاح أيضًا من خلال `paru -S voicestudio-bin`.
-
-[مصادر التطوير](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>البناء من AUR والتثبيت باستخدام pacman</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-قم بتنزيل `.deb` في المجلد الحالي، ثم قم بتثبيته:
-
-[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu وFedora وopenSUSE والمزيد</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-مع [تثبيت snapd](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-لتمكين الوصول إلى الميكروفون:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>أي توزيعة لينكس · AppImage</summary>
-
-قم بتنزيل AppImage في المجلد الحالي، ثم قم بتشغيله:
-
-[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>لا شىء / NixOS · البيئة المصدر</summary>
-
-أدخل بيئة تطوير FHS الخاصة بالمستودع، ثم قم بالتشغيل من المصدر:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-الدليل
-
-</details>
-
-الدليل
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-صور حاويات مستقرة · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**تشغيل محليًا على وحدة المعالجة المركزية (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-افتح http://localhost:3900 واستخدم مفتاح API المطبوع أدناه.
-
-تعليمات NVIDIA وAMD ROCm وCompose
-
-[مرآة Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · التحميل الجانبي</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · معاينة · على الجهاز، دون اتصال بالإنترنت بعد تنزيل النموذج.
-
-قم بتنزيل IPA واتبع تعليمات التوقيع والتحميل الجانبي.
-
-[تنزيل](https://github.com/debpalash/VoiceStudio/releases/latest) · [الدليل](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-تتوفر أدوات تثبيت سطح المكتب والهاتف على [أحدث إصدار](https://github.com/debpalash/VoiceStudio/releases/latest)؛ تأتي صور Docker من GHCR. لا GPU؟ التطبيق قابل للاستخدام بالكامل على وحدة المعالجة المركزية، ولكن بشكل أبطأ. يمكن لمحركات GGUF الأصلية أيضًا استخدام Vulkan على وحدات معالجة الرسوميات AMD وIntel وNVIDIA؛ تختار شركة OmniVoice GGUF وحدة معالجة الرسومات الخاصة بها وحجم الطراز تلقائيًا على نظامي التشغيل Windows وLinux ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration)، [CosyVoice](../../docs/engines/cosyvoice-gguf.md)). السرعة حسب المحرك والأجهزة: [الأداء](../../docs/performance.md).
-
-
 <a id="get-started"></a>
-
 ## ابدأ الآن
 
 التثبيت باستخدام الخيارات المذكورة أعلاه. ثم افتح **استنساخ الصوت**، واختر صوتًا أو أضف تسجيلًا مرجعيًا نظيفًا، واكتب النص الخاص بك وقم بإنشاءه. يسأل التطبيق قبل تنزيل أي نموذج.
@@ -420,13 +200,10 @@ iOS / iPadOS 17+ · معاينة · على الجهاز، دون اتصال با
 <details>
 <summary><strong>المزيد من خيارات التثبيت</strong>: إصدار محدد، رئيسي حالي، إلغاء التثبيت، من المصدر، باستخدام وكيل ترميز</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-إذا تعذر الوصول إلى `voicestudio.sh`، فقم بتشغيل البرنامج النصي مباشرة من المستودع: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`. المتطلبات الأساسية والسلوك: [دليل التثبيت](../../docs/install/script.md).
 
 **من المصدر**
 

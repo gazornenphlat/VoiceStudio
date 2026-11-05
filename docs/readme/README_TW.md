@@ -114,57 +114,6 @@
 
 選擇你的系統，再展開相應的安裝方式。
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · 安裝指令碼</summary>
-
-<blockquote>
-
-**穩定版 · Apple Silicon**<br />macOS 13.3+ · Apple Silicon：透過 Metal（MPS）執行本地引擎。
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-下載適合你的 Mac 的 DMG，開啟後將 VoiceStudio 拖入 Applications。
-
-[下載](https://github.com/debpalash/VoiceStudio/releases/latest) · 指南
-
-</details>
-
-<details>
-<summary>一條命令安裝</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · 遠端後端 · 受限</summary>
-
-Intel Mac 可執行應用介面；請連線另一臺電腦上的 VoiceStudio 後端。
-
-指南
-
-</details>
-
-> [!NOTE]
-> 在 macOS 上看到“VoiceStudio 已損壞，無法開啟”，是 Gatekeeper 攔截了應用，並不是下載檔案損壞。參見 Gatekeeper 修復方法。
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ irm https://voicestudio.sh/install.ps1 | iex
 [下載](https://github.com/debpalash/VoiceStudio/releases/latest) · [指南](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**穩定版 · x64**<br />Linux x64 · NVIDIA CUDA · CPU · 支援的 GGUF 引擎可使用 Vulkan。
-
-<details>
-<summary>一條命令安裝</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-也可以使用 `paru -S voicestudio-bin` 安裝。
-
-[開發原始碼版](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>從 AUR 構建並使用 pacman 安裝</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-將 `.deb` 下載到當前目錄，再安裝：
-
-[下載](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu、Fedora、openSUSE 等</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-[安裝 snapd](https://snapcraft.io/docs/installing-snapd) 後執行：
-
-```sh
-sudo snap install voicestudio
-```
-
-如需啟用麥克風訪問：
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>各類 Linux 發行版 · AppImage</summary>
-
-將 AppImage 下載到當前目錄，再啟動：
-
-[下載](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · 原始碼環境</summary>
-
-進入倉庫提供的 FHS 開發環境，再從原始碼啟動：
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-指南
-
-</details>
-
-指南
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-穩定版映象 · CPU · NVIDIA CUDA · AMD ROCm。
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**在本機使用 CPU 執行（Bash）**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-開啟 http://localhost:3900，並使用下方輸出的 API 金鑰。
-
-NVIDIA、AMD ROCm 和 Compose 使用說明
-
-[Docker Hub 映象](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · 側載</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · 預覽版 · 下載模型後可在裝置上離線執行。
-
-下載 IPA，並按照指南完成簽名和側載。
-
-[下載](https://github.com/debpalash/VoiceStudio/releases/latest) · [指南](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-桌面端和手機安裝包都在[最新發行版](https://github.com/debpalash/VoiceStudio/releases/latest)中，Docker 映象則釋出在 GHCR。沒有 GPU？應用在 CPU 上也能完整使用，只是速度較慢。原生 GGUF 引擎還能透過 Vulkan 使用 AMD、Intel 和 NVIDIA GPU；在 Windows 和 Linux 上，OmniVoice GGUF 會自動選擇 GPU 和模型量化（[OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration)、[CosyVoice](../../docs/engines/cosyvoice-gguf.md)）。各引擎在不同硬體上的速度：[效能說明](../../docs/performance.md)。
-
-
 <a id="get-started"></a>
-
 ## 開始使用
 
 按上方方式安裝後，開啟 **聲音克隆**，選擇一個聲音或新增清晰的參考錄音，輸入文字並生成。應用會在下載模型前徵求你的同意。
@@ -420,15 +200,11 @@ iOS / iPadOS 17+ · 預覽版 · 下載模型後可在裝置上離線執行。
 <details>
 <summary><strong>更多安裝方式</strong>：指定版本、當前 main、解除安裝、從原始碼安裝、透過編碼智慧體安裝</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # 安裝指定版本
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # 構建當前 main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # 解除安裝應用，保留資料
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-如果無法訪問 `voicestudio.sh`，可直接從倉庫執行指令碼：
-`curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`。
-前置要求與指令碼行為：[安裝指令碼說明](../../docs/install/script.md)。
+如果無法訪問 voicestudio.sh，可直接從倉庫執行指令碼：
 
 **從原始碼安裝**
 

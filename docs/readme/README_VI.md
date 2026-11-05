@@ -114,57 +114,6 @@ Bắt đầu với **VoiceStudio** (mặc định, được cung cấp bởi k2-
 
 Chọn hệ thống của bạn, sau đó mở rộng phương pháp cài đặt.
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · trình cài đặt</summary>
-
-<blockquote>
-
-**Ổn định · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: các công cụ chạy cục bộ với Metal (MPS).
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-Tải tệp DMG cho máy Mac, mở tệp và kéo VoiceStudio vào thư mục Ứng dụng (Applications).
-
-[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest) · Hướng dẫn
-
-</details>
-
-<details>
-<summary>Trình cài đặt một lệnh</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · backend từ xa · Hỗ trợ hạn chế</summary>
-
-Giao diện ứng dụng chạy được trên máy Mac Intel; hãy kết nối với backend VoiceStudio trên một máy tính khác.
-
-Hướng dẫn
-
-</details>
-
-> [!NOTE]
-> Trên macOS, thông báo «VoiceStudio bị hỏng và không thể mở» nghĩa là Gatekeeper đã chặn ứng dụng, chứ không phải tệp tải xuống bị hỏng. Cách xử lý Gatekeeper.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ Giao diện ứng dụng chạy gốc; backend Python x64 được giả lập t
 [Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest) · [Hướng dẫn](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**Ổn định · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Vulkan dành cho các công cụ GGUF được hỗ trợ.
-
-<details>
-<summary>Trình cài đặt một lệnh</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-Cũng có sẵn thông qua `paru -S voicestudio-bin`.
-
-[Nguồn phát triển](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>Xây dựng từ AUR và cài đặt bằng pacman</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-Tải `.deb` vào thư mục hiện tại, sau đó cài đặt nó:
-
-[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu, Fedora, openSUSE và hơn thế nữa</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-Với [đã cài đặt snapd](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-Để bật quyền truy cập micrô:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>Bất kỳ bản phân phối Linux nào · AppImage</summary>
-
-Tải AppImage vào thư mục hiện tại, sau đó khởi chạy nó:
-
-[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · môi trường nguồn</summary>
-
-Nhập môi trường phát triển FHS của kho lưu trữ, sau đó chạy từ nguồn:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-Hướng dẫn
-
-</details>
-
-Hướng dẫn
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-Image container ổn định · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**Chạy cục bộ trên CPU (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-Mở http://localhost:3900 và sử dụng khóa API được in bên dưới.
-
-Hướng dẫn cho NVIDIA, AMD ROCm và Compose
-
-[Gương Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · cài đặt ngoài App Store</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · Xem trước · Trên thiết bị, ngoại tuyến sau khi tải xuống mô hình.
-
-Tải tệp IPA rồi làm theo hướng dẫn ký và cài đặt ngoài App Store.
-
-[Tải xuống](https://github.com/debpalash/VoiceStudio/releases/latest) · [Hướng dẫn](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-Trình cài đặt cho máy tính và điện thoại có trong [bản phát hành mới nhất](https://github.com/debpalash/VoiceStudio/releases/latest); image Docker được cung cấp qua GHCR. Không có GPU? Bạn vẫn dùng đầy đủ tính năng bằng CPU, chỉ chậm hơn. Các công cụ GGUF gốc cũng hỗ trợ Vulkan trên GPU của AMD, Intel và NVIDIA; OmniVoice GGUF tự chọn GPU và kích thước mô hình trên Windows và Linux ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration), [CosyVoice](../../docs/engines/cosyvoice-gguf.md)). Xem tốc độ theo công cụ và phần cứng tại [hiệu năng](../../docs/performance.md).
-
-
 <a id="get-started"></a>
-
 ## Bắt đầu
 
 Cài đặt bằng các tùy chọn ở trên. Sau đó mở **Nhân bản giọng nói**, chọn giọng nói hoặc thêm bản ghi tham chiếu rõ ràng, nhập văn bản của bạn và tạo. Ứng dụng sẽ hỏi trước khi tải xuống bất kỳ mô hình nào.
@@ -420,13 +200,10 @@ Cài đặt bằng các tùy chọn ở trên. Sau đó mở **Nhân bản giọ
 <details>
 <summary><strong>Tùy chọn cài đặt khác</strong>: phiên bản cụ thể, nhánh main hiện tại, gỡ cài đặt, cài từ mã nguồn hoặc dùng trợ lý lập trình</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-Nếu không thể truy cập `voicestudio.sh`, hãy chạy tập lệnh trực tiếp từ kho lưu trữ: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`. Điều kiện tiên quyết và hành vi: [hướng dẫn cài đặt](../../docs/install/script.md).
 
 **Từ mã nguồn**
 

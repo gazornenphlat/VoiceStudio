@@ -114,57 +114,6 @@ Motorlarınızı seçin ve yalnızca ihtiyacınız olan modelleri indirin.
 
 Sisteminizi seçin, ardından kurulum yöntemini genişletin.
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · yükleyici</summary>
-
-<blockquote>
-
-**Kararlı · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: Metal (MPS) içeren yerel motorlar.
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-Mac'iniz için DMG'yi indirin, açın ve VoiceStudio'yu Uygulamalar'a sürükleyin.
-
-[İndir](https://github.com/debpalash/VoiceStudio/releases/latest) · Kılavuz
-
-</details>
-
-<details>
-<summary>Tek komutlu yükleyici</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · uzak arka uç · Sınırlı</summary>
-
-Uygulama kullanıcı arayüzü Intel'de çalışır; başka bir bilgisayardaki VoiceStudio arka ucuna bağlayın.
-
-Kılavuz
-
-</details>
-
-> [!NOTE]
-> macOS’ta «VoiceStudio hasarlı ve açılamıyor» mesajı, indirilen dosyanın bozuk olduğunu değil, Gatekeeper’ın uygulamayı engellediğini belirtir. Gatekeeper engelini kaldırma.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ Yerel uygulama kullanıcı arayüzü; x64 Python arka ucu CPU'da emülasyon alt�
 [İndir](https://github.com/debpalash/VoiceStudio/releases/latest) · [Kılavuz](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**Kararlı · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Desteklenen GGUF motorları için Vulkan.
-
-<details>
-<summary>Tek komutlu yükleyici</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-Ayrıca `paru -S voicestudio-bin` aracılığıyla da mevcuttur.
-
-[Geliştirme kaynakları](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>AUR'dan derleyin ve pacman ile yükleyin</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-`.deb`'yu geçerli klasöre indirin ve yükleyin:
-
-[İndir](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu, Fedora, openSUSE ve daha fazlası</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-[Snapd takılıyken](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-Mikrofon erişimini etkinleştirmek için:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>Herhangi bir Linux dağıtımı · AppImage</summary>
-
-AppImage'ı mevcut klasöre indirin ve başlatın:
-
-[İndir](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · kaynak ortamı</summary>
-
-Havuzun FHS geliştirme ortamına girin ve ardından kaynaktan çalıştırın:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-Kılavuz
-
-</details>
-
-Kılavuz
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-Kararlı konteyner imajları · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**CPU üzerinde yerel olarak çalıştır (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-http://localhost:3900'yu açın ve aşağıda yazılı olan API anahtarını kullanın.
-
-NVIDIA, AMD ROCm ve Compose talimatları
-
-[Docker Hub aynası](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · yandan yükleme</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · Önizleme · Cihazda, model indirildikten sonra çevrimdışı.
-
-IPA'yı indirin ve imzalama ve yan yükleme talimatlarını izleyin.
-
-[İndir](https://github.com/debpalash/VoiceStudio/releases/latest) · [Kılavuz](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-Masaüstü ve telefon kurulum programları [en son sürümde](https://github.com/debpalash/VoiceStudio/releases/latest); Docker görüntüleri GHCR'den gelir. GPU'nuz yok mu? Uygulama CPU'da tamamen kullanılabilir, ancak daha yavaştır. Yerel GGUF motorları ayrıca Vulkan'ı AMD, Intel ve NVIDIA GPU'larda da kullanabilir; OmniVoice GGUF, Windows ve Linux'ta GPU'sunu ve model boyutunu otomatik olarak seçer ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration), [CosyVoice](../../docs/engines/cosyvoice-gguf.md)). Motor ve donanıma göre hız: [performans](../../docs/performance.md).
-
-
 <a id="get-started"></a>
-
 ## Başlarken
 
 Yukarıdaki seçenekleri kullanarak kurulum yapın. Ardından **Ses klonlama**'yı açın, bir ses seçin veya temiz bir referans kaydı ekleyin, metninizi yazın ve oluşturun. Uygulama herhangi bir modeli indirmeden önce sorar.
@@ -420,13 +200,10 @@ Yukarıdaki seçenekleri kullanarak kurulum yapın. Ardından **Ses klonlama**'y
 <details>
 <summary><strong>Daha fazla kurulum seçeneği</strong>: belirli bir sürüm, güncel main dalı, kaldırma, kaynak koddan veya bir kodlama ajanıyla kurulum</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-`voicestudio.sh`'ya erişilemiyorsa betiği doğrudan depodan çalıştırın: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`. Önkoşullar ve davranış: [kurulum kılavuzu](../../docs/install/script.md).
 
 **Kaynaktan**
 

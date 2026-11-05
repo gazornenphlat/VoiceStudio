@@ -114,57 +114,6 @@
 
 เลือกระบบของคุณ จากนั้นขยายวิธีการติดตั้ง
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · ตัวติดตั้ง</summary>
-
-<blockquote>
-
-**เสถียร · แอปเปิลซิลิคอน**<br />macOS 13.3+ · Apple Silicon: เอ็นจิ้นเฉพาะที่มี Metal (MPS)
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-ดาวน์โหลด DMG สำหรับ Mac ของคุณ เปิดแล้วลาก VoiceStudio ไปที่ Applications
-
-[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest) · คำแนะนำ
-
-</details>
-
-<details>
-<summary>โปรแกรมติดตั้งคำสั่งเดียว</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · แบ็กเอนด์ระยะไกล · จำกัด</summary>
-
-UI ของแอปทำงานบน Intel เชื่อมต่อกับแบ็กเอนด์ VoiceStudio บนคอมพิวเตอร์เครื่องอื่น
-
-คำแนะนำ
-
-</details>
-
-> [!NOTE]
-> บน macOS ข้อความ «VoiceStudio เสียหายและเปิดไม่ได้» หมายถึง Gatekeeper บล็อกแอป ไม่ได้หมายความว่าไฟล์ที่ดาวน์โหลดมาเสียหาย วิธีแก้ปัญหา Gatekeeper.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ UI ของแอปเนทีฟ; แบ็กเอนด์ x64 Python ท
 [ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest) · [คำแนะนำ](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**เสถียร · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Vulkan สำหรับเอ็นจิ้น GGUF ที่รองรับ
-
-<details>
-<summary>โปรแกรมติดตั้งคำสั่งเดียว</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-มีจำหน่ายผ่าน `paru -S voicestudio-bin` ด้วย
-
-[แหล่งที่มาของการพัฒนา](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>สร้างจาก AUR และติดตั้งด้วย pacman</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-ดาวน์โหลด `.deb` ลงในโฟลเดอร์ปัจจุบัน จากนั้นทำการติดตั้ง:
-
-[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu, Fedora, openSUSE และอื่นๆ</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-ด้วย [ติดตั้ง snapd](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-หากต้องการเปิดใช้งานการเข้าถึงไมโครโฟน:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>การแจกจ่าย Linux ใดๆ · AppImage</summary>
-
-ดาวน์โหลด AppImage ลงในโฟลเดอร์ปัจจุบัน จากนั้นเปิดใช้งาน:
-
-[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · สภาพแวดล้อมต้นทาง</summary>
-
-เข้าสู่สภาพแวดล้อมการพัฒนา FHS ของพื้นที่เก็บข้อมูล จากนั้นเรียกใช้จากแหล่งที่มา:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-คำแนะนำ
-
-</details>
-
-คำแนะนำ
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-อิมเมจคอนเทนเนอร์รุ่นเสถียร · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**ทำงานบน CPU ในเครื่อง (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-เปิด http://localhost:3900 และใช้คีย์ API ที่พิมพ์ด้านล่าง
-
-คำแนะนำสำหรับ NVIDIA, AMD ROCm และ Compose
-
-[มิเรอร์ Docker Hub](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA ·ไซด์โหลด</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · ดูตัวอย่าง · บนอุปกรณ์ ออฟไลน์ หลังจากดาวน์โหลดโมเดลแล้ว
-
-ดาวน์โหลด IPA และปฏิบัติตามคำแนะนำในการลงนามและไซด์โหลด
-
-[ดาวน์โหลด](https://github.com/debpalash/VoiceStudio/releases/latest) · [คำแนะนำ](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-ตัวติดตั้งสำหรับคอมพิวเตอร์และโทรศัพท์อยู่ใน[รุ่นล่าสุด](https://github.com/debpalash/VoiceStudio/releases/latest) ส่วนอิมเมจ Docker มาจาก GHCR หากไม่มี GPU ก็ยังใช้งานแอปด้วย CPU ได้ครบ เพียงแต่ทำงานช้ากว่า เอนจิน GGUF แบบเนทีฟยังใช้ Vulkan กับ GPU ของ AMD, Intel และ NVIDIA ได้ โดย OmniVoice GGUF จะเลือก GPU และขนาดโมเดลโดยอัตโนมัติบน Windows และ Linux ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration), [CosyVoice](../../docs/engines/cosyvoice-gguf.md)) ดูความเร็วตามเอนจินและฮาร์ดแวร์ได้ที่[ประสิทธิภาพ](../../docs/performance.md)
-
-
 <a id="get-started"></a>
-
 ## เริ่มต้นใช้งาน
 
 Install using the options above. จากนั้นเปิด **การโคลนเสียง** เลือกเสียงหรือเพิ่มการบันทึกอ้างอิงที่ชัดเจน พิมพ์ข้อความของคุณและสร้าง แอพจะถามก่อนที่จะดาวน์โหลดรุ่นใด ๆ
@@ -420,13 +200,10 @@ Install using the options above. จากนั้นเปิด **การ�
 <details>
 <summary><strong>ตัวเลือกการติดตั้งเพิ่มเติม</strong>: เวอร์ชันเฉพาะ, หลักปัจจุบัน, ถอนการติดตั้ง, จากแหล่งที่มา, ด้วยเอเจนต์การเข้ารหัส</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-หากไม่สามารถเข้าถึง `voicestudio.sh` ให้รันสคริปต์จากที่เก็บโดยตรง: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh` ข้อกำหนดเบื้องต้นและลักษณะการทำงาน: [คู่มือการติดตั้ง](../../docs/install/script.md)
 
 **จากซอร์สโค้ด**
 

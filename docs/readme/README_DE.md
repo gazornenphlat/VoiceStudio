@@ -114,57 +114,6 @@ Beginnen Sie mit **VoiceStudio** (Standard, unterstützt von k2-fsa/OmniVoice) o
 
 Wählen Sie Ihr System und erweitern Sie dann eine Installationsmethode.
 
-<a id="install-macos"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>macOS</strong> · Homebrew · DMG · Installer</summary>
-
-<blockquote>
-
-**Stabil · Apple Silicon**<br />macOS 13.3+ · Apple Silicon: lokale Engines mit Metal (MPS).
-
-<a href="https://github.com/debpalash/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-27272a?style=flat-square&amp;logo=homebrew&amp;logoColor=ffffff" alt="Homebrew" height="20" /></a>
-
-```sh
-brew tap debpalash/tap
-brew trust --cask debpalash/tap/voicestudio
-brew install --cask debpalash/tap/voicestudio
-```
-
-<details>
-<summary>DMG</summary>
-
-Laden Sie die DMG-Datei für Ihren Mac herunter, öffnen Sie sie und ziehen Sie VoiceStudio in den Ordner „Programme“ (Applications).
-
-[Herunterladen](https://github.com/debpalash/VoiceStudio/releases/latest) · Anleitung
-
-</details>
-
-<details>
-<summary>Ein-Befehl-Installationsprogramm</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Intel Mac · Remote-Backend · Limited</summary>
-
-Die App-Benutzeroberfläche läuft auf Intel; Verbinden Sie es mit einem VoiceStudio-Backend auf einem anderen Computer.
-
-Anleitung
-
-</details>
-
-> [!NOTE]
-> Unter macOS bedeutet „VoiceStudio ist beschädigt und kann nicht geöffnet werden“, dass Gatekeeper die App blockiert hat. Die heruntergeladene Datei ist dadurch nicht beschädigt. Gatekeeper-Problem beheben.
-
-</blockquote>
-
-</details>
-
 <a id="install-windows"></a>
 
 <details>
@@ -188,154 +137,6 @@ Native App-Benutzeroberfläche; Das x64-Python-Backend läuft unter Emulation au
 [Herunterladen](https://github.com/debpalash/VoiceStudio/releases/latest) · [Anleitung](../../docs/install/windows.md)
 
 </details>
-
-</blockquote>
-
-</details>
-
-<a id="install-linux"></a>
-
-<details open>
-<summary><img src="../../docs/assets/platforms/linux.svg" alt="" width="20" height="20" /> <strong>Linux</strong> · AUR · Snap · DEB · AppImage · Nix</summary>
-
-<blockquote>
-
-**Stabil · x64**<br />Linux x64 · NVIDIA CUDA · CPU · Vulkan für unterstützte GGUF-Engines.
-
-<details>
-<summary>Ein-Befehl-Installationsprogramm</summary>
-
-```sh
-curl -fsSL https://voicestudio.sh/install | sh
-```
-
-</details>
-
-<details>
-<summary>Arch / Manjaro / EndeavourOS · AUR</summary>
-
-<a href="https://aur.archlinux.org/packages/voicestudio-bin"><img src="https://img.shields.io/badge/AUR-1793d1?style=flat-square&amp;logo=archlinux&amp;logoColor=ffffff" alt="AUR" height="20" /></a>
-
-```sh
-yay -S voicestudio-bin
-```
-
-Auch erhältlich über `paru -S voicestudio-bin`.
-
-[Entwicklungsquellen](https://aur.archlinux.org/packages/voicestudio-git) · `yay -S voicestudio-git`
-
-<details>
-<summary>Aus AUR erstellen und mit Pacman installieren</summary>
-
-```sh
-sudo pacman -S --needed base-devel git
-git clone https://aur.archlinux.org/voicestudio-bin.git
-cd voicestudio-bin
-makepkg -s
-sudo pacman -U ./voicestudio-bin-*.pkg.tar.zst
-```
-
-</details>
-
-</details>
-
-<details>
-<summary>Ubuntu / Debian / Linux Mint · DEB</summary>
-
-Laden Sie `.deb` in den aktuellen Ordner herunter und installieren Sie es dann:
-
-[Herunterladen](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-sudo apt install ./VoiceStudio-*-linux-x64.deb
-```
-
-</details>
-
-<details>
-<summary>Snap · Ubuntu, Fedora, openSUSE und mehr</summary>
-
-<a href="https://snapcraft.io/voicestudio"><img src="https://img.shields.io/badge/Snap%20Store-27272a?style=flat-square&amp;logo=snapcraft&amp;logoColor=ffffff" alt="Snap Store" height="20" /></a>
-
-Mit [snapd installiert](https://snapcraft.io/docs/installing-snapd):
-
-```sh
-sudo snap install voicestudio
-```
-
-So aktivieren Sie den Mikrofonzugriff:
-
-```sh
-sudo snap connect voicestudio:audio-record
-```
-
-</details>
-
-<details>
-<summary>Jede Linux-Distribution · AppImage</summary>
-
-Laden Sie das AppImage in den aktuellen Ordner herunter und starten Sie es dann:
-
-[Herunterladen](https://github.com/debpalash/VoiceStudio/releases/latest)
-
-```sh
-chmod +x VoiceStudio-*-linux-x64.AppImage
-./VoiceStudio-*-linux-x64.AppImage
-```
-
-</details>
-
-<details>
-<summary>Nix / NixOS · Quellumgebung</summary>
-
-Rufen Sie die FHS-Entwicklungsumgebung des Repositorys auf und führen Sie sie dann von der Quelle aus aus:
-
-```sh
-git clone https://github.com/debpalash/VoiceStudio.git
-cd VoiceStudio
-nix develop .#fhs
-bun run dev
-```
-
-Anleitung
-
-</details>
-
-Anleitung
-
-</blockquote>
-
-</details>
-
-<a id="install-docker"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/docker.svg" alt="" width="20" height="20" /> <strong>Docker</strong> · GHCR · Docker Hub</summary>
-
-<blockquote>
-
-Stabile Container-Images · CPU · NVIDIA CUDA · AMD ROCm.
-
-<a href="https://github.com/debpalash/VoiceStudio/pkgs/container/voicestudio"><img src="https://img.shields.io/badge/GHCR-27272a?style=flat-square&amp;logo=github&amp;logoColor=ffffff" alt="GHCR" height="20" /></a>
-
-**Lokal auf der CPU ausführen (Bash)**
-
-```sh
-export OMNIVOICE_API_KEY="$(openssl rand -hex 32)"
-docker run -d --name omnivoice \
-  -p 127.0.0.1:3900:3900 \
-  -e OMNIVOICE_API_KEY \
-  -e OMNIVOICE_DATA_DIR=/app/omnivoice_data \
-  -v omnivoice-data:/app/omnivoice_data \
-  ghcr.io/debpalash/voicestudio:stable
-printf 'API key: %s\n' "$OMNIVOICE_API_KEY"
-```
-
-Öffnen Sie http://localhost:3900 und verwenden Sie den unten abgedruckten API-Schlüssel.
-
-Anleitungen für NVIDIA, AMD ROCm und Compose
-
-[Docker Hub-Spiegel](https://hub.docker.com/r/palashdeb/omnivoice-studio): `palashdeb/omnivoice-studio:stable`
 
 </blockquote>
 
@@ -391,28 +192,7 @@ adb install -r VoiceStudio-*-android.apk
 
 </details>
 
-<a id="install-ios"></a>
-
-<details>
-<summary><img src="../../docs/assets/platforms/apple.svg" alt="" width="20" height="20" /> <strong>iPhone / iPad</strong> · IPA · Seitenladen</summary>
-
-<blockquote>
-
-iOS / iPadOS 17+ · Vorschau · Auf dem Gerät, offline nach Modell-Download.
-
-Laden Sie das IPA herunter und befolgen Sie die Anweisungen zum Signieren und Querladen.
-
-[Herunterladen](https://github.com/debpalash/VoiceStudio/releases/latest) · [Anleitung](../../docs/mobile.md#install)
-
-</blockquote>
-
-</details>
-
-Desktop- und Telefoninstallationsprogramme sind auf der [neuesten Version](https://github.com/debpalash/VoiceStudio/releases/latest); Docker-Images stammen von GHCR. Keine GPU? Die App ist auf der CPU voll nutzbar, nur langsamer. Native GGUF-Engines können Vulkan auch auf AMD-, Intel- und NVIDIA-GPUs nutzen; OmniVoice GGUF wählt seine GPU- und Modellgröße automatisch unter Windows und Linux aus ([OmniVoice](../../docs/engines/omnivoice-gguf.md#vulkan-acceleration), [CosyVoice](../../docs/engines/cosyvoice-gguf.md)). Geschwindigkeit nach Engine und Hardware: [Leistung](../../docs/performance.md).
-
-
 <a id="get-started"></a>
-
 ## Erste Schritte
 
 Installieren Sie mit den oben genannten Optionen. Öffnen Sie dann **Klonen von Stimmen**, wählen Sie eine Stimme aus oder fügen Sie eine saubere Referenzaufnahme hinzu, geben Sie Ihren Text ein und generieren Sie ihn. Die App fragt nach, bevor sie ein Modell herunterlädt.
@@ -420,13 +200,10 @@ Installieren Sie mit den oben genannten Optionen. Öffnen Sie dann **Klonen von 
 <details>
 <summary><strong>Weitere Installationsoptionen</strong>: eine bestimmte Version, aktuelle Hauptversion, deinstalliert, aus der Quelle, mit einem Codierungsagenten</summary>
 
-```sh
-curl -fsSL https://voicestudio.sh/install | sh -s -- --version X.Y.Z   # a specific release
-curl -fsSL https://voicestudio.sh/install | sh -s -- --main            # build current main
-curl -fsSL https://voicestudio.sh/install | sh -s -- --uninstall       # remove the app, keep your data
+```powershell
+irm https://voicestudio.sh/install.ps1 | iex
 ```
 
-Wenn `voicestudio.sh` nicht erreichbar ist, führen Sie das Skript direkt aus dem Repository aus: `curl -fsSL https://raw.githubusercontent.com/debpalash/VoiceStudio/main/scripts/install.sh | sh`. Voraussetzungen und Verhalten: [Installationsanleitung](../../docs/install/script.md).
 
 **Aus Quelle**
 
