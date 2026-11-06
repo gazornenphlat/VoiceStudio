@@ -17,7 +17,7 @@ def test_rehearsal_installs_runtime_in_a_separate_packaged_launch():
         ('win32', 'x64'), ('win32', 'arm64'),
     }
     assert '--setup' not in runtime[0]['run'], '--setup would bypass runtime installation'
-    assert 'xvfb-run -a node tests/packaged-smoke.mjs --install' in runtime[0]['run']
+    assert 'node tests/packaged-smoke.mjs --install' in runtime[0]['run']
     assert 'node tests/packaged-smoke.mjs --setup' in '\n'.join(s.get('run', '') for s in steps)
     assert workflow['permissions']['contents'] == 'read'
     assert '--publish never' in '\n'.join(s.get('run', '') for s in steps)

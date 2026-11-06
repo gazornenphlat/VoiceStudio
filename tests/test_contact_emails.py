@@ -34,7 +34,7 @@ _NATIVE_LICENCE_PATH = re.compile(
     r"^mobile/(?:ios/VoiceStudio/Resources/NativeLicences/[^/]+\.txt"
     r"|android/app/src/main/assets/licenses/native-[^/]+\.txt"
     # LAME (LGPL) is vendored unmodified for MP3 export; its source headers name its authors.
-    r"|ios/VoiceStudioKit/Sources/VSNative/Lame/.+)$"
+    r"|native/mp3/src/Lame/.+)$"
 )
 
 

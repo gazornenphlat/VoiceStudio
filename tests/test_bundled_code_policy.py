@@ -69,8 +69,10 @@ def test_store_build_blocks_shell_execution_before_it_runs():
 
 
 @pytest.mark.skipif(os.name != "posix", reason="POSIX exec API")
-def test_store_build_blocks_direct_exec_before_replacing_the_process():
-    result = run_policy("import os; os.execv('/bin/echo',['echo','EXECUTED'])")
+def test_store_build_blocks_direct_exec_before_replacing_the_process(tmp_path):
+    # An empty signed-resources root: /bin resolves into the interpreter's /usr, so
+    # the default root would legitimately allow it.
+    result = run_policy("import os; os.execv('/bin/echo',['echo','EXECUTED'])", resources=tmp_path)
     assert result.returncode != 0
     assert "BUNDLED_CODE_POLICY" in result.stderr
     assert "EXECUTED" not in result.stdout
