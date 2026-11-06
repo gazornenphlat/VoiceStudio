@@ -1,11 +1,11 @@
 # VoiceStudio mobile — app contract
 
-Both native apps (iOS: Swift/SwiftUI, `mobile/ios/`; Android: Kotlin/Compose,
-`mobile/android/`) implement **exactly this spec**. A feature ships on both or
-on neither (CLAUDE.md → "Default features must work on every platform").
+The native Android app (Kotlin/Compose, `mobile/android/`) implements **exactly
+this spec**. A feature ships whole or not at all (CLAUDE.md → "Default features
+must work on every platform").
 
 The apps run models **on the phone** and can also drive the user's own
-VoiceStudio computer (desktop app, Docker or server) over LAN, Tailscale or a
+VoiceStudio computer (desktop app or server) over LAN, Tailscale or a
 remote URL. **Phone first:** once its models are downloaded every feature works
 offline with no computer; pairing adds the computer's engines. No cloud relay,
 no accounts. M1 (below) is the computer connection; M2 is on-device inference.
@@ -15,8 +15,8 @@ no accounts. M1 (below) is the computer connection; M2 is on-device inference.
 | File | Source | Regenerate |
 |---|---|---|
 | `contract/openapi.json` | backend FastAPI app | `uv run python scripts/export_openapi.py` |
-| `contract/maintainer-cards.json`, iOS contributor assets | Electron Home maintainer cards and portraits | `bun scripts/export-mobile-contributors.ts` |
-| `contract/tokens.json`, `Tokens.generated.swift`, `Tokens.generated.kt` | Electron theme | `bun scripts/export-mobile-tokens.ts` |
+| `contract/maintainer-cards.json` | Electron Home maintainer cards | no regenerate script in this fork (the iOS export was removed) |
+| `contract/tokens.json`, `Tokens.generated.kt` | Electron theme | `bun scripts/export-mobile-tokens.ts` |
 | Locale catalogs | `electron/src/renderer/src/i18n/locales/*.json` | copied into each app at build time |
 
 ## Theme
@@ -35,32 +35,21 @@ no accounts. M1 (below) is the computer connection; M2 is on-device inference.
   `input`; focus ring = `focus`; errors = `error`/`errorForeground`/`errorSurface`;
   warnings likewise; tab/nav bars = `chrome` + `toolbarForeground`.
 - Type: Inter (bundled, SIL OFL — include its license) preserves the brand in
-  artwork and the Home wordmark. iOS uses the system semantic text styles for
-  navigation, controls and body content, scaling with Dynamic Type; Android keeps
-  the generated Inter typography. Desktop sizes
-  (`VSTokens.text*`) are the base; scale with Dynamic Type / Android font
-  scale. Body text on phones uses `editor` (16/28); controls use `ui` (14/20)
+  artwork and the Home wordmark. Desktop sizes (`VSTokens.text*`) are the base;
+  scale with the Android font scale. Body text on phones uses `editor` (16/28); controls use `ui` (14/20)
   scaled up to the platform minimum touch-readable size.
 - Radii: `radiusLg` for cards, `radiusControl` for buttons/fields. Spacing:
   `spacingGap` between elements, `spacingInset` for screen padding (cap at 16
   on compact widths).
 - Respect reduced motion and reduced transparency.
-- Native iOS presentation follows Apple's current HIG: automatic system navigation
-  and tab-bar materials, platform button shapes and sheet curvature. Content can
-  scroll beneath native chrome while controls remain in safe areas. iOS content
-  cards and text fields use generated `iosCardRadius` and `iosFieldRadius`
-  tokens (continuous 24-point and 16-point corners). The Home wordmark uses
-  generated `iosHomeWordmarkSize` (28 points), scaling with Dynamic Type;
-  Android retains its generated shapes. These presentation differences preserve
-  the same capabilities and consent gates on both platforms.
-- Licence review (both platforms) leads with a plain summary: the licence
+- Licence review leads with a plain summary: the licence
   category, four rights rows (commercial use, generated audio, sharing, voice
   rights; each "Restricted" or "Not stated"), the licensor's notes, the credit
   and tappable https licence/source links. The raw terms, fingerprint, licence
-  code and receipts sit under a collapsed "Exact terms" section. iOS shows it as a
+  code and receipts sit under a collapsed "Exact terms" section. The review is a
   large, scrollable sheet with a leading Close action, an initially unchecked
   confirmation and a persistent Accept action disabled until confirmation. Closing
-  never records acceptance or starts a download. On both platforms, multi-selection
+  never records acceptance or starts a download. Multi-selection
   sheets/dialogs edit a draft; Cancel/dismiss discards it and Confirm applies it.
 
 ## Strings
@@ -76,14 +65,14 @@ no accounts. M1 (below) is the computer connection; M2 is on-device inference.
   use the same keys). If you need a key that is not there, add it to
   `contract/strings.<platform>-additions.en.json` instead; the maintainer merges
   those into the shared list and the Electron catalogs with translations.
-- No hardcoded user-facing text in Swift/Kotlin. No CJK anywhere outside the
+- No hardcoded user-facing text in Kotlin. No CJK anywhere outside the
   catalogs.
 
 ## Screens (M1)
 
 Bottom navigation: **Home**, **Voices**, **Dub**, **Dictate**, **Settings**.
 Home is the default after consent. All five navigation destinations keep visible
-text labels; iOS keeps the full tab bar visible while scrolling. The Home voice
+text labels. The Home voice
 cloning shortcut opens creation directly, while the Voices tab opens the library.
 Before a speech model is ready, Speech pins its explicit Download action in place
 of a disabled Generate button. Downloading still requires each model’s exact
@@ -142,8 +131,7 @@ All tabs work without pairing once on-device models are installed (see M2); the 
      monitor progress (job events / polling per OpenAPI), abort, download/share
      results (`/dub/download*`). History: `/dub/history`.
    - Long jobs run on the host; the app reconnects and resumes monitoring.
-     Upload continues in the background (iOS background URLSession / Android
-     WorkManager). Local notification on finish if the user allowed
+     Upload continues in the background (Android WorkManager). Local notification on finish if the user allowed
      notifications (no APNs/FCM).
 6. **Dictate**
    - Hold/tap to record, stream to the host dictation WebSocket (ticket from
@@ -169,8 +157,7 @@ All tabs work without pairing once on-device models are installed (see M2); the 
 ## Platform rules
 
 - Networking: plain HTTP allowed **only** to local/private addresses
-  (iOS `NSAllowsLocalNetworking` + `NSLocalNetworkUsageDescription`; Android
-  `network_security_config` for loopback/RFC1918/CGNAT `100.64/10`/link-local
+  (Android `network_security_config` for loopback/RFC1918/CGNAT `100.64/10`/link-local
   and `.local`/`.ts.net`). Everything else HTTPS.
 - Permissions requested only at first use, with a reason string from L10n:
   camera (QR), microphone (record/dictate), local network, notifications.
@@ -179,7 +166,7 @@ All tabs work without pairing once on-device models are installed (see M2); the 
 - Accessibility: every control labelled, Dynamic Type / font scale up to the
   largest size without clipping, minimum 44pt / 48dp touch targets, contrast
   from tokens.
-- Minimum OS: iOS 17, Android API 29 (target the latest stable SDK).
+- Minimum OS: Android API 29 (target the latest stable SDK).
 - Version: read from the root `package.json` at build time (never hard-coded).
 
 ## Tests each app must have
@@ -206,9 +193,8 @@ All tabs work without pairing once on-device models are installed (see M2); the 
 
 - Native libraries are built or fetched by `mobile/native/` scripts at the pins
   above, verified by SHA-256, and never committed. Prebuilt artifacts (sherpa
-  AAR, llama xcframework) are downloaded with a recorded checksum; the rest is
-  built from source (iOS: CMake + Xcode toolchain, Metal where supported;
-  Android: NDK `arm64-v8a`, plus `x86_64` for the emulator).
+  AAR) are downloaded with a recorded checksum; the rest is
+  built from source (Android: NDK `arm64-v8a`, plus `x86_64` for the emulator).
 - Each app wraps the runtimes behind one platform interface
   (`LocalEngine`: `synthesize`, `clone`, `design`, `transcribe`, `streamTranscribe`,
   `translate`, all cancellable, all off the main thread, progress reported).
@@ -291,7 +277,6 @@ All tabs work without pairing once on-device models are installed (see M2); the 
   Retry transient network/408/429/5xx failures with bounded exponential backoff,
   jitter and `Retry-After`; retry 403 from the original pinned URL to refresh
   expiring delivery URLs. Permanent failures require an explicit retry.
-  iOS uses system background URLSession tasks and durable completion receipts;
   Android uses user-initiated transfer jobs on API 34+ and foreground WorkManager
   jobs on older supported devices; blocked foreground promotion retries without
   pausing the intent. Task start and cancellation are ordered so a stopped task
@@ -339,9 +324,9 @@ Extract audio (AVFoundation / MediaExtractor), transcribe (sherpa Whisper),
 translate per segment (llama.cpp), synthesize per segment using either the
 original speaker from a source reference clip or a saved phone voice
 (omnivoice.cpp), fit timing,
-mix, and mux back into the video (AVAssetWriter / MediaMuxer). Long jobs run as
-a foreground task with progress (Android foreground service; iOS keeps
-progress visible and resumes from a saved checkpoint after interruption).
+mix, and mux back into the video (MediaMuxer). Long jobs run as
+a foreground task with progress (Android foreground service; resumes from a
+saved checkpoint after interruption).
 
 ### Privacy
 
@@ -359,8 +344,7 @@ Settings → Privacy states this.
 - Licence gate: gated model can't download or load before acceptance;
   withdrawal blocks it again.
 - Real inference smoke test in CI with the smallest models (cached): TTS
-  produces audio and ASR transcribes it back (iOS on the macOS runner via
-  VoiceStudioKit; Android on an `x86_64` emulator).
+  produces audio and ASR transcribes it back (Android on an `x86_64` emulator).
 - Routing: phone / computer / download prompt choices, and offline use with no
   computer paired.
 
@@ -388,7 +372,7 @@ repository). It needs no sign-in and accepts no audio or identifiers.
   | `reason` | the chosen reason |
   | `note` | trimmed note, if any |
   | `prompt_text` | the typed text (first 5000 characters), only when ticked |
-  | `platform` | `android` / `ios` |
+  | `platform` | `android` |
   | `app_version` | root `package.json` version |
   | `task` | `speak` / `clone` / `dub` |
   | `model_id` | phone: the `repo` from `models.json` of the model that made it (Speech: the TTS or clone model; a cloned voice: the `clone` model that generated its saved preview (legacy voices can retain their ASR attribution); a dub: its pinned `clone` model; results saved before this feature: `unknown`); computer: the engine id the host reported, else `unknown` (characters outside `0-9A-Za-z._/:-` removed, at most 128) |
@@ -528,16 +512,10 @@ Workflows on both platforms. These are native screens; no embedded desktop UI.
   Atomic per-chunk checkpoints bind source SHA-256 and the exact installed model
   pin; cancellation retains completed chunks. Completion removes scratch PCM.
   Edited text cannot export stale subtitle timings until the original is restored.
-  Android uses a foreground worker; iOS uses the shared CPU job owner and resumes
+  Android uses a foreground worker and resumes
   saved records after restart. Import never downloads a model.
 - **Jobs** live beyond screen navigation. Android foreground workers expose
-  progress/cancellation. iOS requests user-started continued processing on iOS
-  26+, including supported GPU continuation with the signed GPU entitlement
-  and an actual OS grant. A user-enabled CPU fallback cancels/checkpoints,
-  awaits native-lease cleanup, then reruns the same immutable operation under
-  task-scoped CPU selection. No process-global backend environment is changed;
-  foreground Metal remains the default. Unsupported/denied grants and older OS
-  limits retain explicit resume. Thermal critical state and critically low
+  progress/cancellation. Unsupported OS limits retain explicit resume. Thermal critical state and critically low
   battery pause work. Sustained jobs cover dubs, narration, workflows and file transcription;
   interactive tools remain screen-owned. Paused book/workflow recipes may resume
   only when their full draft and model configuration still match; edits discard
