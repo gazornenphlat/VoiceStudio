@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AlertCircleIcon,
   CheckCircle2Icon,
-  KeyboardIcon,
   LockKeyholeIcon,
   MicIcon,
   RotateCwIcon,
@@ -117,21 +116,6 @@ export function PermissionsSettings() {
               </Button>
             )}
           </SettingsRow>
-          {state.platform === 'darwin' && state.accessibility && (
-            <SettingsRow
-              id="permission-accessibility"
-              title={t('permissions.accessibility')}
-              description={t('permissions.accessibility_why')}
-            >
-              <KeyboardIcon aria-hidden="true" className="size-4 text-muted-foreground" />
-              <PermissionBadge status={state.accessibility} />
-              {state.accessibility === 'denied' && (
-                <Button variant="ghost" size="sm" onClick={() => void open('accessibility')}>
-                  {t('permissions.open_settings')}
-                </Button>
-              )}
-            </SettingsRow>
-          )}
         </>
       )}
     </SettingsSection>

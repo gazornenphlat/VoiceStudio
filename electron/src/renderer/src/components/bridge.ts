@@ -11,17 +11,17 @@ export function appVersion(): string {
   return getBridge()?.app.version ?? __APP_VERSION__;
 }
 
+/** The Windows build never runs on macOS, so macOS-only layout branches are unreachable. */
 export function isMac(): boolean {
-  return getBridge()?.app.platform === 'darwin';
+  return false;
 }
 
-export type PlatformFamily = 'mac' | 'windows' | 'linux';
+export type PlatformFamily = 'windows' | 'linux';
 
 /** Which OS design language native-feeling UI should follow; browser tabs fall back to the user agent. */
 export function platformFamily(): PlatformFamily {
   const platform =
     getBridge()?.app.platform ?? (typeof navigator === 'undefined' ? '' : navigator.platform || navigator.userAgent);
-  if (platform === 'darwin' || /mac|iphone|ipad/i.test(platform)) return 'mac';
   if (platform === 'win32' || /win/i.test(platform)) return 'windows';
   return 'linux';
 }

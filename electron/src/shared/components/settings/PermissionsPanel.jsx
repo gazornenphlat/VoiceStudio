@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertCircle, CheckCircle, Keyboard, LockKeyhole, Mic, RotateCw } from 'lucide-react';
+import { AlertCircle, CheckCircle, LockKeyhole, Mic, RotateCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { Badge, Button } from '../../ui';
 import { SettingsSection, SettingRow } from './primitives';
 import usePermissions from '../../hooks/usePermissions';
 import { detectPlatform, micHintKey } from '../../utils/micError';
-import { openAccessibilitySettings, openMicrophoneSettings } from '../../utils/permissions';
+import { openMicrophoneSettings } from '../../utils/permissions';
 
 /**
  * PermissionsPanel — Settings → Permissions: live OS-permission status for
@@ -52,7 +52,7 @@ function StatusChip({ id, status, t }) {
 
 export default function PermissionsPanel({ platform = detectPlatform() }) {
   const { t } = useTranslation();
-  const { available, mic, a11y, recheck } = usePermissions();
+  const { available, mic, recheck } = usePermissions();
 
   const openMicSettings = async () => {
     if (!(await openMicrophoneSettings())) {
@@ -97,23 +97,6 @@ export default function PermissionsPanel({ platform = detectPlatform() }) {
               </>
             }
           />
-          {platform === 'mac' && (
-            <SettingRow
-              icon={Keyboard}
-              title={t('permissions.accessibility')}
-              subtitle={a11y ? t('permissions.accessibility_why') : t('capture.a11y_setup')}
-              control={
-                <>
-                  <StatusChip id="accessibility" status={a11y ? 'granted' : 'denied'} t={t} />
-                  {!a11y && (
-                    <Button variant="ghost" size="sm" onClick={() => openAccessibilitySettings()}>
-                      {t('permissions.open_settings')}
-                    </Button>
-                  )}
-                </>
-              }
-            />
-          )}
         </>
       )}
     </SettingsSection>

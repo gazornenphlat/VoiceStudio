@@ -126,7 +126,6 @@ describe('model licence acceptance', () => {
   });
 
   it.each([
-    ['MacIntel', 'mac'],
     ['Win32', 'windows'],
     ['Linux x86_64', 'linux'],
   ])('follows the %s design language for the action row', async (nav, family) => {

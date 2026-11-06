@@ -188,22 +188,20 @@ export function tunnelTarget(listener: TwilioState['listener']): string {
   return `http://${shown}:${listener.preferred_port ?? DEFAULT_GATEWAY_PORT}`;
 }
 
-type Os = 'darwin' | 'win32' | 'linux';
+type Os = 'win32' | 'linux';
 function currentOs(): Os {
   const platform = getBridge()?.app.platform;
-  if (platform === 'darwin' || platform === 'win32') return platform;
+  if (platform === 'win32') return platform;
   if (platform) return 'linux';
   const agent = typeof navigator === 'undefined' ? '' : navigator.userAgent;
-  return /Mac/i.test(agent) ? 'darwin' : /Win/i.test(agent) ? 'win32' : 'linux';
+  return /Win/i.test(agent) ? 'win32' : 'linux';
 }
 
 const INSTALL: Record<'cloudflared' | 'ngrok', Partial<Record<Os, string>>> = {
   cloudflared: {
-    darwin: 'brew install cloudflared',
     win32: 'winget install --id Cloudflare.cloudflared',
   },
   ngrok: {
-    darwin: 'brew install ngrok',
     win32: 'winget install --id ngrok.ngrok',
     linux: 'sudo snap install ngrok',
   },

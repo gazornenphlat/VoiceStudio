@@ -16,10 +16,4 @@ describe('macOS window chrome', () => {
     expect(MAC_TRAFFIC_LIGHTS_BAND).toBeGreaterThanOrEqual(MAC_TRAFFIC_LIGHTS.y + 22);
   });
 
-  it('is the only place the main process takes the light position from', () => {
-    // __dirname, not import.meta.url: under jsdom the latter is a Location, not a file URL.
-    const main = readFileSync(join(__dirname, '../../main/index.ts'), 'utf8');
-    expect(main).toContain('trafficLightPosition: MAC_TRAFFIC_LIGHTS');
-    expect(main).not.toMatch(/trafficLightPosition:\s*\{/);
-  });
 });

@@ -28,9 +28,8 @@ import {
 } from './model-licence-view';
 
 /**
- * Button row per platform convention: macOS puts the default action rightmost
- * with Cancel beside it, Windows (Fluent) uses equal-width buttons with the
- * primary action first, Linux (GNOME/KDE) right-aligns Cancel then the action.
+ * Button row per platform convention: Windows (Fluent) uses equal-width buttons
+ * with the primary action first, Linux (GNOME/KDE) right-aligns Cancel then the action.
  * Rendered below the dialog's scroll region so it is always visible.
  */
 function footerActionsClass(platform: PlatformFamily) {
@@ -39,7 +38,6 @@ function footerActionsClass(platform: PlatformFamily) {
     // Fluent dialogs put the actions on their own tinted command area.
     (platform === 'windows' ? 'bg-muted' : 'bg-popover');
   if (platform === 'windows') return cn(base, 'sm:flex-row-reverse [&>button]:sm:flex-1');
-  if (platform === 'mac') return cn(base, 'sm:justify-end [&>button]:sm:min-w-24');
   return cn(base, 'sm:flex-wrap sm:justify-end');
 }
 
@@ -290,14 +288,14 @@ export function ModelLicenceGate() {
         className={cn(
           // Tall and wide: the licence text is the content, so give it the room.
           'flex h-[min(48rem,calc(100dvh-2rem))] flex-col gap-0 overflow-hidden p-0 sm:max-w-4xl',
-          platform === 'mac' ? 'rounded-xl' : 'rounded-lg',
+          'rounded-lg',
           LICENCE_DIALOG_SURFACE,
         )}
         data-platform={platform}
       >
-        <DialogHeader className={cn('px-8 pt-6 pb-4', platform === 'mac' && 'items-center text-center')}>
-          <div className={cn('flex gap-3', platform === 'mac' ? 'flex-col items-center' : 'items-start')}>
-            <ModelLicenseIcon category="conditions" className={platform === 'mac' ? 'size-8' : 'mt-1 size-6 shrink-0'} />
+        <DialogHeader className="px-8 pt-6 pb-4">
+          <div className="flex items-start gap-3">
+            <ModelLicenseIcon category="conditions" className="mt-1 size-6 shrink-0" />
             <div className="min-w-0 space-y-1">
               <DialogTitle className={platform === 'windows' ? 'text-xl font-semibold' : 'text-base font-semibold'}>
                 {t(done ? 'modelLicense.acceptedTitle' : 'modelLicense.requiredTitle')}

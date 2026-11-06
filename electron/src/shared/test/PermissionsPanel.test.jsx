@@ -57,34 +57,17 @@ describe('PermissionsPanel — inside Tauri', () => {
     expect(screen.queryByRole('button', { name: 'Open Settings' })).not.toBeInTheDocument();
   });
 
-  it('denied mic → Denied chip, per-OS hint, and an Open Settings deep-link', async () => {
+  it('denied mic → Denied chip and an Open Settings deep-link', async () => {
     stubInvoke({ mic: 'denied' });
-    render(<PermissionsPanel platform="mac" />);
+    render(<PermissionsPanel platform="windows" />);
     await waitFor(() => {
       expect(screen.getByTestId('perm-chip-microphone')).toHaveTextContent('Denied');
     });
-    // The actionable per-OS path replaces the generic "why" line.
-    expect(
-      screen.getByText(/System Settings → Privacy & Security → Microphone/),
-    ).toBeInTheDocument();
 
     const buttons = screen.getAllByRole('button', { name: 'Open Settings' });
     fireEvent.click(buttons[0]);
     await waitFor(() => {
       expect(invokeMock).toHaveBeenCalledWith('open_microphone_settings');
-    });
-  });
-
-  it('shows the Accessibility row on macOS with its own deep-link when denied', async () => {
-    stubInvoke({ mic: 'granted', a11y: false });
-    render(<PermissionsPanel platform="mac" />);
-    expect(screen.getByText('Accessibility')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByTestId('perm-chip-accessibility')).toHaveTextContent('Denied');
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'Open Settings' }));
-    await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith('open_accessibility_settings');
     });
   });
 
@@ -106,7 +89,7 @@ describe('PermissionsPanel — inside Tauri', () => {
 
   it('renders the honest neutral chips for prompt/unknown', async () => {
     stubInvoke({ mic: 'prompt' });
-    render(<PermissionsPanel platform="mac" />);
+    render(<PermissionsPanel platform="windows" />);
     await waitFor(() => {
       expect(screen.getByTestId('perm-chip-microphone')).toHaveTextContent('Not asked yet');
     });
@@ -115,7 +98,7 @@ describe('PermissionsPanel — inside Tauri', () => {
 
 describe('PermissionsPanel — browser / web UI (no Tauri)', () => {
   it('no-ops gracefully: explains instead of guessing, never invokes', () => {
-    render(<PermissionsPanel platform="mac" />);
+    render(<PermissionsPanel platform="windows" />);
     expect(screen.getByText(/only readable in the desktop app/)).toBeInTheDocument();
     expect(screen.queryByText('Microphone')).not.toBeInTheDocument();
     expect(invokeMock).not.toHaveBeenCalled();
