@@ -53,16 +53,6 @@ describe('BackendStartFailureNotice', () => {
     expect(dialog.textContent).toMatch(/Clean & Retry/i);
   });
 
-  // #1112's dead end: an Intel Mac can never succeed, so no Retry advice.
-  it('omits the retry hint for a failure retrying can never fix', async () => {
-    render(<BackendStartFailureNotice />);
-    emit("Intel Macs can't run the local AI backend (PyTorch ships no x86_64 wheels).");
-    fireEvent.click(await screen.findByRole('button', { name: /see why/i }));
-
-    const dialog = await screen.findByRole('dialog');
-    expect(dialog.textContent).not.toMatch(/Clean & Retry/i);
-  });
-
   it('reports the diagnosis through the bug-report affordance', async () => {
     render(<BackendStartFailureNotice />);
     emit(DIAGNOSIS);

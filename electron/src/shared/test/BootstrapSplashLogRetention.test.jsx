@@ -14,7 +14,6 @@
  *   - `detectHints(message, logs)` scans for actionable failure markers. A
  *     failure that happened early in a long install lost its marker, so the
  *     card fell back to `hint_default` and the user was told nothing useful.
- *   - `isUnrecoverableFailure(message, logs)` runs off the same scan.
  *
  * The fix keeps the whole run in state and slices only where the DOM is
  * written. The array is bounded by one bootstrap: both retry paths clear it,

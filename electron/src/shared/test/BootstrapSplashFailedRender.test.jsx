@@ -44,19 +44,4 @@ describe('BootstrapSplash — stage="failed" renders (#1159 TDZ regression)', ()
     expect(screen.getByRole('button', { name: /^Retry/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Clean & Retry/ })).toBeInTheDocument();
   });
-
-  it('unrecoverable failure (Intel Mac, #1112) renders without retry buttons', () => {
-    // This is the exact expression that read `logs` in its TDZ:
-    // isUnrecoverableFailure(message, logs) with isFailed === true.
-    render(
-      <BootstrapSplash
-        stage="failed"
-        message="Intel Macs can't run the local AI backend (PyTorch ships no macOS x86_64 wheels)."
-      />,
-    );
-
-    expect(screen.getByText(/Retrying cannot fix this/)).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /^Retry/ })).toBeNull();
-    expect(screen.queryByRole('button', { name: /Clean & Retry/ })).toBeNull();
-  });
 });

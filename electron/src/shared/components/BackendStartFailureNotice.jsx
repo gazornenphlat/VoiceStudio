@@ -4,7 +4,7 @@ import { AlertTriangle, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button, Dialog } from '../ui';
 import { openBugReport } from '../utils/bugReport';
-import { detectHints, isUnrecoverableFailure } from './BootstrapSplash';
+import { detectHints } from './BootstrapSplash';
 
 /**
  * BackendStartFailureNotice — the surfacing half of #1177.
@@ -56,7 +56,6 @@ export default function BackendStartFailureNotice() {
   // and after the splash. No logs here (the splash's log buffer is gone by
   // now) — the shell's message is the whole evidence.
   const hints = detectHints(message, []);
-  const unrecoverable = isUnrecoverableFailure(message, []);
 
   return (
     <>
@@ -137,9 +136,7 @@ export default function BackendStartFailureNotice() {
             {hints.map((key) => (
               <li key={key}>{t(key)}</li>
             ))}
-            {/* An unrecoverable failure (Intel Mac) must not send the user to a
-                Retry that can never work — #1112's dead end. */}
-            {!unrecoverable && <li>{t('backend_start_failure.retry_hint')}</li>}
+            <li>{t('backend_start_failure.retry_hint')}</li>
           </ul>
         </div>
       </Dialog>

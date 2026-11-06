@@ -135,9 +135,9 @@ const INSTALL_WORK_STAGES = [
 // nothing more, so the per-event array copy stays bounded no matter how long a
 // bootstrap runs.
 //
-// The FULL run lives in `allLogsRef` instead (#1847). Four consumers need every
-// line — the Activity counter, the Copy button, the actionable failure hints and
-// the unrecoverable-retry gate — and capping the state they read meant a cold
+// The FULL run lives in `allLogsRef` instead (#1847). Three consumers need every
+// line — the Activity counter, the Copy button and the actionable failure hints
+// — and capping the state they read meant a cold
 // install silently destroyed its own early output. A ref rather than state
 // because appending to it is O(1); `totalLines` is what makes a new line
 // re-render. It lives for exactly one bootstrap: both retry paths clear it, and
@@ -182,23 +182,8 @@ export function detectHints(message, logs = []) {
   if (/seems stuck at|never reported ready/i.test(all)) hints.push('bootstrap.hint_stuck');
   if (/blocking GitHub|couldn't download Python|python-build-standalone|dns error/i.test(all))
     hints.push('bootstrap.hint_github_blocked');
-  // Intel-Mac backend unsupported (#889): PyTorch ships no macOS x86_64
-  // wheels, so bootstrap.rs pre-fails with this message before any sync.
-  if (/Intel Macs can't run the local AI backend/i.test(all)) {
-    return ['bootstrap.hint_intel_mac']; // retrying can never help — show only this
-  }
   if (hints.length === 0) hints.push('bootstrap.hint_default');
   return hints;
-}
-
-/** Failures no retry can ever fix — offering a Retry button for these is the
- *  dead end #1112 reported ("clicking the buttons does nothing"): the bootstrap
- *  re-fails identically every time. Today that's the Intel Mac (#889): PyTorch
- *  ships no macOS x86_64 wheels, so the dependency set can never resolve there.
- *  Keyed off the same hint the matcher produces, so the two can't drift.
- *  Pure + exported for tests. */
-export function isUnrecoverableFailure(message, logs = []) {
-  return detectHints(message, logs).includes('bootstrap.hint_intel_mac');
 }
 
 function formatEta(seconds) {
@@ -448,11 +433,11 @@ export function BootstrapSplash({ stage, message, attempt = 0 }) {
 
   // ── Hooks FIRST, derived values AFTER ──────────────────────────────────
   // Every useState/useRef must be declared before any plain `const` that
-  // reads its result. When a derived const (e.g. `isUnrecoverable`, which
-  // reads `logs`) sits *between* two hook calls, the production minifier
-  // (esbuild) merges the declarations into one comma-list and can hoist the
-  // derived const ahead of the `useState` binding it depends on — emitting
-  // `isUnrecoverable = isFailed && f(message, logs), [logs] = useState([])`.
+  // reads its result. When a derived const (e.g. one that reads `logs`) sits
+  // *between* two hook calls, the production minifier (esbuild) merges the
+  // declarations into one comma-list and can hoist the derived const ahead of
+  // the `useState` binding it depends on — emitting
+  // `derived = f(logs), [logs] = useState([])`.
   // That is a temporal-dead-zone access ("Cannot access 'logs' before
   // initialization"): it throws during render, React unmounts to an empty
   // #root, and the whole app is a black screen. Dev/unminified builds
@@ -498,12 +483,6 @@ export function BootstrapSplash({ stage, message, attempt = 0 }) {
   const label = t(`bootstrap.${stage}`, STAGE_LABEL[stage]);
   const stepIndex = Math.max(0, STEPS.indexOf(stage));
   const isFailed = stage === 'failed';
-  // Retrying an Intel-Mac install can never succeed — don't offer the dead end.
-  // Reads the full run, not the rendered tail: an Intel-Mac marker printed
-  // early in a long install used to scroll out of the capped array, and the
-  // dead-end detection went with it. Only evaluated once `isFailed`, by which
-  // point no more lines are arriving.
-  const isUnrecoverable = isFailed && isUnrecoverableFailure(message, allLogsRef.current);
 
   const resetLogs = () => {
     allLogsRef.current = [];
@@ -835,35 +814,20 @@ export function BootstrapSplash({ stage, message, attempt = 0 }) {
               </ul>
             </div>
             <div className="flex items-center justify-end gap-2">
-              {/* #1112: some failures can NEVER be retried away — an Intel Mac
-                  has no PyTorch wheels, so every retry re-fails identically and
-                  the buttons just look broken ("clicking them does nothing").
-                  Say so plainly and don't offer the dead end. */}
-              {isUnrecoverable ? (
-                <span className="text-sm text-fg-muted">
-                  {t(
-                    'bootstrap.unrecoverable',
-                    'Retrying cannot fix this — see the guidance above.',
-                  )}
-                </span>
-              ) : (
-                <>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleCleanRetry}
-                    disabled={retrying}
-                    leading={<Brush size={12} />}
-                  >
-                    {t('bootstrap.clean_retry', 'Clean & Retry')}
-                  </Button>
-                  <Button variant="primary" onClick={handleRetry} disabled={retrying}>
-                    {retrying
-                      ? t('bootstrap.retrying', 'Retrying…')
-                      : t('bootstrap.retry', 'Retry')}
-                  </Button>
-                </>
-              )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleCleanRetry}
+                  disabled={retrying}
+                  leading={<Brush size={12} />}
+                >
+                  {t('bootstrap.clean_retry', 'Clean & Retry')}
+                </Button>
+                <Button variant="primary" onClick={handleRetry} disabled={retrying}>
+                  {retrying
+                    ? t('bootstrap.retrying', 'Retrying…')
+                    : t('bootstrap.retry', 'Retry')}
+                </Button>
             </div>
           </section>
         ) : (
