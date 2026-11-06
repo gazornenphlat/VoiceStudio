@@ -3,12 +3,11 @@
  * to a window the user can actually see.
  *
  * The dictation widget used to be a floating pill, and that pill was where
- * every failure surfaced: Accessibility not granted, the mic denied by the OS,
- * a transcription error. The widget window is now a permanently hidden host
- * for the recorder (owner decision, 2026-08-07) — nothing it renders is ever
- * on screen — so those messages had nowhere left to go. Without this bridge,
- * pressing the hotkey with Accessibility ungranted would do nothing at all and
- * say nothing about why.
+ * every failure surfaced: the mic denied by the OS, a transcription error. The
+ * widget window is now a permanently hidden host for the recorder (owner
+ * decision, 2026-08-07) — nothing it renders is ever on screen — so those
+ * messages had nowhere left to go. Without this bridge, a failed dictation
+ * would say nothing about why.
  *
  * The widget emits; the main window listens and toasts. The label is
  * localized by the sender (both windows share one i18n instance and language,
@@ -19,7 +18,7 @@
  */
 import toast from 'react-hot-toast';
 import i18next from 'i18next';
-import { inTauri, openAccessibilitySettings, openMicrophoneSettings } from './permissions';
+import { inTauri, openMicrophoneSettings } from './permissions';
 import { toastAsrModelMissing } from './asrModelMissing';
 
 export const DICTATION_NOTICE_EVENT = 'dictation-notice';
@@ -61,16 +60,11 @@ export function showDictationNotice(notice) {
   }
   const label = notice?.label;
   if (!label) return; // nothing worth interrupting the user for
-  const opener =
-    notice.kind === 'a11y' || notice.kind === 'setup'
-      ? openAccessibilitySettings
-      : // A mic error only earns the settings button when the OS actually
-        // denied it. "Busy" and "no device" arrive under the same kind, and
-        // for those the permissions pane shows nothing wrong — which reads as
-        // the app blaming the user for a permission they already granted.
-        notice.kind === 'mic' && notice.deniedByOs
-        ? openMicrophoneSettings
-        : null;
+  // A mic error only earns the settings button when the OS actually denied
+  // it. "Busy" and "no device" arrive under the same kind, and for those the
+  // permissions pane shows nothing wrong — which reads as the app blaming the
+  // user for a permission they already granted.
+  const opener = notice.kind === 'mic' && notice.deniedByOs ? openMicrophoneSettings : null;
 
   if (!opener || !inTauri()) {
     toast.error(label, { duration: 8000 });

@@ -63,14 +63,6 @@ export async function checkMicrophone() {
 }
 
 /**
- * Accessibility grant for pasting into other apps. The Windows build has no
- * such grant, so this always resolves `true` and the setup prompt never shows.
- */
-export async function checkAccessibility() {
-  return true;
-}
-
-/**
  * Invoke an open-*-settings command. Resolves `true` when the pane was
  * opened, `false` when it wasn't (outside Tauri, or the shell rejected —
  * e.g. Linux has no mic-privacy pane and errors with a "settings:" kind).
@@ -91,11 +83,6 @@ async function openSettingsPane(command) {
 /** Deep-link the OS microphone-privacy pane (macOS/Windows; false on Linux). */
 export function openMicrophoneSettings() {
   return openSettingsPane('open_microphone_settings');
-}
-
-/** Deep-link macOS Privacy → Accessibility (no-op elsewhere). */
-export function openAccessibilitySettings() {
-  return openSettingsPane('open_accessibility_settings');
 }
 
 /**

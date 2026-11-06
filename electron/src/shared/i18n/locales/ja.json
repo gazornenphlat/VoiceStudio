@@ -890,7 +890,6 @@
     "reset_default": "デフォルトにリセットする",
     "listening_label": "聞いています…",
     "transcribing_label": "文字起こし中…",
-    "a11y_setup": "音声入力が代わりに入力できるよう、アクセシビリティを許可してください",
     "pasted": "貼り付けた",
     "inserted": "入力しました",
     "copied": "クリップボードにコピーしました",

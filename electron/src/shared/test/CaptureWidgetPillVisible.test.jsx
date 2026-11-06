@@ -99,14 +99,6 @@ afterEach(() => {
 });
 
 describe('the pill window is shown for the states the user must see', () => {
-  it('shows itself when the capture needs the user to act', async () => {
-    // A denied Accessibility probe drives the pill to 'setup' — the state that
-    // asks for a grant. Invisible, it is indistinguishable from a dead hotkey.
-    mocks.holder.a11y = false;
-    renderWidget();
-
-    await waitFor(() => expect(shows().length).toBeGreaterThan(0));
-  });
 
   it('stays hidden while idle', async () => {
     renderWidget();

@@ -93,15 +93,14 @@ export function computeTypeDelta(prevTyped, nextText) {
 /**
  * Map a failed `simulate_paste`/`simulate_type` invoke into an actionable
  * `{ kind, message }`. The Rust command prefixes its Err strings with the
- * failing layer — "a11y:" (macOS Accessibility not granted; the pill offers
- * open_accessibility_settings), "clipboard:" (couldn't write/restore the user
- * clipboard), "preflight:" (input was rejected before any key could be emitted)
- * or "paste:" (the synthetic ⌘V/Ctrl+V itself failed). Pure + exported for
- * unit testing.
+ * failing layer — "clipboard:" (couldn't write/restore the user clipboard),
+ * "preflight:" (input was rejected before any key could be emitted) or
+ * "paste:" (the synthetic Ctrl+V itself failed). Pure + exported for unit
+ * testing.
  */
 export function parsePasteError(err) {
   const raw = typeof err === 'string' ? err : (err && err.message) || String(err ?? '');
-  for (const kind of ['a11y', 'clipboard', 'paste', 'preflight']) {
+  for (const kind of ['clipboard', 'paste', 'preflight']) {
     if (raw.startsWith(`${kind}:`)) return { kind, message: raw.slice(kind.length + 1).trim() };
   }
   return { kind: 'paste', message: raw };

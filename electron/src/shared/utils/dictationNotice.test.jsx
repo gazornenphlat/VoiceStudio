@@ -20,7 +20,6 @@ vi.mock('react-hot-toast', () => ({
 }));
 vi.mock('./permissions', () => ({
   inTauri: () => true,
-  openAccessibilitySettings: vi.fn(),
   openMicrophoneSettings: vi.fn(),
 }));
 

@@ -8,9 +8,7 @@ vi.mock('@tauri-apps/api/core', () => ({
 import {
   inTauri,
   checkMicrophone,
-  checkAccessibility,
   openMicrophoneSettings,
-  openAccessibilitySettings,
   openInputMonitoringSettings,
 } from './permissions';
 
@@ -36,14 +34,8 @@ describe('permissions — browser fallback (no Tauri shell)', () => {
     expect(invokeMock).not.toHaveBeenCalled();
   });
 
-  it('checkAccessibility resolves true without touching invoke', async () => {
-    await expect(checkAccessibility()).resolves.toBe(true);
-    expect(invokeMock).not.toHaveBeenCalled();
-  });
-
   it('every open-settings deep-link resolves false without throwing', async () => {
     await expect(openMicrophoneSettings()).resolves.toBe(false);
-    await expect(openAccessibilitySettings()).resolves.toBe(false);
     await expect(openInputMonitoringSettings()).resolves.toBe(false);
     expect(invokeMock).not.toHaveBeenCalled();
   });
@@ -71,7 +63,6 @@ describe('permissions — inside the Tauri shell', () => {
   it('a failing probe degrades to unknown / true (never blocks)', async () => {
     invokeMock.mockRejectedValue(new Error('command check_microphone not found'));
     await expect(checkMicrophone()).resolves.toBe('unknown');
-    await expect(checkAccessibility()).resolves.toBe(true);
   });
 
   it('openMicrophoneSettings resolves true when the pane opened', async () => {

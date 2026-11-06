@@ -3,10 +3,9 @@
  *
  * Covers the truthfulness rebuild: model status frames render real
  * download/load progress, "Inserted" only appears after native delivery resolves
- * Ok, an "a11y:"-prefixed paste failure renders the actionable Accessibility
- * error, Esc aborts without pasting, live retract-retype is opt-in (default
- * sessions never call simulate_type), the missing-Accessibility setup state
- * shows on mount, and the waveform bars move from real mic frames.
+ * Ok, Esc aborts without pasting, live retract-retype is opt-in (default
+ * sessions never call simulate_type), and the waveform bars move from real
+ * mic frames.
  */
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -1049,27 +1048,6 @@ describe('CaptureWidget', () => {
     ]);
   });
 
-  it('an "a11y:" paste rejection renders the actionable error, never "Inserted"', async () => {
-    mocks.holder.paste = async () => {
-      throw 'a11y: process is not trusted';
-    };
-    render(withI18n(<CaptureWidget />));
-    const ws = await startSession();
-
-    act(() => ws.msg({ type: 'final', final_kind: 'utterance', text: 'hello world' }));
-    act(() => ws.msg({ type: 'final', final_kind: 'summary', text: 'hello world' }));
-
-    await screen.findByText(/Accessibility access needed/);
-    expect(screen.queryByText(/Inserted/)).not.toBeInTheDocument();
-    expect(mocks.copyText).not.toHaveBeenCalled();
-
-    // The action button opens the OS Accessibility pane.
-    fireEvent.click(screen.getByText('Open Settings'));
-    await waitFor(() =>
-      expect(mocks.holder.calls.some(([c]) => c === 'open_accessibility_settings')).toBe(true),
-    );
-  });
-
   it('Esc during recording aborts: socket closed, nothing pasted, pill gone', async () => {
     const { container } = render(withI18n(<CaptureWidget />));
     const ws = await startSession();
@@ -1470,67 +1448,6 @@ describe('CaptureWidget', () => {
     ]);
   });
 
-  it('renders the one-time Accessibility setup state when the mount probe fails', async () => {
-    mocks.holder.a11y = false;
-    render(withI18n(<CaptureWidget />));
-
-    await screen.findByText(/Allow Accessibility/);
-    expect(screen.getByText('Open Settings')).toBeInTheDocument();
-    // It does not pretend to record.
-    expect(screen.queryByText(/Listening/)).not.toBeInTheDocument();
-  });
-
-  it('exposes the full Accessibility setup text as the label hover title', async () => {
-    mocks.holder.a11y = false;
-    render(withI18n(<CaptureWidget />));
-
-    const label = await screen.findByText(/Allow Accessibility/);
-    expect(label).toHaveAttribute('title', 'Allow Accessibility so dictation can type for you');
-  });
-
-  it('clears the Accessibility setup pill after the native grant changes', async () => {
-    vi.useFakeTimers();
-    try {
-      mocks.holder.a11y = false;
-      render(withI18n(<CaptureWidget />));
-
-      await act(async () => {
-        await Promise.resolve();
-      });
-      expect(screen.getByText(/Allow Accessibility/)).toBeInTheDocument();
-
-      mocks.holder.a11y = true;
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(1100);
-      });
-
-      expect(screen.queryByText(/Allow Accessibility/)).not.toBeInTheDocument();
-      // The unfocusable widget must also leave the screen — asserting only the
-      // pill text would still pass if hideWidgetWindow() were dropped.
-      expect(mocks.holder.hideWindow).toHaveBeenCalled();
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('records from the Accessibility setup state and reports native clipboard fallback', async () => {
-    mocks.holder.a11y = false;
-    mocks.holder.paste = async () => 'copied';
-    render(withI18n(<CaptureWidget />));
-    await screen.findByText(/Allow Accessibility/);
-    expect(screen.getByText('Open Settings')).toBeInTheDocument();
-
-    const ws = await startNativeSession('a11y-copy-session');
-    act(() => ws.msg({ type: 'final', final_kind: 'utterance', text: 'clipboard words' }));
-    act(() => ws.msg({ type: 'final', final_kind: 'summary', text: 'clipboard words' }));
-
-    await screen.findByText(/Copied/);
-    expect(pasteCalls().map(([, args]) => args)).toEqual([
-      { text: 'clipboard words', sessionId: 'a11y-copy-session' },
-      { text: 'clipboard words', sessionId: 'a11y-copy-session' },
-    ]);
-  });
-
   it('waveform bars move from the worklet mic frames', async () => {
     const { container } = render(withI18n(<CaptureWidget />));
     await startSession();
@@ -1579,7 +1496,7 @@ describe('CaptureWidget', () => {
 
   it("an error holding a transcript stays up — that text is the user's to copy", async () => {
     mocks.holder.paste = async () => {
-      throw 'a11y: process is not trusted';
+      throw 'paste: key event failed';
     };
     const { container } = render(withI18n(<CaptureWidget />));
     const ws = await startSession();
@@ -1587,7 +1504,7 @@ describe('CaptureWidget', () => {
     // Drive to the error state on real timers so the paste rejection settles.
     act(() => ws.msg({ type: 'final', final_kind: 'utterance', text: 'hello world' }));
     act(() => ws.msg({ type: 'final', final_kind: 'summary', text: 'hello world' }));
-    await screen.findByText(/Accessibility access needed/);
+    await screen.findByText(/Couldn't paste into the active app/);
 
     vi.useFakeTimers();
     try {

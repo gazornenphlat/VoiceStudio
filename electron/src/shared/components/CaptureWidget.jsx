@@ -63,33 +63,6 @@ async function hideWidgetWindow() {
   }
 }
 
-// macOS Accessibility probe (AXIsProcessTrusted via the shell). Resolves true
-// on Windows/Linux and outside Tauri — there is nothing to grant there.
-async function checkAccessibility() {
-  if (!inTauri()) return true;
-  try {
-    const { invoke } = await import('@tauri-apps/api/core');
-    return (await invoke('check_accessibility')) !== false;
-  } catch (err) {
-    // Older shell without the command — don't block dictation on the probe.
-    console.warn('check_accessibility failed:', err);
-    return true;
-  }
-}
-
-// Open the OS pane where the user grants Accessibility (macOS
-// Privacy_Accessibility; no-op elsewhere — the shell command handles the OS
-// switch).
-async function openA11ySettings() {
-  if (!inTauri()) return;
-  try {
-    const { invoke } = await import('@tauri-apps/api/core');
-    await invoke('open_accessibility_settings');
-  } catch (err) {
-    console.warn('open_accessibility_settings failed:', err);
-  }
-}
-
 const LS_CAPTURE_MODE = 'omni_capture_mode';
 // Live retract-retype (word-by-word typing with visible backspace corrections
 // in the target app) is OPT-IN: default dictation only inserts committed
@@ -119,23 +92,6 @@ const IDLE_VISIBLE_POLL_MS = 600;
 
 // The widget window deliberately does not take focus, so it cannot rely on
 // the main window's focus-based permission refresh after System Settings.
-// Reconcile only while the Accessibility blocker is visible.
-const A11Y_SETUP_RECHECK_MS = 1000;
-
-// How long the Accessibility prompt may hold the always-on-top pill on screen.
-//
-// The pill is created always-on-top, and the setup state had no time limit at
-// all: it sat above every application, including the first-run setup window it
-// was covering, until Accessibility was granted or the user dismissed it by
-// hand (#1845, #1886). A permission the user has not granted yet is not urgent
-// enough to outrank whatever they are actually doing, and on a clean install
-// they are usually mid-setup and cannot grant it yet anyway.
-//
-// Polling does NOT stop when the window hides. The check keeps running, so
-// granting Accessibility later still returns the widget to idle on its own —
-// what expires is the pill's claim on the screen, not the reconciliation.
-const A11Y_SETUP_VISIBLE_MS = 20_000;
-
 // A dictation model id is a sherpa-onnx live model when it carries the
 // `sherpa-` prefix the backend assigns (see services/sherpa_dictation.py). Only
 // then do we open the low-latency raw-PCM streaming path. Other models use a
@@ -205,15 +161,14 @@ export function computeTypeDelta(prevTyped, nextText) {
 /**
  * Map a failed `simulate_paste`/`simulate_type` invoke into an actionable
  * `{ kind, message }`. The Rust command prefixes its Err strings with the
- * failing layer — "a11y:" (macOS Accessibility not granted; the pill offers
- * open_accessibility_settings), "clipboard:" (couldn't write/restore the user
- * clipboard), "preflight:" (input was rejected before any key could be emitted)
- * or "paste:" (the synthetic ⌘V/Ctrl+V itself failed). Pure + exported for
- * unit testing.
+ * failing layer — "clipboard:" (couldn't write/restore the user clipboard),
+ * "preflight:" (input was rejected before any key could be emitted) or
+ * "paste:" (the synthetic Ctrl+V itself failed). Pure + exported for unit
+ * testing.
  */
 export function parsePasteError(err) {
   const raw = typeof err === 'string' ? err : (err && err.message) || String(err ?? '');
-  for (const kind of ['a11y', 'clipboard', 'paste', 'preflight']) {
+  for (const kind of ['clipboard', 'paste', 'preflight']) {
     if (raw.startsWith(`${kind}:`)) return { kind, message: raw.slice(kind.length + 1).trim() };
   }
   return { kind: 'paste', message: raw };
@@ -344,7 +299,7 @@ async function typeDelta({ backspaces, text }, sessionId) {
       // Native marks failures detected before synthesis separately. Retrying
       // those via committed delivery is safe; all other failures may have
       // emitted a partial delta before the helper returned Err.
-      mayHaveEmitted: error.kind !== 'preflight' && error.kind !== 'a11y',
+      mayHaveEmitted: error.kind !== 'preflight',
     };
   }
 }
@@ -360,8 +315,6 @@ function formatElapsed(ms) {
 // Localized headline for the pill's error state.
 function errorLabel(t, info) {
   switch (info?.kind) {
-    case 'a11y':
-      return t('capture.a11y_error');
     case 'clipboard':
       return t('capture.clipboard_error');
     case 'paste':
@@ -385,8 +338,7 @@ function errorLabel(t, info) {
  * All interaction via global hotkey (hold-to-talk); Esc cancels anywhere.
  * Records → transcribes → delivers → auto-dismisses — and every state the pill
  * shows is TRUE: "Inserted" only after native synthesis succeeds, "Copied"
- * after clipboard fallback, model progress from backend status frames, and an
- * actionable setup state when macOS Accessibility has not been granted yet.
+ * after clipboard fallback, and model progress from backend status frames.
  */
 export default function CaptureWidget({ onDismiss }) {
   const { t } = useTranslation();
@@ -403,8 +355,8 @@ export default function CaptureWidget({ onDismiss }) {
   // confirmed native synthesis, 'copied' for clipboard-only delivery, or the
   // legacy browser 'pasted' value. Drives the done label truthfully.
   const [doneKind, setDoneKind] = useState(null);
-  // { kind, message } for the error state (mic / a11y / clipboard / paste /
-  // transcription / server). The a11y kind renders the Open-Settings action.
+  // { kind, message } for the error state (mic / clipboard / paste /
+  // transcription / server).
   const [errorInfo, setErrorInfo] = useState(null);
   // Backend model lifecycle ({type:"status"} WS frames): null when ready, else
   // { stage: 'downloading' | 'loading', progress: 0..1 | null }.
@@ -577,8 +529,6 @@ export default function CaptureWidget({ onDismiss }) {
   // Waveform ring buffer (pure module) — fed by the worklet frame callbacks.
   const waveRef = useRef(null);
   if (!waveRef.current) waveRef.current = createWaveform();
-  // The Accessibility setup pill is shown at most once per widget lifetime.
-  const a11ySetupSeenRef = useRef(false);
   // Opt-in dictate-over-playback AEC (parity Action 8). When on, we capture
   // raw PCM via an AudioWorklet and tag mic/far-end frames instead of using
   // MediaRecorder. All AEC state lives in refs so the default path is inert.
@@ -643,14 +593,6 @@ export default function CaptureWidget({ onDismiss }) {
       else if (holdStartRef.current === 'starting') holdStartRef.current = 'released';
       return;
     }
-    if (current === 'setup') {
-      if (modeRef.current === 'hold') holdStartRef.current = 'starting';
-      checkAccessibility().then((ok) => {
-        if (ok) startRecordingRef.current?.(modeRef.current === 'hold');
-        else holdStartRef.current = null;
-      });
-      return;
-    }
     const idle = current === 'idle' || current === 'done' || current === 'error';
     if (action === 'toggle') {
       if (idle) startRecordingRef.current?.();
@@ -674,62 +616,6 @@ export default function CaptureWidget({ onDismiss }) {
   useEffect(() => {
     void ensureDictationPrefsHydrated();
   }, [ensureDictationPrefsHydrated]);
-
-  // First-run truthfulness: without the macOS Accessibility grant native text
-  // insertion is unavailable, though the completed transcript can still fall
-  // back to the clipboard. Probe up front so the setup pill exposes the grant.
-  // (Resolves true on Windows/Linux and outside Tauri.)
-  useEffect(() => {
-    let stale = false;
-    (async () => {
-      const ok = await checkAccessibility();
-      if (!stale && !ok && !a11ySetupSeenRef.current) {
-        a11ySetupSeenRef.current = true;
-        setState((s) => (s === 'idle' ? 'setup' : s));
-      }
-    })();
-    return () => {
-      stale = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (state !== 'setup' || !inTauri()) return undefined;
-    let cancelled = false;
-    let timerId;
-
-    // Wall-clock start of this setup episode, so the budget covers the whole
-    // time the prompt has been up rather than one poll interval.
-    const shownAt = Date.now();
-    let hiddenForBudget = false;
-    const reconcileAccessibility = async () => {
-      const ok = await checkAccessibility();
-      if (cancelled || stateRef.current !== 'setup') return;
-      if (ok) {
-        stateRef.current = 'idle';
-        setState('idle');
-        await hideWidgetWindow();
-        return;
-      }
-      if (!hiddenForBudget && Date.now() - shownAt >= A11Y_SETUP_VISIBLE_MS) {
-        // Stop covering the screen, but stay in `setup` so the label is right
-        // if something shows the window again, and keep polling below.
-        hiddenForBudget = true;
-        await hideWidgetWindow();
-      }
-      timerId = setTimeout(() => {
-        void reconcileAccessibility();
-      }, A11Y_SETUP_RECHECK_MS);
-    };
-
-    timerId = setTimeout(() => {
-      void reconcileAccessibility();
-    }, A11Y_SETUP_RECHECK_MS);
-    return () => {
-      cancelled = true;
-      clearTimeout(timerId);
-    };
-  }, [state]);
 
   // ── Tray hotkey: tray-dictate (start) + tray-dictate-stop (release) ──
   // Toggle mode: tray-dictate flips start↔stop, tray-dictate-stop is ignored
@@ -839,7 +725,7 @@ export default function CaptureWidget({ onDismiss }) {
           const sequence = ++nativeStartSequenceRef.current;
           const initialState = stateRef.current;
           const startupWasInFlight = startInFlightRef.current;
-          const restartable = ['idle', 'done', 'error', 'setup'].includes(initialState);
+          const restartable = ['idle', 'done', 'error'].includes(initialState);
           if (!restartable && !startupWasInFlight) {
             if (modeRef.current === 'toggle' && initialState === 'recording') {
               stopRecordingRef.current?.();
@@ -917,7 +803,7 @@ export default function CaptureWidget({ onDismiss }) {
               completeDelivery(event);
               return;
             }
-            if (['idle', 'done', 'error', 'setup'].includes(current)) {
+            if (['idle', 'done', 'error'].includes(current)) {
               outputSessionIdRef.current = sessionId;
               launchRecording(trackHold);
               return;
@@ -925,18 +811,6 @@ export default function CaptureWidget({ onDismiss }) {
             resetPendingHold();
             void finishOutputSession(sessionId);
             completeDelivery(event, 'The current state cannot accept a start');
-            return;
-          }
-
-          if (initialState === 'setup') {
-            outputSessionIdRef.current = sessionId;
-            void checkAccessibility().then(() => {
-              if (outputSessionIdRef.current !== sessionId) {
-                completeDelivery(event, 'Output session changed before startup');
-                return;
-              }
-              launchRecording(modeRef.current === 'hold');
-            });
             return;
           }
 
@@ -1226,8 +1100,8 @@ export default function CaptureWidget({ onDismiss }) {
   }, [state, transcript, dismiss]);
 
   // Apply transcription result → deliver (paste/copy) → show the TRUE outcome
-  // → auto-dismiss on success. A failed delivery is an error state (with the
-  // Accessibility action when that's the fix), never a fake "Pasted".
+  // → auto-dismiss on success. A failed delivery is an error state, never a
+  // fake "Pasted".
   const applyResult = useCallback(
     async (
       data,
@@ -1399,7 +1273,7 @@ export default function CaptureWidget({ onDismiss }) {
       deliveryCopySourceRef.current = null;
       if (segmentErrorRef.current) {
         // At least one utterance never reached the target app — the truthful
-        // outcome is an error (with the a11y action when relevant).
+        // outcome is an error.
         setErrorInfo(segmentErrorRef.current);
         setState('error');
         return;
@@ -1441,7 +1315,7 @@ export default function CaptureWidget({ onDismiss }) {
         deliveryKindRef.current = aggregateDeliveryKind(deliveryKindRef.current, result.kind);
       } else {
         // Stop live typing for the rest of the session. A native preflight or
-        // Accessibility failure emits nothing, so committed paste/copy remains
+        // A preflight failure emits nothing, so committed paste/copy remains
         // safe only when no earlier delta for this utterance landed. Synthesis
         // failures and an already-inserted prefix both make a whole retry unsafe.
         liveTypingRef.current = false;
@@ -2204,7 +2078,7 @@ export default function CaptureWidget({ onDismiss }) {
   // the same bug, one path over. Poll instead, so the invariant holds no matter
   // who made the window visible or when (CodeRabbit, #1399).
   // Every state but `idle` is one the user is meant to see — listening,
-  // transcribing, the result flash, an error, the Accessibility prompt. Show
+  // transcribing, the result flash, an error. Show
   // the window here rather than at each call site, for the same reason the
   // idle reconcile below hides it here: one invariant covers the paths that
   // exist now and the ones added later. `dismiss()` owns the hide.
@@ -2268,19 +2142,16 @@ export default function CaptureWidget({ onDismiss }) {
     };
   }, [state]);
 
-  // The pill carries these states on screen now, but it is transient and
-  // deliberately unfocusable. States that need the user to DO something —
-  // grant Accessibility, grant the mic, retry after a failure — also go to the
-  // main window, where the instruction survives the pill's auto-dismiss and
-  // can be acted on.
+  // The pill is transient and deliberately unfocusable. Errors that need the
+  // user to DO something — grant the mic, retry after a failure — also go to
+  // the main window, where the instruction survives the pill's auto-dismiss.
   useEffect(() => {
-    if (state !== 'error' && state !== 'setup') return;
-    const kind = state === 'setup' ? 'setup' : errorInfo?.kind || 'transcription';
+    if (state !== 'error') return;
     emitDictationNotice({
-      kind,
+      kind: errorInfo?.kind || 'transcription',
       // Localize here: this is where the error's context lives, and both
       // windows share one i18n instance and language.
-      label: state === 'setup' ? t('capture.a11y_setup') : errorLabel(t, errorInfo),
+      label: errorLabel(t, errorInfo),
       // Only an OS-level denial has a settings pane worth opening. A mic that
       // is merely busy or absent fails with the same kind, and sending that
       // user to the permissions pane sends them somewhere nothing is wrong —
@@ -2303,10 +2174,6 @@ export default function CaptureWidget({ onDismiss }) {
   let emoji = '';
   if (state === 'recording' && paused) {
     label = t('common.paused');
-  } else if (state === 'setup') {
-    // One-time Accessibility setup — shown instead of pretending to work.
-    emoji = '🔒';
-    label = t('capture.a11y_setup');
   } else if (modelStatus && (state === 'recording' || state === 'transcribing')) {
     // Backend model lifecycle beats the generic listening/transcribing labels.
     emoji = modelStatus.stage === 'downloading' ? '⏬' : '⏳';
@@ -2340,7 +2207,6 @@ export default function CaptureWidget({ onDismiss }) {
     label = errorLabel(t, errorInfo);
   }
 
-  const showA11yAction = state === 'setup' || (state === 'error' && errorInfo?.kind === 'a11y');
   // OS-level mic denial gets its own Open-Settings deep-link (Tauri only —
   // a browser denial has no OS pane we can open).
   const showMicAction =
@@ -2387,16 +2253,6 @@ export default function CaptureWidget({ onDismiss }) {
       {/* Spinner while transcribing or while the model downloads/loads */}
       {(state === 'transcribing' || (state === 'recording' && modelStatus)) && (
         <Loader size={14} className="shrink-0 text-white/40 motion-safe:animate-spin" />
-      )}
-
-      {/* Accessibility action — setup state and a11y-kind paste errors */}
-      {showA11yAction && (
-        <button
-          className="shrink-0 cursor-pointer whitespace-nowrap rounded-full border-0 bg-white/[0.1] px-2.5 py-1 text-[11px] font-medium text-white/90 transition-[background] duration-[0.15s] hover:bg-white/[0.18]"
-          onClick={openA11ySettings}
-        >
-          {t('capture.open_a11y_settings')}
-        </button>
       )}
 
       {/* Microphone action — OS-denied mic errors deep-link the mic pane */}
@@ -2447,8 +2303,8 @@ export default function CaptureWidget({ onDismiss }) {
           <X size={14} />
         </button>
       )}
-      {/* Dismiss — done/error/setup */}
-      {(state === 'done' || state === 'error' || state === 'setup') && (
+      {/* Dismiss — done/error */}
+      {(state === 'done' || state === 'error') && (
         <button
           className="flex h-[20px] w-[20px] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-white/[0.06] p-0 text-white/40 transition-[background,color] duration-[0.15s] hover:bg-white/[0.12] hover:text-white/80"
           onClick={dismiss}

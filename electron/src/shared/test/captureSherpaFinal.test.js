@@ -169,10 +169,6 @@ describe('computeTypeDelta', () => {
 
 describe('parsePasteError', () => {
   it('splits the Rust kind prefixes off simulate_paste Err strings', () => {
-    expect(parsePasteError('a11y: accessibility not granted')).toEqual({
-      kind: 'a11y',
-      message: 'accessibility not granted',
-    });
     expect(parsePasteError('clipboard: could not restore')).toEqual({
       kind: 'clipboard',
       message: 'could not restore',
@@ -188,7 +184,7 @@ describe('parsePasteError', () => {
   });
 
   it('accepts Error objects (Tauri invoke may reject with either shape)', () => {
-    expect(parsePasteError(new Error('a11y: nope'))).toEqual({ kind: 'a11y', message: 'nope' });
+    expect(parsePasteError(new Error('paste: nope'))).toEqual({ kind: 'paste', message: 'nope' });
   });
 
   it('falls back to a generic paste kind for unprefixed/unknown errors', () => {
