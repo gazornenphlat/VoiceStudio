@@ -50,16 +50,12 @@ Electron publication uses these GitHub Actions secrets:
   into a private temporary file and removes it on success or failure. Apple
   ID passwords are not used by this workflow.
 - `ELECTRON_WINDOWS_CSC_LINK` and `ELECTRON_WINDOWS_CSC_KEY_PASSWORD` for
-  Windows Authenticode signing. The macOS certificate cannot sign Windows apps.
-- `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID` and
-  `APP_STORE_CONNECT_API_KEY` in the `app-store-connect` environment for the
-  iOS TestFlight upload ([`mobile.md`](mobile.md#testflight-maintainers)).
-  TestFlight is not a release channel.
+  Windows Authenticode signing.
 - `ANDROID_UPLOAD_KEYSTORE`, `ANDROID_UPLOAD_KEYSTORE_PASSWORD`,
   `ANDROID_UPLOAD_KEY_ALIAS`, `ANDROID_UPLOAD_KEY_PASSWORD` and
   `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` in the `google-play` environment for the
   Play internal testing upload ([`mobile.md`](mobile.md#play-internal-testing-maintainers)).
-  Play internal testing is not a release channel either.
+  Play internal testing is not a release channel.
 - The repository `GITHUB_TOKEN` for draft creation and asset uploads.
 - `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` for the Docker Hub mirror.
 - `POSTHOG_PROJECT_TOKEN` (secret) and `POSTHOG_HOST` (repository variable),

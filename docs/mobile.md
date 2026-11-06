@@ -1,23 +1,23 @@
-# VoiceStudio on your phone (iOS and Android)
+# VoiceStudio on your phone (Android)
 
-The iOS and Android apps run VoiceStudio **on your phone**: speech, voice
+The Android app runs VoiceStudio **on your phone**: speech, voice
 cloning, dictation and dubbing work offline once their models are downloaded,
 with no computer, account or cloud service. If you also run VoiceStudio on a
-computer (desktop app, Docker or a server), you can pair the phone with it and
+Windows computer (desktop app or a server), you can pair the phone with it and
 choose, per task, to run on **This phone** or **My computer**.
 
-> **Preview.** The apps aren't in the App Store or Google Play yet. Download them
-> from [Releases](https://github.com/debpalash/VoiceStudio/releases/latest)
-> ([Install](#install)) or build them from source (below).
+> **Preview.** The app isn't in Google Play yet. Download it from
+> [Releases](https://github.com/debpalash/VoiceStudio/releases/latest)
+> ([Install](#install)) or build it from source (below).
 
-| | iOS | Android |
-|---|---|---|
-| Minimum OS | iOS 17 (iPhone, iPad) | Android 10 (API 29) |
-| Source | `mobile/ios/` | [`mobile/android/`](../mobile/android/README.md) |
+| | Android |
+|---|---|
+| Minimum OS | Android 10 (API 29) |
+| Source | [`mobile/android/`](../mobile/android/README.md) |
 
 ## Install
 
-Each release attaches the phone apps next to the desktop installers on the
+Each release attaches the Android app next to the Windows installers on the
 [Releases page](https://github.com/debpalash/VoiceStudio/releases/latest).
 
 - **Android:** download `VoiceStudio-<version>-android.apk` on the phone, open
@@ -26,10 +26,6 @@ Each release attaches the phone apps next to the desktop installers on the
   [Obtainium](https://obtainium.imranr.dev/), or add the
   [publisher-operated F-Droid repository](../store/fdroid/README.md). It carries
   the same release-signed APK; it is separate from F-Droid.org's main catalogue.
-- **iPhone:** download `VoiceStudio-<version>-ios-unsigned.ipa` and install it
-  with a sideloading tool that signs it with your own Apple ID (for example
-  Sideloadly). With a free Apple ID the install expires after 7 days; turn on
-  Developer Mode (Settings → Privacy & Security) when iOS asks.
 
 Check downloads against the release's `SHA256SUMS.txt`.
 
@@ -41,11 +37,10 @@ contributor portraits. Tap either core maintainer to open a native profile sheet
 with their role, website, GitHub and X links. Portraits, brand icons and profile
 metadata are bundled for offline use; external pages open only when tapped.
 Contributor portraits use the public GitHub profile images refreshed on
-2026-10-26. The contributor export also keeps iOS portraits identical to
-Electron and Android.
+2026-10-26.
 
 Settings → **Support** contains native **Donate**, **VoiceStudio Pro** and
-**Other Apps** pages on both phones. All copy and project logos are bundled for
+**Other Apps** pages. All copy and project logos are bundled for
 offline use. Donate offers the same GitHub Sponsors, Ko-fi and PayPal destinations
 as desktop, opened only by a tap; gifts do not unlock features. Pro explains the
 computer production tools while the phone's creative tools stay free. It does
@@ -110,7 +105,7 @@ Supermetry and Spicrawl with explicit sponsor credits and individual links.
   or explicit voice choices. Regeneration keeps saved line volumes, speech rates,
   delivery instructions and audio effects. Model downloads remain explicit.
 - **Project transfer**: export/import editable `.vsproject` archives on either
-  phone or Electron's Projects page. Manuscripts, chapter headings, casts,
+  phone or the desktop app's Projects page. Manuscripts, chapter headings, casts,
   pronunciation settings, dub timelines, translations, references and assets
   travel together, including translations that have not been rendered. Imports
   create new copies and require permission for bundled voice recordings. Engine
@@ -157,25 +152,19 @@ Supermetry and Spicrawl with explicit sponsor credits and individual links.
   explicitly run a task. Home widgets and shortcuts open Speak or Dictate without
   starting recording or inference. Saved voice-design recipes reopen for editing.
 
-Production workspaces are available from **Home** on both iOS and Android.
+Production workspaces are available from **Home**.
 Install models in Models first. Voice Design uses OmniVoice. Saved-voice speech
 uses OmniVoice, Pocket TTS or ZipVoice, with each model’s licence gate; translation
 uses the phone translation model. Voice designs save their generated sample, traits and seed. References
 are limited to 30 seconds; longer design results remain playable/shareable.
 
 Stories, books, workflows and queued dubs keep completed work on disk. Android
-runs these through foreground workers with progress and Cancel. iOS owns running
-jobs independently of screens. On supported iOS 26+ devices, GPU work requests
-continued processing with the signed background GPU entitlement; the UI only
-claims it after the OS grants it. An explicit CPU fallback option can cancel,
-checkpoint and continue on CPU when GPU background execution is unavailable.
-Foreground work retains GPU acceleration. Older systems use limited background
-grants. The OS may still pause work; Resume continues an unchanged saved draft.
+runs these through foreground workers with progress and Cancel. The OS may still
+pause work; Resume continues an unchanged saved draft.
 After editing a book or workflow, Generate uses the current settings and reuses
 matching cached work. Low battery or critical thermal conditions pause processing. This sustained job
 support covers dubs, stories/books, workflows and file transcription; short interactive tools and
 the phone API remain foreground tasks. Delete a project/job to remove its media.
-
 
 ## Calling the phone speech API
 
@@ -289,14 +278,13 @@ Send, and reports are deleted after 180 days.
 
 ## For developers
 
-Both apps follow one contract, [`mobile/contract/SPEC.md`](../mobile/contract/SPEC.md):
-a feature ships on both or neither. Colors, the API description and the text
+The Android app follows the contract in [`mobile/contract/SPEC.md`](../mobile/contract/SPEC.md).
+Colors, the API description and the text
 are generated from the desktop app and backend, never copied by hand:
 
 ```sh
 bun scripts/export-mobile-tokens.ts        # theme tokens from the Electron theme
 bun scripts/export-mobile-design.ts        # native design traits from Electron
-bun scripts/export-mobile-contributors.ts  # maintainer identities and profile links
 uv run python scripts/export_openapi.py    # mobile/contract/openapi.json from the backend
 ```
 
@@ -308,107 +296,21 @@ production. To test against the development API, copy `mobile/.env.example` to
 `VOICESTUDIO_CONTENT_REPORTS_URL=https://dev-appapi.voicestudio.sh`, or export
 that variable; the environment wins over the file. Rebuild after changing it.
 
-**Try the iPhone app without Xcode.** Each `mobile` workflow run uploads an
-unsigned build, `VoiceStudio-ios-unsigned` (kept 7 days). Download it from the
-run's Artifacts, then install it with a sideloading tool that signs it with your
-own Apple ID (for example Sideloadly). With a free Apple ID the install expires
-after 7 days; turn on Developer Mode on the iPhone (Settings → Privacy &
-Security) when iOS asks. App text uses the
-Electron locale catalogs (`mobile.*` keys). The `mobile` workflow builds and
-tests both apps.
+App text uses the Electron locale catalogs (`mobile.*` keys). The `mobile`
+workflow builds and tests the app.
 
-## TestFlight (maintainers)
+## TestFlight (removed)
 
-The `iOS TestFlight` workflow signs the iPhone app and uploads it to TestFlight
-for the team's internal testers by default. Its manual `audience` choice also
-supports `external` for a public TestFlight beta. It prepares the pinned native
-inference runtimes before generating and archiving the Xcode project, including on a clean runner.
-It is dispatched by hand from `main` and never
-submits the app for App Store review. One-time setup in the Apple Developer team:
-
-1. Register the App ID `sh.voicestudio.mobile` (Certificates, Identifiers &
-   Profiles → Identifiers) and create the app in App Store Connect with it.
-   The same team must own the Share ID `sh.voicestudio.mobile.shareextension`
-   and widget ID `sh.voicestudio.mobile.workspacewidget`. Assign the existing
-   `group.sh.voicestudio.mobile.development` App Group to both the app and Share
-   extension, then refresh their profiles. Each extension ID must be the main
-   app ID plus one dot and a single suffix, with no additional periods; a
-   development archive can succeed with an ID that App Store export rejects.
-   The main app keeps its existing App Store record’s bundle ID.
-   For another team, change the bundle IDs and `VS_APP_GROUP_IDENTIFIER` in
-   `project.yml`; that one group setting supplies both entitlements and runtime
-   bundle metadata. Automatic signing cannot claim an unavailable identifier or
-   use a profile missing the shared App Group entitlement. See Apple's
-   [App Groups setup](https://developer.apple.com/help/account/identifiers/enable-app-capabilities).
-2. Register at least one iPhone under Devices (its UDID is in Finder when it
-   is connected). Automatic signing archives with a development profile first,
-   and Apple issues none for a team without devices.
-3. Create an App Store Connect API key with the **Admin** role (Users and
-   Access → Integrations). Admin lets CI create the cloud-managed Apple
-   Distribution certificate and App Store profile during export.
-4. Create the `app-store-connect` environment (Settings → Environments), limit
-   it to the `main` branch, and add `APP_STORE_CONNECT_KEY_ID`,
-   `APP_STORE_CONNECT_ISSUER_ID` and `APP_STORE_CONNECT_API_KEY` (the full
-   `.p8` text). `APPLE_TEAM_ID` is shared with macOS notarization.
-5. Export one existing **Apple Development** identity for that same paid team
-   from Keychain Access as a password-protected `.p12`. Include its private key;
-   a downloaded `.cer` alone cannot sign. Add the base64 file as
-   `IOS_ARCHIVE_CERTIFICATE` and its password as
-   `IOS_ARCHIVE_CERTIFICATE_PASSWORD` in both `app-store-connect` and
-   `mobile-release`. Never commit either value or revoke an active certificate
-   to free a slot for a CI rerun. Each runner imports this existing identity
-   into a temporary keychain, verifies its team and private key, then removes
-   the keychain and decoded certificate. Xcode may create provisioning profiles
-   for the app, Share extension and widget. Export still uses Apple's
-   cloud-managed **Apple Distribution** identity; the `.p12` is only for the
-   development-signed archive. Rotate these secrets when the identity expires.
-   Validate an export with both OpenSSL and `security import` into a temporary
-   keychain before setting the secrets: parsing a PKCS#12 certificate alone does
-   not prove Apple's Security framework can import its encrypted private key.
-
-For a public beta, dispatch from the latest `main` with
-`gh workflow run ios-testflight.yml --ref main -f audience=external`. This creates
-an external-eligible build; uploads marked Internal Only cannot be reassigned to
-external groups. In App Store Connect, create an external group, complete Test
-Information, add the build and submit it for Beta App Review. Once approved,
-create its public link and set **Tester Limit** to the desired capacity (for
-example, **100**). The limit applies to testers joining through that link.
-Regular dispatches retain the `internal` default. Neither audience submits an
-App Store version for public sale. See Apple's
-[external testing and public-link instructions](https://developer.apple.com/help/app-store-connect/test-a-beta-version/invite-external-testers).
-
-The workflow builds on the `macos-26` runner because App Store Connect accepts
-only the current iOS SDK; the `mobile` and `mobile-release` iOS jobs use the same runner.
-The app icon is `Resources/Assets.xcassets/AppIcon.appiconset/AppIcon.png`, a
-1024×1024 opaque PNG rendered from `mobile/ios/VoiceStudio/AppIcon.svg`.
-Generated `Brand.xcassets` supplies launch and Home artwork; it removes the former
-generated app icon so incremental builds also bundle exactly one icon catalog.
-
-Privacy manifests ship in the app, both extensions and the embedded OmniVoice
-and llama frameworks. The app declares private preferences (`CA92.1`), model and
-render storage checks (`E174.1`), private file metadata (`C617.1`) and files the
-user explicitly selects (`3B52.1`). The Share extension declares selected-file
-metadata; the native frameworks declare private model-file metadata. The widget
-uses none of these APIs. These manifests declare no tracking; they do not enable
-telemetry. Apple's [required-reason API policy](https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api)
-applies to each executable bundle, so the unsigned CI build, TestFlight archive
-and signed release export all validate the packaged declarations before upload.
-
-`Info.plist` declares `ITSAppUsesNonExemptEncryption` as `NO`: the app uses
-only the system's HTTPS and hashing, which are exempt, so builds skip the
-export compliance question. Revisit it if the app ever adds its own encryption.
-
-The version is the root `package.json` version without any `-beta.N` suffix
-(App Store Connect accepts only `X.Y.Z`); the build number is the workflow run
-number and attempt, so every upload is new.
+The iOS app and its TestFlight workflow were removed in the Windows-only fork.
+Older release notes still link to this heading.
 
 ## Play internal testing (maintainers)
 
-The `Android Play internal testing` workflow is the Android counterpart: it
-signs a release bundle with the Play upload key and uploads it to the Play
-Console **internal testing** track. It is dispatched by hand from `main` and
-never sends a release to production. The store listing, graphics and Play Console
-answers are in [`store/google-play.md`](../store/google-play.md). One-time setup:
+The `Android Play internal testing` workflow signs a release bundle with the Play
+upload key and uploads it to the Play Console **internal testing** track. It is
+dispatched by hand from `main` and never sends a release to production. The store
+listing, graphics and Play Console answers are in
+[`store/google-play.md`](../store/google-play.md). One-time setup:
 
 1. Create the app in the Play Console with the package name
    `sh.voicestudio.mobile` and keep Play App Signing on (Google holds the app
@@ -425,13 +327,13 @@ answers are in [`store/google-play.md`](../store/google-play.md). One-time setup
    `ANDROID_UPLOAD_KEY_PASSWORD` and `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON`.
 5. Google Play takes the first bundle only through the Play Console. Prepare
    it without attempting an upload: run **mobile-release** from `main`, leave
-   `release_ref` empty, enable `android`, and disable `ios` and `signed_ios`.
-   Its `mobile-release` environment needs the same four Android upload-key
-   secrets (use the existing key, including for later Play builds). Download
-   `VoiceStudio-android-release`, then upload its `VoiceStudio.aab` to internal
-   testing by hand. This manual build produces artifacts only; it creates no
-   release or tag and contacts no store. Until the app's first release is rolled
-   out, dispatch **Android Play internal testing** with status `draft`.
+   `release_ref` empty, and enable `android`. Its `mobile-release` environment
+   needs the same four Android upload-key secrets (use the existing key, including
+   for later Play builds). Download `VoiceStudio-android-release`, then upload its
+   `VoiceStudio.aab` to internal testing by hand. This manual build produces
+   artifacts only; it creates no release or tag and contacts no store. Until the
+   app's first release is rolled out, dispatch **Android Play internal testing**
+   with status `draft`.
 
 The Play workflow installs the pinned NDK/CMake and reuses the native runtime
 cache. Before uploading, it strictly verifies the bundle against that upload
@@ -444,7 +346,7 @@ opts out of the rear-camera and autofocus requirements implied by the camera
 permission, so Play does not exclude devices that lack them. QR scanning still
 asks for camera permission when used.
 
-The version name is the root `package.json` version. Both signed Android
+The version name is the root `package.json` version. The signed Android
 workflows get their version code from `scripts/android_version_code.py`: UTC
 minutes since 2020-01-01 (seconds jumped too far for Play). They share a concurrency
 group, so signed builds run one at a time, each taking minutes, and subsequent
@@ -455,40 +357,32 @@ local release builds without upload-key environment variables are unsigned.
 ## Releasing
 
 Every desktop release calls `mobile-release` at the same tag and includes the
-signed Android APK/AAB and unsigned iOS sideload IPA in the same GitHub Release.
-Both phone builds must pass before publication. Store uploads are separate: use
-[TestFlight](#testflight-maintainers) and
+signed Android APK/AAB in the same GitHub Release. The phone build must pass
+before publication. Store uploads are separate: use
 [Play internal testing](#play-internal-testing-maintainers). Nothing is published
 to production automatically.
 
-- **Run it:** the desktop release runs both phone builds automatically. For recovery,
-  Actions → `mobile-release` → Run workflow, set `release_ref` to the release tag
-  and `signed_ios=false` for sideload artifacts without Apple signing. Manual
-  runs produce artifacts. Rename them to `VoiceStudio-X.Y.Z-android.apk`,
-  `VoiceStudio-X.Y.Z-android.aab` and `VoiceStudio-X.Y.Z-ios-unsigned.ipa` before
-  attaching missing files to the existing release. Preserve existing published
+- **Run it:** the desktop release runs the phone build automatically. For recovery,
+  Actions → `mobile-release` → Run workflow, and set `release_ref` to the release tag.
+  Manual runs produce artifacts. Rename them to `VoiceStudio-X.Y.Z-android.apk`
+  and `VoiceStudio-X.Y.Z-android.aab` before attaching missing files to the
+  existing release. Preserve existing published
   binaries. Add the new files' SHA-256 digests to the shared `SHA256SUMS.txt`,
   preserving existing entries, and update the release download links and signing
   status. Verify the uploaded asset digests against the checksum manifest.
   Legacy `mobile-v*` tags still draft a separate prerelease.
-- **Downloads for everyone:** the shared release holds the signed APK and AAB,
-  an unsigned IPA for sideloading, and `SHA256SUMS.txt`. Manual builds with
-  `signed_ios=true` additionally produce an App Store IPA. The App Store IPA only installs through TestFlight; iPhone
-  users outside TestFlight sideload the unsigned IPA with their own Apple ID.
-- **Version:** the root `package.json` version. Android shares its increasing
-  build code with Play; iOS uses the workflow run number and attempt.
+- **Downloads for everyone:** the shared release holds the signed APK and AAB and
+  `SHA256SUMS.txt`.
+- **Version:** the root `package.json` version. Android uses an increasing
+  build code shared with Play.
 - **Secrets** (repository environment `mobile-release`, with required reviewers,
-  not limited to `main` so tags can use it): the same values as the store
+  not limited to `main` so tags can use it): the same Android values as the store
   workflows, `ANDROID_UPLOAD_KEYSTORE`, `ANDROID_UPLOAD_KEYSTORE_PASSWORD`,
-  `ANDROID_UPLOAD_KEY_ALIAS`, `ANDROID_UPLOAD_KEY_PASSWORD`,
-  `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`,
-  `APP_STORE_CONNECT_API_KEY`, `APPLE_TEAM_ID`, `IOS_ARCHIVE_CERTIFICATE` and
-  `IOS_ARCHIVE_CERTIFICATE_PASSWORD` (the last two are required for signed iOS archives).
+  `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD`.
 
 Android updates also require the installed app's signing certificate. Google
 Play App Signing may use a different certificate from the APK upload key;
 version codes do not make builds with different signing keys interchangeable.
-
 
 ## Dubbing errors
 
