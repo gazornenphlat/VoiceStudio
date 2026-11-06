@@ -12,16 +12,7 @@ import assert from "node:assert/strict";
 const ISSUER = "https://dev-id.voicestudio.sh";
 const CLIENT_ID = "396555644615786670";
 const workspaceRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const executable =
-  process.platform === "win32"
-    ? join(workspaceRoot, "electron/node_modules/electron/dist/electron.exe")
-    : resolve(
-        workspaceRoot,
-        "electron/node_modules/electron/dist",
-        process.platform === "darwin"
-          ? "Electron.app/Contents/MacOS/Electron"
-          : "electron",
-      );
+const executable = join(workspaceRoot, "electron/node_modules/electron/dist/electron.exe");
 const screenshots = process.env.ACCOUNT_SMOKE_SCREENSHOTS;
 const launchEnvironment = { ...process.env };
 delete launchEnvironment.ELECTRON_RUN_AS_NODE;

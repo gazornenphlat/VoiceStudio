@@ -310,8 +310,8 @@ def release(args: argparse.Namespace) -> None:
     print(f"Last release: {last}    package.json on main: {current}")
     channel = select_option(
         "Release channel?",
-        [("stable", "GitHub latest, :stable Docker, all stores"),
-         ("beta", "opt-in prerelease, never latest, :beta Docker")],
+        [("stable", "GitHub latest, all stores"),
+         ("beta", "opt-in prerelease, never latest")],
     )
     suggestion = next_version(current, channel, tags)
     shape = "X.Y.Z-beta.N, e.g. 0.5.7-beta.1" if channel == "beta" else "X.Y.Z"
@@ -344,7 +344,7 @@ def release(args: argparse.Namespace) -> None:
     )
     print(f"""
 Release plan
-  channel   {channel}  ({'GitHub prerelease, never latest; :beta Docker' if channel == 'beta' else 'GitHub latest; :stable Docker'})
+  channel   {channel}  ({'GitHub prerelease, never latest' if channel == 'beta' else 'GitHub latest'})
   new tag   {tag}   (last release {last})
   mode      {mode}{'  (UNSIGNED: ' + ', '.join(unsigned) + ')' if unsigned else ''}
   steps     {steps}""")

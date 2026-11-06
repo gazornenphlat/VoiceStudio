@@ -6,13 +6,7 @@ import assert from 'node:assert/strict';
 
 const executablePath =
   process.env.VOICESTUDIO_PACKAGED_EXE ||
-  resolve(
-    process.platform === 'win32'
-      ? 'electron/release/win-unpacked/VoiceStudio.exe'
-      : process.platform === 'darwin'
-        ? 'electron/release/mac/VoiceStudio.app/Contents/MacOS/VoiceStudio'
-        : 'electron/release/linux-unpacked/voicestudio-electron',
-  );
+  resolve('electron/release/win-unpacked/VoiceStudio.exe');
 const profile = mkdtempSync(join(tmpdir(), 'voicestudio-packaged-repair-'));
 const app = await electron.launch({
   executablePath,
