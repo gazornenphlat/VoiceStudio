@@ -51,12 +51,6 @@ codes follow the new address.
     inbound connections. If you dismissed the prompt, open *Windows Security →
     Firewall & network protection → Allow an app through firewall* and tick
     **Private** for that `python.exe`.
-  - **macOS firewall.** If System Settings → Network → Firewall is on, allow
-    incoming connections for the VoiceStudio backend when macOS asks, or add it
-    under **Options**. *Block all incoming connections* must be off.
-  - **Linux firewall.** Allow the share port, for example
-    `sudo ufw allow 3901/tcp` or
-    `sudo firewall-cmd --add-port=3901/tcp`.
   - **VPN on either device.** A VPN with *block local network* (or kill
     switch) settings stops LAN traffic. Allow local network access or turn
     the VPN off.
@@ -81,7 +75,7 @@ to `localhost`, because on that device it is not VoiceStudio.
 ### How the PIN works
 - A fresh 6-digit PIN is generated each time you enable sharing; it is never written to disk.
 - The QR encodes the PIN (`…/?pin=######`) so scanning connects in one step. Typing the bare URL instead prompts for the PIN.
-- Requests from other devices must present the PIN (sent automatically once entered/scanned); requests from this machine never need it. In Docker the host's own browser does not count as this machine and needs the PIN unless you opt in with `OMNIVOICE_TRUST_HOST_LOOPBACK=1` (see Docker install).
+- Requests from other devices must present the PIN (sent automatically once entered/scanned); requests from this machine never need it. In a container the host's own browser does not count as this machine and needs the PIN unless you opt in with `OMNIVOICE_TRUST_HOST_LOOPBACK=1`.
 
 ### Security model
 - **Loopback-only is the default on every launch** — you must explicitly enable sharing each session; it never auto-exposes.

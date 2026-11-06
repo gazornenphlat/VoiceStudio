@@ -278,7 +278,7 @@ the default gateway, so only that exact socket address qualifies, only on the
 main port (not the LAN-share listener), and forwarded headers are never read
 for it. It grants the PIN's consumption rights only: the API-key gate and admin
 routes are unaffected. Default off. Risks and setup:
-Docker install.
+see the server-mode notes below.
 
 ---
 
@@ -291,7 +291,7 @@ stricter gate (`require_admin`, `backend/api/dependencies.py`) than consumption.
 On the desktop build they are **true-loopback-only**: no PIN, key, or trusted
 network reaches them from another machine.
 
-In **server mode** (`OMNIVOICE_SERVER_MODE=1`, the Docker image) the loopback
+In **server mode** (`OMNIVOICE_SERVER_MODE=1`, as in a container) the loopback
 origin is unenforceable — NAT rewrites the source and even a
 `-p 127.0.0.1:3900:3900` mapping looks non-loopback — so the true-loopback
 requirement is dropped (issue #261, else the operator is 403'd out of their own
@@ -431,9 +431,8 @@ export OMNIVOICE_ALLOWED_HOSTS="nas.lan,.home.example"   # ".suffix" allows subd
 
 The packaged desktop app has no Settings field for this. Add the same line
 without `export` (`OMNIVOICE_ALLOWED_HOSTS=nas.lan`) to the user env file —
-`~/.config/omnivoice/env` on macOS and Linux,
 `%USERPROFILE%\.config\omnivoice\env` on Windows, or the file named by
-`OMNIVOICE_ENV_FILE` — and restart VoiceStudio. Docker takes it as
+`OMNIVOICE_ENV_FILE` — and restart VoiceStudio. A container takes it as
 `-e OMNIVOICE_ALLOWED_HOSTS=...`.
 
 `OMNIVOICE_ALLOWED_HOSTS=*` turns the host check off; use it only behind a

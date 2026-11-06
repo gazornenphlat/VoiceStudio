@@ -536,9 +536,9 @@ engine choice. Models still load on demand when requested.
 `python-build-standalone` from GitHub. Common in China, intermittently in
 Russia, sometimes on corporate proxies.
 
-**Fix:** see linux.md#restricted-networks-china--russia
-(the same env vars work on Windows — `UV_PYTHON_INSTALL_MIRROR`,
-`UV_HTTP_TIMEOUT=900`, `UV_HTTP_RETRIES=5`, `UV_PYTHON_PREFERENCE=only-system`).
+**Fix:** set `UV_PYTHON_INSTALL_MIRROR` to a reachable mirror, and raise
+`UV_HTTP_TIMEOUT=900` and `UV_HTTP_RETRIES=5`. `UV_PYTHON_PREFERENCE=only-system`
+makes the installer use a Python already on the machine.
 
 **Linked issues:**
 [#57](https://github.com/debpalash/VoiceStudio/issues/57),
@@ -985,7 +985,7 @@ call.
 > app, notices recorded by the previous version are cleaned up rather than
 > resurfacing — the update may well have fixed that crash.
 >
-> Outside the desktop app (browser dev, Docker, LAN share) the same notice is
+> Outside the desktop app (browser dev, LAN share) the same notice is
 > raised by the **backend itself** on its next start — see **section 14c**.
 
 ## 14b. "Can't reach the local VoiceStudio backend" flashing during startup or an automatic restart
@@ -1027,13 +1027,13 @@ console, so its initial stop is best-effort and may proceed directly to the
 bounded forced tree cleanup. Surviving subprocess engines cannot retain ports
 or files (#1635).
 
-## 14c. "Can't reach the backend" in a browser — `bun run dev`, Docker, or LAN share
+## 14c. "Can't reach the backend" in a browser — `bun run dev` or LAN share
 
 **Symptom:** you're using VoiceStudio **outside the desktop app** — the dev
-stack (`bun run dev`), a Docker deployment, or a shared/remote backend — and
+stack (`bun run dev`) or a shared/remote backend — and
 requests fail with a "can't reach the backend" error.
 
-These deployments have no desktop shell to supervise the backend. Newer builds
+These setups have no desktop shell to supervise the backend. Newer builds
 make the backend **self-forensicate**, and the dev runner adds bounded recovery:
 
 - **The error tells you what it knows.** It now says whether the backend *was
@@ -1041,9 +1041,7 @@ make the backend **self-forensicate**, and the dev runner adds bounded recovery:
   killed mid-request") or *never answered this session* ("it may never have
   started" — a port conflict or failed setup), and points at the right logs
   for **your** deployment: the `bun run dev` terminal + `omnivoice.log` in
-  dev, `docker logs <container>` / `journalctl` on a server. (If Docker
-  serves the page itself, the page can go down together with the backend —
-  check the container first.)
+  dev, and `journalctl` on a server.
 - **Dev crash recovery and exit banner.** `bun run dev`'s backend runs through
   `scripts/dev-backend.mjs`, which owns Python-file reloads directly so a dead
   server cannot hide behind a still-running uvicorn reload parent. When the
@@ -1068,9 +1066,7 @@ make the backend **self-forensicate**, and the dev runner adds bounded recovery:
 
 Where the forensics live: `omnivoice.log`, `run_sentinel.json`, and
 `last_run_crash.json` are all in the backend's data folder
-(`~/Library/Application Support/OmniVoice` on macOS, `%APPDATA%\OmniVoice` on
-Windows, `~/.omnivoice` on Linux, or `$OMNIVOICE_DATA_DIR` — the Docker image
-mounts it as the `omnivoice_data` volume).
+(`%APPDATA%\OmniVoice` on Windows, or the folder named by `$OMNIVOICE_DATA_DIR`).
 
 ### Google Colab: the UI loads but every action fails with 403
 
@@ -1096,8 +1092,8 @@ to act on or to put in a bug report.
 **Cause:** the message was wrong *and* evidence-free. The backend was not
 starting up and had not merely stopped — it had **failed to start**, and the
 desktop shell knew exactly why: it holds the exit code plus a ~30-line tail of
-the backend's stderr, or the specific reason setup refused (an Intel Mac, a
-failed `uv sync`, a network blocking GitHub). The UI could not read that
+the backend's stderr, or the specific reason setup refused (a failed
+`uv sync`, a network blocking GitHub). The UI could not read that
 diagnosis, so every distinct failure collapsed into the same generic sentence.
 
 **Fixed:** the app now surfaces the shell's own diagnosis. When a request fails
@@ -1107,8 +1103,8 @@ because the backend could not start, you get:
   it names what happened rather than guessing.
 - **A "See why" notice** whose details dialog shows the exit code and the
   captured stderr tail verbatim, plus the same actionable hints the setup
-  screen gives (broken venv, blocked GitHub, port in use, unsupported Intel
-  Mac — where retrying can never help, no Retry is suggested).
+  screen gives (broken venv, blocked GitHub, port in use). Where retrying
+  cannot help, no Retry is suggested.
 - **A "Report" button** that opens a prefilled GitHub issue with that output
   already attached, with your home directory path replaced by `~` and any
   credential-shaped strings redacted before anything leaves the machine.
@@ -1119,9 +1115,9 @@ later attempt can't erase the diagnosis of the first one.
 **From source (`bun run dev`)?** Run `bun run setup:api` first so the
 backend's Python environment exists. If the window never comes up, read the
 terminal output plus `omnivoice.log` and `backend_err.log` in your VoiceStudio
-data folder. If a packaging build (`bun run dist`) stops while compiling the
-Rust native helper with a missing `pkg-config` library, install the package
-block in the Linux source-build guide.
+data folder. If a packaging build (`bun run dist`) stops while compiling the Rust native
+helper, check that the Visual Studio C++ build tools are installed (see
+[Building main](script.md#building-main)).
 
 **Still stuck?** Open the details, copy the output, and file it with **Report**
 — that output is the thing that makes the failure diagnosable.
@@ -1183,7 +1179,7 @@ via `deep_translator`, and the LLM provider via `openai`) are **optional** and
 not bundled. Only **Argos** and **NLLB** work out of the box.
 
 **Fix:**
-- **From-source / Docker install:** click the highlighted **Install** button next
+- **From-source install:** click the highlighted **Install** button next
   to the *Engine* label in the Dub tab (or run `uv pip install deep_translator`
   in the backend venv) and restart the backend.
 - **Packaged installer build:** in-app install is disabled (read-only signed
@@ -1498,7 +1494,7 @@ An architecture accepted by the torch.compile preflight may still encounter inde
 
 ### Native engine installation from a remote client
 
-Sidecar and audio.cpp runtime installation is restricted to requests from the backend computer's loopback interface. An API key does not bypass this restriction. The catalogue now shows local setup guidance instead of offering a remote install that will be rejected. Open the backend through `localhost` on that computer, or follow the engine's setup guide there. In Docker, bridge-network requests may not be loopback even when the browser runs on the host; use the documented container setup rather than weakening the native-install gate.
+Sidecar and audio.cpp runtime installation is restricted to requests from the backend computer's loopback interface. An API key does not bypass this restriction. The catalogue now shows local setup guidance instead of offering a remote install that will be rejected. Open the backend through `localhost` on that computer, or follow the engine's setup guide there. Requests from a container's bridge network may not count as loopback even when the browser runs on the host; keep the native-install gate rather than weakening it.
 
 ### Dubbing extraction fails
 
