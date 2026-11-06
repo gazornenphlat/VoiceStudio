@@ -17,7 +17,6 @@
 # Release, packaging, and container builds
 /electron/electron-builder.config.mjs  @debpalash
 /electron/build/                       @debpalash
-/electron/scripts/embed-appimage-update.mjs @debpalash
 /scripts/prepare_electron_release.py   @debpalash
 /scripts/check_electron_release_assets.py @debpalash
 /scripts/clear-release-rerun-assets.py @debpalash
