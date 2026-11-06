@@ -7,7 +7,9 @@ def get_app_data_dir():
     if custom_dir:
         return custom_dir
         
-    if sys.platform == "win32":
+    if sys.platform == "darwin":
+        return os.path.expanduser("~/Library/Application Support/OmniVoice")
+    elif sys.platform == "win32":
         return os.path.join(os.environ.get("APPDATA", ""), "OmniVoice")
     else:
         return os.path.expanduser("~/.omnivoice")
