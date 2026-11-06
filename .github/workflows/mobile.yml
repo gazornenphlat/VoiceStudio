@@ -1,4 +1,4 @@
-# Mobile — native iOS and Android companion apps (mobile/contract/SPEC.md).
+# Mobile — native Android companion app (mobile/contract/SPEC.md).
 #
 # Both apps build from generated inputs (theme tokens, OpenAPI, Electron locale
 # catalogs), so a change to any of those re-runs this workflow on `main`. Contract

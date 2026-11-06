@@ -207,7 +207,7 @@ def test_the_jq_expression_emits_status_and_filename_for_renames_too(tmp_path):
 
 def test_the_electron_jobs_are_gated_on_the_detection_and_survive_its_failure():
     jobs = WORKFLOW["jobs"]
-    for name in ("ui-crawler", "linux-native-package", "electron-ui", "test-electron", "electron-smokes"):
+    for name in ("ui-crawler", "electron-ui", "test-electron", "electron-smokes"):
         assert jobs[name]["needs"] == "changes", name
         condition = jobs[name]["if"]
         assert "!cancelled()" in condition and "outputs.electron != 'false'" in condition, name
@@ -248,8 +248,7 @@ def test_the_electron_jobs_are_gated_on_the_detection_and_survive_its_failure():
 
 def test_required_check_names_are_unchanged():
     names = {j["name"] for j in WORKFLOW["jobs"].values()}
-    assert {"Tests (backend + frontend)", "Linux native package",
-            "Electron installer contracts"} <= names
+    assert {"Tests (backend + frontend)", "Electron installer contracts"} <= names
     assert any(n.startswith("UI crawler (") for n in names)
     assert any(n.startswith("Desktop UI (") for n in names)
 

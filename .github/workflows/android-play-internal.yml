@@ -1,7 +1,6 @@
 # Android Play internal testing — signs the native phone app with the Play upload
-# key and uploads it to the Play Console internal testing track, the Android
-# counterpart of ios-testflight.yml. Owner-dispatched from `main` only; nothing
-# is sent for production review (see docs/mobile.md → Play internal testing).
+# key and uploads it to the Play Console internal testing track. Owner-dispatched
+# from `main` only; nothing is sent for production review (see docs/mobile.md → Play internal testing).
 
 name: Android Play internal testing
 
