@@ -87,14 +87,18 @@ def test_speech_gguf_placeholder_rejected_at_engine_selection(client, monkeypatc
     """Selecting the GGUF engine explicitly while bin/ holds a 0-byte
     placeholder must 400 at _resolve_engine (is_available now tells the
     truth) with the actionable reason — never reach the exec path."""
-    from engines.omnivoice_gguf import backend as gguf_backend
-
-    placeholder_dir = None
+    import sys
     import tempfile
     from pathlib import Path
 
+    from services.tts_backend import get_backend_class
+
+    # Other tests evict and re-import engine modules, so the registered class can
+    # live in a different module object than a fresh import. Patch the one it uses.
+    gguf_backend = sys.modules[get_backend_class("omnivoice-gguf").__module__]
+
     placeholder_dir = Path(tempfile.mkdtemp(prefix="gguf-placeholder-"))
-    placeholder = placeholder_dir / "omnivoice-tts-darwin-arm64"
+    placeholder = placeholder_dir / "omnivoice-tts-windows-x86_64.exe"
     placeholder.write_bytes(b"")
     placeholder.chmod(0o755)
 
