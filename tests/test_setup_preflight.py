@@ -510,9 +510,16 @@ def test_preflight_no_gpu_at_all_shows_warn():
 
 def test_preflight_network_handles_offline():
     """_probe_network must gracefully return False on connection error."""
+    import socket
+    from unittest.mock import patch
+
     from api.routers.setup.wizard import _probe_network
-    # Deliberately unreachable host:port
-    assert _probe_network(host="10.255.255.1", timeout=0.3) is False
+
+    # Simulate the offline connect failure directly. Picking an address that is
+    # assumed unroutable made this depend on the machine's network, and some
+    # sandboxes do route it.
+    with patch.object(socket, "create_connection", side_effect=OSError("unreachable")):
+        assert _probe_network(host="10.255.255.1", timeout=0.3) is False
 
 
 def _patch_race_probe(latencies):
