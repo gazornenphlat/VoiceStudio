@@ -74,13 +74,6 @@ describe('permissions — inside the Tauri shell', () => {
     await expect(checkAccessibility()).resolves.toBe(true);
   });
 
-  it('checkAccessibility maps the boolean through', async () => {
-    invokeMock.mockResolvedValue(false);
-    await expect(checkAccessibility()).resolves.toBe(false);
-    invokeMock.mockResolvedValue(true);
-    await expect(checkAccessibility()).resolves.toBe(true);
-  });
-
   it('openMicrophoneSettings resolves true when the pane opened', async () => {
     invokeMock.mockResolvedValue(undefined);
     await expect(openMicrophoneSettings()).resolves.toBe(true);

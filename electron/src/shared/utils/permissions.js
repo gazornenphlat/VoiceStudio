@@ -63,19 +63,11 @@ export async function checkMicrophone() {
 }
 
 /**
- * macOS Accessibility grant (needed so dictation can paste/type into other
- * apps). Resolves `true` on Windows/Linux and outside Tauri — nothing to
- * grant there.
+ * Accessibility grant for pasting into other apps. The Windows build has no
+ * such grant, so this always resolves `true` and the setup prompt never shows.
  */
 export async function checkAccessibility() {
-  if (!inTauri()) return true;
-  try {
-    const { invoke } = await tauriCore();
-    return (await invoke('check_accessibility')) !== false;
-  } catch (err) {
-    console.warn('check_accessibility failed:', err);
-    return true;
-  }
+  return true;
 }
 
 /**
