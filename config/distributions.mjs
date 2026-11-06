@@ -14,18 +14,6 @@ const profiles = {
     fileAccess: "user-selected",
     signing: "authenticode",
   },
-  "snap-store": {
-    applicationUpdates: "store",
-    runtimeCode: "user-initiated-download",
-    fileAccess: "confined",
-    signing: "store-assertion",
-  },
-  "mac-app-store": {
-    applicationUpdates: "store",
-    runtimeCode: "bundled-only",
-    fileAccess: "sandbox-scoped",
-    signing: "apple-distribution",
-  },
 };
 
 export const DISTRIBUTION_TARGETS = Object.freeze(Object.keys(profiles));

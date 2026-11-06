@@ -426,24 +426,6 @@ describe('DesktopUpdater', () => {
     }
   });
 
-  test.each(['snap-store', 'mac-app-store'] as const)(
-    'defers updates to the %s even when the updater environment override is absent',
-    async (distribution) => {
-      const updater = new DesktopUpdater(distribution);
-      expect(updater.snapshot()).toMatchObject({
-        status: 'unsupported',
-        unsupportedReason: 'store',
-      });
-      await updater.check();
-      await updater.download();
-      updater.install();
-      expect(mocks.autoUpdater.setFeedURL).not.toHaveBeenCalled();
-      expect(mocks.autoUpdater.checkForUpdates).not.toHaveBeenCalled();
-      expect(mocks.autoUpdater.downloadUpdate).not.toHaveBeenCalled();
-      expect(mocks.autoUpdater.quitAndInstall).not.toHaveBeenCalled();
-    },
-  );
-
   test('retains application-owned updates for the Microsoft Store EXE package', async () => {
     const manifest = feedManifestName(process.platform, process.arch, 'microsoft-store');
     const feedFetcher = vi.fn(

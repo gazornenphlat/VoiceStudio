@@ -1,4 +1,4 @@
-export type DistributionTarget = "direct" | "microsoft-store" | "snap-store" | "mac-app-store";
+export type DistributionTarget = "direct" | "microsoft-store";
 
 export type ApplicationUpdateOwner = "application" | "store";
 export type RuntimeCodePolicy = "user-initiated-download" | "bundled-only";

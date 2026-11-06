@@ -33,11 +33,10 @@ function sha256File(path) {
 }
 
 function releaseArtifact(name, distribution) {
-  // Direct and Snap packages are `VoiceStudio-<version>-…`; store builds carry a label.
+  // Direct packages are `VoiceStudio-<version>-…`; the Microsoft Store build carries a label.
   const installer =
     {
       "microsoft-store": /^VoiceStudio-MicrosoftStore-/,
-      "mac-app-store": /^VoiceStudio-MacAppStore-/,
     }[distribution] ?? /^VoiceStudio-\d/;
   const updatePrefix =
     distribution === "microsoft-store"

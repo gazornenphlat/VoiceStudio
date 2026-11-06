@@ -3,10 +3,6 @@
   "identity": {
     "productName": "VoiceStudio",
     "applicationId": "com.voicestudio.desktop",
-    "macAppStore": {
-      "applicationId": "sh.voicestudio.pro",
-      "appStoreConnectId": "6829361961"
-    },
     "publisherLegalName": "Yupcha Softwares Private Limited",
     "license": "AGPL-3.0-only",
     "defaultLocale": "en-US"
@@ -34,14 +30,13 @@
     "diskGib": 10,
     "firstRunNetworkRequired": true,
     "architectures": {
-      "windows": ["x64", "arm64-experimental"],
-      "linux": ["x64"],
-      "macos": ["arm64", "x64-ui-only"]
+      "windows": [
+        "x64",
+        "arm64-experimental"
+      ]
     },
     "minimumOs": {
-      "windows": "Windows 10",
-      "macos": "macOS 13.3",
-      "linux": "Distribution supported by the selected package format"
+      "windows": "Windows 10"
     }
   },
   "permissions": {
@@ -56,8 +51,6 @@
     "publicUserContentHosting": false
   },
   "categories": {
-    "microsoft-store": "Music",
-    "snap-store": "Audio & Video",
-    "mac-app-store": "Productivity"
+    "microsoft-store": "Music"
   }
 }
