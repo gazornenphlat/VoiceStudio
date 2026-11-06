@@ -423,31 +423,6 @@ itself does not grant access.
 3. Open **Model Catalogue**, review and accept the PocketTTS terms locally,
    then retry. VoiceStudio stores this acknowledgement only on your machine.
 
-## 3. Gatekeeper quarantine on macOS
-
-**Symptom:** "VoiceStudio.app is damaged and can't be opened."
-
-**Cause:** Gatekeeper cannot verify the app's Apple Developer identity — the
-build is unsigned or ad-hoc signed (local `bun run dist` packages, or a release
-published without notarization; signing and notarization run in
-`electron-release.yml` when the Apple credentials are configured).
-
-**Fix:** see macos.md#gatekeeper-quarantine.
-
-## 4. Linux: blank window or GPU errors
-
-**Symptom:** the Linux app window opens blank, or the terminal shows GPU
-process errors.
-
-**Cause:** the Electron app renders with Chromium; some GPU driver and
-compositor combinations fail to initialise hardware acceleration. (The
-`WEBKIT_*` variables from older versions of this entry applied only to the
-archived Tauri app, which rendered with WebKitGTK.)
-
-**Fix:** launch once with `--disable-gpu` (and on Wayland, optionally
-`--ozone-platform=x11`) — see
-linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404.
-
 ## 5. Windows Triton / torch.compile OOM
 
 **Symptom:** the first synthesis call fails with `OutOfMemoryError: CUDA out
@@ -569,14 +544,6 @@ Russia, sometimes on corporate proxies.
 [#57](https://github.com/debpalash/VoiceStudio/issues/57),
 [#60](https://github.com/debpalash/VoiceStudio/issues/60).
 
-## 7. `.deb` ffprobe path conflict on upgrade
-
-**Symptom:** after upgrading from a pre-v0.3 .deb, `ffprobe -version` reports
-"VoiceStudio bundled ffprobe" instead of the system ffmpeg, breaking other apps
-that rely on `/usr/bin/ffprobe`.
-
-**Fix:** see linux.md#deb-ffprobe-conflict.
-
 ## 7b. "Media engine unavailable" / FFmpeg questions
 
 FFmpeg, FFprobe, and yt-dlp are **not** things you install for VoiceStudio.
@@ -630,34 +597,6 @@ main process supplies a desktop-origin transport marker for both packaged and
 development requests; renderer-supplied origins and markers are discarded.
 Remote backends must also use `OMNIVOICE_API_KEY` as the bearer key and remain
 restricted to a private tailnet; see [API authentication](../api-auth.md).
-
-## 8. Docker LAN access — media preview 404
-
-**Symptom:** VoiceStudio loads on `http://<lan-ip>:3900` but the audio preview
-pane shows 404s for `/media/...`.
-
-**Cause:** pre-v0.3, the frontend hardcoded `localhost:3900` for media-preview
-URLs, which is wrong when the UI is reached from a different LAN host.
-
-**Fix:** the frontend derives its API/media base from the page's own origin.
-When running behind a reverse proxy where the UI and API are on different
-origins, set the runtime override `OMNIVOICE_PUBLIC_API_BASE` (works on the
-prebuilt image via `docker run -e`) and list the UI's origin in
-`OMNIVOICE_ALLOWED_ORIGINS` — see
-docker.md#lan-access.
-
-## 9. Apple Silicon `mlx-whisper` unavailable on Intel mac
-
-**Symptom:** on an Intel mac, VoiceStudio logs `mlx-whisper backend unavailable;
-falling back to faster-whisper`.
-
-**Cause:** `mlx-whisper` and `mlx-audio` only build for arm64 (Apple Silicon).
-
-**Fix:** none needed on Apple Silicon setups that log this transiently. Note
-that Intel Macs can no longer run the local backend at all — PyTorch dropped
-Intel-Mac wheels, so this entry only applies to historical installs (see
-macos.md and
-[#889](https://github.com/debpalash/VoiceStudio/issues/889)).
 
 ## 10. Windows: `Could not locate cudnn_ops_infer64_8.dll` during transcription
 
@@ -1195,44 +1134,6 @@ This entry covered a corrupted WebView2 profile in the archived Tauri app
 instead`, issue #879). The Electron app does not use WebView2. Install Electron
 with the [migration guide](../electron-migration.md); if the Electron app hangs
 at startup, see [14d](#14d-cant-reach-the-local-voicestudio-backend-when-the-backend-never-started).
-
-## 16. macOS: microphone permission never prompts, VoiceStudio never appears in System Settings
-
-**Symptom:** clicking record shows "Microphone access denied. macOS: open
-System Settings → Privacy & Security → Microphone and enable VoiceStudio" —
-but VoiceStudio never appears in that list, so there's nothing to enable.
-`NSMicrophoneUsageDescription` is present in the app's `Info.plist`, and
-resetting the permission (`tccutil reset Microphone
-com.voicestudio.desktop`) followed by a relaunch changes nothing — no
-system prompt ever appears.
-
-**Cause:** the app bundle was missing the Hardened Runtime *entitlement* for
-microphone access. Hardened Runtime blocks microphone hardware access unless
-`com.apple.security.device.audio-input` is present in the signed binary's
-entitlements — regardless of `Info.plist`'s `NSMicrophoneUsageDescription`
-(that only supplies the prompt *text*). Without the entitlement, macOS's TCC
-layer never registers a request, which is exactly why the app never appears in
-the System Settings list. (Diagnosed in the archived Tauri app by
-[@MahdiHedhli](https://github.com/MahdiHedhli).)
-
-**Fix:** fixed since the release after v0.3.12
-([#1016](https://github.com/debpalash/VoiceStudio/pull/1016)); the Electron app
-signs with the same entitlement (`electron/build/entitlements.mac.plist`).
-Update and live recording works, with a normal macOS permission prompt on
-first use.
-
-**Workaround on older builds (≤ v0.3.12):** record your voice sample in any
-other app (Voice Memos, QuickTime, etc.) and upload the resulting file in
-VoiceStudio instead of using live recording — upload-based cloning is
-unaffected and works normally.
-
-**Linked issue:** [#1013](https://github.com/debpalash/VoiceStudio/issues/1013)
-
-> **Tip:** current builds surface the live OS grant state in-app — **Settings →
-> Permissions** shows whether the microphone (and, on macOS, Accessibility) is
-> granted, denied, or not asked yet, with an **Open Settings** button that
-> deep-links the exact OS pane described above. The dictation blocker rechecks
-> Accessibility while it is visible and closes as soon as macOS reports the grant.
 
 ## 17. Windows: backend won't start with a non-English (CJK) username — `UnicodeDecodeError` in `site`
 
