@@ -255,15 +255,22 @@ _process_wide = False
 _thread_state = threading.local()
 
 
+# Only the schemes urllib (and therefore yt-dlp) actually route through a proxy.
+# getproxies() also returns tool-specific keys (npm_config_https, yarn_https,
+# docker_https, global_agent_https, ...) that no request in this process uses;
+# treating those hosts as trusted let a loopback target through the guard.
+_PROXY_SCHEMES = frozenset({"http", "https", "all"})
+
+
 def _proxy_hosts() -> frozenset[str]:
-    """Hostnames of the system/environment proxies yt-dlp would use."""
+    """Hostnames of the proxies yt-dlp's own requests are routed through."""
     hosts = set()
     try:
         proxies = urllib.request.getproxies()
     except Exception:  # noqa: BLE001 - a broken proxy config must not break imports
         proxies = {}
     for name, value in proxies.items():
-        if name == "no" or not value:
+        if name not in _PROXY_SCHEMES or not value:
             continue
         try:
             host = urlsplit(value if "://" in value else f"http://{value}").hostname

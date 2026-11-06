@@ -303,7 +303,10 @@ def _serve(host="127.0.0.1", redirect_to=None):
     return server, hits
 
 
-def test_guard_is_scoped_to_the_guarded_thread():
+def test_guard_is_scoped_to_the_guarded_thread(monkeypatch):
+    # A configured proxy is trusted by design; this test checks the thread scope
+    # of the guard itself, so it runs with no proxy hosts.
+    monkeypatch.setattr(url_safety, "_proxy_hosts", lambda: frozenset())
     with url_safety.guard_outbound_connections():
         with pytest.raises(socket.gaierror):
             socket.getaddrinfo("127.0.0.1", 80)
