@@ -68,7 +68,7 @@ The OS refused to run the engine and left no evidence of what refused it. Add th
 
 ### `GATEKEEPER_QUARANTINE`
 
-macOS quarantined the engine. See Gatekeeper quarantine.
+Windows quarantined the engine's files. Unblock them or add the install folder to your security tool's allow list.
 
 ### `EXEC_NOEXEC_MOUNT`
 
@@ -100,11 +100,11 @@ The runtime is inside OneDrive, Dropbox, iCloud Drive, Google Drive or Nextcloud
 
 ### `SYSTEM_LIBRARY_PROBLEM`
 
-A system library the engine needs is missing or too old. The setup screen names it; see the Linux guide.
+A system library the engine needs is missing or too old. The setup screen names it. Install the missing component, then retry setup.
 
 ### `UNSUPPORTED_PLATFORM`
 
-This computer cannot run the local engine, or this is the wrong download for it. See the macOS guide, or connect to an engine on another computer.
+This computer cannot run the local engine. Connect to an engine on another Windows computer instead.
 
 ### `SOURCE_ENV_INCOMPLETE`
 
@@ -144,7 +144,7 @@ Another program holds the engine's port. See [Backend cannot bind its local port
 
 ### `ROCM_NOT_CONFIGURED`
 
-An AMD GPU needs ROCm, which is missing or incomplete. See [Windows ROCm](windows-rocm.md) or the Linux guide.
+An AMD GPU needs ROCm, which is missing or incomplete. See [Windows ROCm](windows-rocm.md).
 
 ## Backend cannot bind its local port
 
@@ -168,11 +168,11 @@ processes or change firewall rules.
 If the backend log ends with `FATAL: the operating system refused to let
 VoiceStudio listen on port …` (`[Errno 13]` / WinError 10013), the OS denied the
 bind rather than reporting a taken port. On Windows a possible cause is a
-reserved range (Hyper-V, WSL, Docker and WinNAT reserve them); another process
+reserved range (Hyper-V, WSL and WinNAT reserve them); another process
 holding the port exclusively gives the same error. List the reserved ranges with
 `netsh interface ipv4 show excludedportrange protocol=tcp` and set
 `OMNIVOICE_PORT` to a port outside every range that no other app uses. On
-macOS and Linux, ports below 1024 need elevated rights. A default launch already
+ports below 1024 need elevated rights. A default launch already
 skips reserved ports on its own; this message appears only when the port was
 chosen explicitly.
 
@@ -372,7 +372,7 @@ minimum and you accept the out-of-memory risk (long dubs may crash), set
 `OMNIVOICE_RAM_PREFLIGHT=0` before launching — the hard block becomes a
 warning. On Windows run PowerShell
 `[Environment]::SetEnvironmentVariable('OMNIVOICE_RAM_PREFLIGHT','0','User')`
-and relaunch; on macOS/Linux export it in the shell that starts the app. (The
+and relaunch. (The
 in-app Settings panel can't help here — this blocker appears before setup
 completes.)
 
@@ -537,7 +537,7 @@ engine choice. Models still load on demand when requested.
 Russia, sometimes on corporate proxies.
 
 **Fix:** see linux.md#restricted-networks-china--russia
-(same env vars work on macOS and Windows — `UV_PYTHON_INSTALL_MIRROR`,
+(the same env vars work on Windows — `UV_PYTHON_INSTALL_MIRROR`,
 `UV_HTTP_TIMEOUT=900`, `UV_HTTP_RETRIES=5`, `UV_PYTHON_PREFERENCE=only-system`).
 
 **Linked issues:**
@@ -636,7 +636,7 @@ manually into the backend venv, then restart:
 uv pip install --no-deps --python .venv\Scripts\python.exe --target .venv\Lib\site-packages\cudnn8_compat nvidia-cudnn-cu12==8.9.7.29
 ```
 
-(On Linux the target is `.venv/lib/pythonX.Y/site-packages/cudnn8_compat`.)
+
 
 Or sidestep cuDNN 8 entirely: switch the ASR backend to **PyTorch Whisper** in
 **Model Catalogue** (ASR tab → **Use**). It runs on PyTorch's own stack (cuDNN 9, bundled with
@@ -710,7 +710,7 @@ compute device is `cpu`.
 
 **Cause:** the default install has the NVIDIA CUDA build of PyTorch (or the
 CPU-only build when no NVIDIA driver is present), and neither can drive AMD GPUs. This is not a driver problem on your side.
-ROCm is opt-in on Linux and Windows (macOS has no ROCm), so the installer never
+ROCm is opt-in on Windows, so the installer never
 picks it on its own; the setup screen's GPU check names the installed build and
 the opt-in for your OS. Open
 **Settings → Performance → GPU acceleration**: it names your card, the installed
@@ -723,8 +723,7 @@ PyTorch build and, for every engine, whether it uses the GPU.
   [Windows ROCm guide](windows-rocm.md). Otherwise PyTorch engines stay on the
   CPU; engines with their own GPU runtime — today audio.cpp (Vulkan) — still use
   a Radeon: install its runtime from **Settings → Models**.
-- **Linux:** set `OMNIVOICE_TORCH_VARIANT=rocm` and run setup again, or use the
-  ROCm Docker image — linux.md — AMD GPU (ROCm). The
+- Set `OMNIVOICE_TORCH_VARIANT=rocm` and run setup again. The
   ROCm build supports RX 9000 (RDNA4) cards natively; do not set
   `HSA_OVERRIDE_GFX_VERSION=11.0.0` for them. If the
   panel says PyTorch has ROCm but cannot open the device, check that the `amdgpu`
@@ -777,7 +776,7 @@ time.
 **Fix — force a clean re-download:**
 
 1. **Fully quit VoiceStudio.** Check Task Manager (Windows) / Activity Monitor
-   (macOS) and end any leftover `omnivoice` / `python` process — a half-running
+   and end any leftover `omnivoice` / `python` process — a half-running
    one keeps the cache locked.
 2. **Delete the incomplete model folder(s) entirely** from the HF cache (the
    whole `models--…` folder, not just `refs/`). Leave other models alone:
@@ -802,7 +801,7 @@ order:
   again**. To pin a mirror yourself, pick one in the same panel (or the
   quick-pick the first-run system check offers when nothing is reachable), or
   set it as an env var before launching and relaunch:
-  - macOS/Linux: `export HF_ENDPOINT=https://hf-mirror.com`
+  - Set `HF_ENDPOINT=https://hf-mirror.com` in the environment before launch.
   - Windows (PowerShell): `[Environment]::SetEnvironmentVariable("HF_ENDPOINT","https://hf-mirror.com","User")`
 
   Automatic selection checks model-file metadata, so a mirror that only
@@ -1281,7 +1280,7 @@ normally.
    after 45 seconds without data.
 2. **If it stalls, cancel and retry.** Finished files are kept.
 3. **Use a VPN or a proxy.** Setup uses your system proxy; to force one, set
-   `HTTPS_PROXY` (macOS/Linux: `export HTTPS_PROXY=http://host:port`; Windows
+   `HTTPS_PROXY` (Windows
    PowerShell: `[Environment]::SetEnvironmentVariable("HTTPS_PROXY","http://host:port","User")`),
    then restart VoiceStudio.
 4. **No NVIDIA GPU, or you don't need it?** The CPU build skips the large CUDA
@@ -1333,9 +1332,7 @@ Default locations of the retained log (portable/profile configurations may diffe
 
 | Platform | Location |
 |---|---|
-| macOS | `~/Library/Application Support/VoiceStudio/setup.log` |
 | Windows | `%APPDATA%\VoiceStudio\setup.log` |
-| Linux | `~/.config/VoiceStudio/setup.log` |
 
 The log includes attempt times, phases, download hosts, effective uv timeouts,
 proxy presence (not proxy credentials), progress, connection-check results, and
@@ -1442,16 +1439,12 @@ has no per-app exceptions. Your options:
 
 VoiceStudio is fully local — no accounts, no services, nothing to deactivate. To
 reclaim disk space or fully remove it, run the uninstaller, which lists every
-VoiceStudio folder with its size (dry-run first) and deletes on `--yes`:
-
-```bash
-scripts/uninstall.sh            # macOS/Linux — dry-run
-scripts/uninstall.sh --yes      # delete app data/env/config/logs
-scripts/uninstall.sh --yes --models   # also delete the shared HF model cache
-```
+VoiceStudio folder with its size (dry-run first) and deletes on `-Yes`:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Yes   # Windows
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1            # dry-run
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Yes       # delete app data/env/config/logs
+powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Yes -Models   # also delete the shared HF model cache
 ```
 
 The two big folders are the **model cache** (Hugging Face weights, several GB)
@@ -1531,7 +1524,7 @@ Python traceback may not exist; include the captured crash details and system/GP
 information when reporting them. The name identifies the failure category, not
 its cause: it does not by itself prove a driver, model, or memory problem.
 
-On macOS, stopping a timed-out engine or installer operation can race with its
+Stopping a timed-out engine or installer operation can race with its
 supervisor exiting. VoiceStudio briefly rechecks that exact owned supervisor before
 treating a process-group permission error as already-completed cleanup;
 permission failures for a live operation still surface as errors.
