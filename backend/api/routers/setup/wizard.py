@@ -572,8 +572,7 @@ def preflight():
             ),
             "fix": (
                 "Use a remote backend hosted on Apple Silicon, an NVIDIA system, "
-                "or CPU-only Linux/Windows. Local setup is disabled here; "
-                "docs/install/macos.md explains the supported paths."
+                "or CPU-only Windows. Local setup is disabled here."
             ),
         }
         checks.append(platform_failure)

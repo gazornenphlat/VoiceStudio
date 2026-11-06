@@ -10,7 +10,7 @@ from __future__ import annotations
 def test_known_class_returns_url():
     from core import error_docs_map
     url = error_docs_map.lookup("GATEKEEPER_QUARANTINE")
-    assert "docs/install/macos.md#gatekeeper-quarantine" in url
+    assert "docs/install/troubleshooting.md#gatekeeper_quarantine" in url
 
 
 def test_unknown_class_returns_default():

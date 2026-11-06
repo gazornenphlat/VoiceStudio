@@ -35,7 +35,7 @@ ERROR_DOCS: dict[str, str] = {
 
     "DIARIZATION_LOAD_FAILED": f"{_BASE}/docs/features/diarization.md#troubleshooting",
     "DIARIZATION_MODEL_MISSING": f"{_BASE}/docs/features/diarization.md#local-installation-and-repair",
-    "GATEKEEPER_QUARANTINE":       f"{_BASE}/docs/install/macos.md#gatekeeper-quarantine",
+    "GATEKEEPER_QUARANTINE":       f"{_BASE}/docs/install/troubleshooting.md#gatekeeper_quarantine",
     "APPIMAGE_WEBKIT_WHITESCREEN": f"{_BASE}/docs/install/linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404",
     "PKG_RESOURCES_MISSING":       f"{_BASE}/docs/install/troubleshooting.md#pkg_resources-missing",
     "HF_AUTH_FAILED":              f"{_BASE}/docs/setup/huggingface-token.md",

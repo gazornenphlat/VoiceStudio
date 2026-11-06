@@ -29,7 +29,7 @@ export const ERROR_DOCS: Record<string, string> = {
 
   DIARIZATION_LOAD_FAILED: `${BASE}/docs/features/diarization.md#troubleshooting`,
   DIARIZATION_MODEL_MISSING: `${BASE}/docs/features/diarization.md#local-installation-and-repair`,
-  GATEKEEPER_QUARANTINE: `${BASE}/docs/install/macos.md#gatekeeper-quarantine`,
+  GATEKEEPER_QUARANTINE: `${BASE}/docs/install/troubleshooting.md#gatekeeper_quarantine`,
   APPIMAGE_WEBKIT_WHITESCREEN: `${BASE}/docs/install/linux.md#appimage-white-screen-on-fedora-44--ubuntu-2404`,
   PKG_RESOURCES_MISSING: `${BASE}/docs/install/troubleshooting.md#pkg_resources-missing`,
   HF_AUTH_FAILED: `${BASE}/docs/setup/huggingface-token.md`,

@@ -25,7 +25,7 @@ export async function setupApi({
   if (platform === "darwin" && arch === "x64")
     throw new Error(
       "Intel Macs cannot install the local backend: PyTorch publishes no Intel-Mac (macOS x86_64) wheels. " +
-        "Connect the app to a VoiceStudio backend on another computer (docs/install/macos.md). " +
+        "Connect the app to a VoiceStudio backend on another computer. " +
         "On an Apple Silicon Mac, run this from a native arm64 terminal with an arm64 Bun or Node.",
     );
   const variant = await selectVariant({ env, platform, arch });
