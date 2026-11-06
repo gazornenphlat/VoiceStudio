@@ -22,7 +22,6 @@ manual VC++ installation first when that prerequisite is missing.
 Cross-platform:
   - Linux:   cuDNN 8 compat (.so.8 libs)
   - Windows: VC++ Redistributable + cuDNN 8 compat (.dll libs)
-  - macOS:   skipped (no CUDA)
 """
 import os
 import re
@@ -37,7 +36,7 @@ import glob
 # UnicodeEncodeError *before finishing setup*, taking `bun desktop` down with it.
 # It only "works" in an interactive terminal by luck of the console's encoding.
 # Force UTF-8 on our own streams so output is identical whether run interactively
-# or piped. No-op where the streams already speak UTF-8 (macOS/Linux, modern
+# or piped. No-op where the streams already speak UTF-8 (Linux, modern
 # Windows Terminal) or can't be reconfigured.
 for _stream in (sys.stdout, sys.stderr):
     try:
@@ -246,10 +245,6 @@ def main(argv=None):
             [sys.executable, "-m", "backend.core.windows_rocm.install", "--uv", "uv"],
             cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
         )
-        return
-
-    # macOS — no CUDA, nothing to do
-    if sys.platform == "darwin":
         return
 
     # ── Step 2: AMD wheels on Linux, when requested ───────────────────────
