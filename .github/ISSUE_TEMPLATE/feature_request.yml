@@ -46,5 +46,5 @@ body:
     attributes:
       value: |
         > VoiceStudio is **local-first** — core features work offline without an account,
-        API keys, or cloud calls, and behave identically on macOS/Windows/Linux. Proposals
+        API keys, or cloud calls, and behave identically on Windows. Proposals
         that fit those constraints are easiest to land.

@@ -50,13 +50,8 @@ body:
     attributes:
       label: Operating system
       options:
-        - macOS (Apple Silicon)
-        - macOS (Intel)
         - Windows (x64)
-        - Linux (AppImage)
-        - Linux (.deb)
-        - Linux (other / from source)
-        - Docker
+        - Windows (ARM64)
     validations:
       required: true
   - type: dropdown
@@ -64,8 +59,7 @@ body:
     attributes:
       label: How did you install it?
       options:
-        - Desktop app (installer / AppImage)
-        - Docker image
+        - Desktop app (installer)
         - From source (uv sync)
     validations:
       required: true
@@ -73,7 +67,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Settings → About (e.g. v0.3.5), or the Docker tag / git SHA.
+      description: Settings → About (e.g. v0.3.5), or the git SHA.
       placeholder: "v0.3.5"
     validations:
       required: true

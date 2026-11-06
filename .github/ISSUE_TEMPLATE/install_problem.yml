@@ -35,13 +35,8 @@ body:
     attributes:
       label: Operating system
       options:
-        - macOS (Apple Silicon)
-        - macOS (Intel)
         - Windows (x64)
-        - Linux (AppImage)
-        - Linux (.deb)
-        - Linux (other / from source)
-        - Docker
+        - Windows (ARM64)
     validations:
       required: true
   - type: dropdown
@@ -49,8 +44,7 @@ body:
     attributes:
       label: How are you installing it?
       options:
-        - Desktop app (installer / AppImage)
-        - Docker image
+        - Desktop app (installer)
         - From source (uv sync)
     validations:
       required: true
