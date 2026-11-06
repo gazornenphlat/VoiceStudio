@@ -45,11 +45,9 @@ def test_build_workflow_is_reusable_and_uploads_every_runtime_file():
                     "bin/vcruntime140*.dll", "bin/checksums.sha256"):
         assert pattern in paths
     assert upload["with"]["if-no-files-found"] == "error"
-    # A matrix `include` that matches no combination re-adds it, which would
-    # defeat the desktop exclude; runners come from a lookup instead.
-    assert "include" not in job["strategy"]["matrix"]
-    for platform in job["strategy"]["matrix"]["platform"]:
-        assert f'"{platform}":' in job["runs-on"]
+    # The desktop product ships Windows x64 only, so one runner builds the leg.
+    assert job["strategy"]["matrix"]["platform"] == ["windows-x86_64"]
+    assert job["runs-on"] == "windows-latest"
 
 
 @pytest.mark.parametrize("name", ["electron-release.yml", "electron-build.yml"])
