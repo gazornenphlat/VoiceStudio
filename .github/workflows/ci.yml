@@ -127,11 +127,6 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - name: Shell installers and Worker routing
-        working-directory: electron
-        run: |
-          sh -n ../scripts/install.sh && bash -n ../scripts/uninstall.sh
-          node --test tests/shell-installer.test.mjs tests/installer-worker.test.mjs
       - name: PowerShell scripts parse
         shell: pwsh
         run: |

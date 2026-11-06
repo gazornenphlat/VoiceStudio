@@ -75,8 +75,7 @@ The script does not start a development server or download model weights.
 
 ## Installer tests
 
-From `electron/`, run `node --test tests/installer-worker.test.mjs`. The PowerShell
-flow test is `electron/tests/powershell-installer.ps1`. These tests mock downloads
+The PowerShell flow test is `electron/tests/powershell-installer.ps1`. These tests mock downloads
 and setup execution in temporary directories; they do not install an app or
 download models. A real Windows install and first-run smoke test are separate
 checks in the Electron release workflow.

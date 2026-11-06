@@ -86,7 +86,7 @@ def test_python_docs_and_mobile_edits_skip_the_electron_jobs(tmp_path, files):
     ["tests/frontend/ssml.test.mjs"],
     [".github/workflows/ci.yml"], [".github/workflows/electron-release.yml"],
     [".github/workflows/electron-build.yml"], ["backend/x.py", ".github/workflows/ci.yml"],
-    ["scripts/install.sh"], ["scripts/export-mobile-tokens.ts"],
+    ["scripts/install.ps1"], ["scripts/export-mobile-tokens.ts"],
     ["something/unknown.txt"], ["LICENSE"], ["store/listing.json"],
 ])
 def test_anything_else_runs_the_electron_jobs(tmp_path, files):

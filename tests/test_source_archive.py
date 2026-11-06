@@ -15,7 +15,6 @@ REQUIRED = (
     ".github/scripts/scam_guard.py",
     "tests/test_cla_workflow.py",
     "scripts/install.ps1",
-    "scripts/install.sh",
     "electron/tests/packaging-contract.mjs",
     "electron/package.json",
     "pyproject.toml",
