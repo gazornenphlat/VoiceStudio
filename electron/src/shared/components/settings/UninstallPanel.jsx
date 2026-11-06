@@ -1,8 +1,8 @@
 /**
  * Settings → Storage → "Remove all data" (#1089).
  *
- * The in-app half of the uninstaller. A user who installed the .dmg / .msi /
- * AppImage has no repo, so `scripts/uninstall.sh` never reaches them — this is
+ * The in-app half of the uninstaller. A user who installed the .msi / .exe
+ * has no repo, so `scripts/uninstall.ps1` never reaches them — this is
  * the affordance they actually have. It asks the desktop shell for every folder
  * this install owns (honoring custom + portable locations), shows each with its
  * real size, and deletes them behind a typed confirmation.

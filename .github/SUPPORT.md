@@ -12,8 +12,7 @@
 ## Uninstalling / removing all data
 
 VoiceStudio is fully local — there's nothing to deactivate, just folders to
-delete. `scripts/uninstall.sh` (macOS/Linux) or `scripts\uninstall.ps1`
-(Windows) lists every VoiceStudio folder with its size (dry-run first) and
+delete. `scripts\uninstall.ps1` lists every VoiceStudio folder with its size (dry-run first) and
 removes them on `--yes`. The complete per-platform path list is in
 [docs/install/uninstall.md](../docs/install/uninstall.md).
 
