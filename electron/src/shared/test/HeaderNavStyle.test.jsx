@@ -148,13 +148,6 @@ describe('Header — rail mode (default)', () => {
       expect(windowActions.close).not.toHaveBeenCalled();
     });
 
-    it('macOS shell: native traffic lights replace the custom controls', () => {
-      pretendToRun('MacIntel', { shell: true });
-      renderHeader({});
-      expect(controls()).toBeNull();
-      expect(screen.queryAllByRole('button', { name: /(minimize|close) window/i })).toHaveLength(0);
-    });
-
     it.each([['MacIntel'], ['Win32'], ['Linux x86_64']])(
       'plain browser on %s has no window controls',
       (platform) => {
@@ -164,20 +157,6 @@ describe('Header — rail mode (default)', () => {
       },
     );
 
-    it('only macOS gets the traffic-light inset on the breadcrumb block', () => {
-      const insetOn = (platform) => {
-        pretendToRun(platform, { shell: true });
-        const view = renderHeader({});
-        const found = view.container.querySelector('.header-area__lead--mac-inset') !== null;
-        view.unmount();
-        return found;
-      };
-      expect({
-        mac: insetOn('MacIntel'),
-        win: insetOn('Win32'),
-        linux: insetOn('Linux x86_64'),
-      }).toEqual({ mac: true, win: false, linux: false });
-    });
   });
 });
 

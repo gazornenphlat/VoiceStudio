@@ -46,22 +46,6 @@ describe('PermissionChecks — wizard rows', () => {
     expect(invokeMock).not.toHaveBeenCalled();
   });
 
-  it('shows mic + Accessibility rows on macOS with live chips', async () => {
-    window.__TAURI_INTERNALS__ = {};
-    stubInvoke({ mic: 'granted', a11y: false });
-    render(<PermissionChecks platform="mac" />);
-    expect(screen.getByTestId('permission-checks')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByTestId('perm-chip-microphone')).toHaveTextContent('Granted');
-      expect(screen.getByTestId('perm-chip-accessibility')).toHaveTextContent('Denied');
-    });
-    // Denied a11y row exposes the deep-link.
-    fireEvent.click(screen.getByRole('button', { name: 'Open Settings' }));
-    await waitFor(() => {
-      expect(invokeMock).toHaveBeenCalledWith('open_accessibility_settings');
-    });
-  });
-
   it('hides the Accessibility row off-macOS and keeps the mic row honest on Linux', async () => {
     window.__TAURI_INTERNALS__ = {};
     stubInvoke({ mic: 'unknown' });

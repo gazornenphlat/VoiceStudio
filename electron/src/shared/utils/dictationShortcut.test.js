@@ -7,14 +7,8 @@ import {
 } from './dictationShortcut';
 
 describe('dictation shortcut parsing', () => {
-  it('resolves CmdOrCtrl to the current platform', () => {
-    expect(parseShortcut('CmdOrCtrl+Shift+Space', 'mac')).toMatchObject({
-      code: 'Space',
-      meta: true,
-      ctrl: false,
-      shift: true,
-    });
-    expect(parseShortcut('CmdOrCtrl+Shift+Space', 'windows')).toMatchObject({
+  it('resolves CmdOrCtrl to Ctrl on Windows', () => {
+    expect(parseShortcut('CmdOrCtrl+Shift+Space')).toMatchObject({
       code: 'Space',
       meta: false,
       ctrl: true,
@@ -45,9 +39,8 @@ describe('dictation shortcut parsing', () => {
     expect(isShortcutRelease({ code: 'KeyA' }, shortcut)).toBe(false);
   });
 
-  it('formats platform-native hints', () => {
-    expect(formatShortcut('CmdOrCtrl+Shift+Space', 'mac')).toBe('⌘⇧Space');
-    expect(formatShortcut('CmdOrCtrl+Shift+Space', 'windows')).toBe('Ctrl+Shift+Space');
-    expect(formatShortcut('Cmd+Option+K', 'linux')).toBe('Super+Alt+K');
+  it('formats Windows hints', () => {
+    expect(formatShortcut('CmdOrCtrl+Shift+Space')).toBe('Ctrl+Shift+Space');
+    expect(formatShortcut('Cmd+Option+K')).toBe('Super+Alt+K');
   });
 });

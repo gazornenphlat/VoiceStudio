@@ -23,8 +23,6 @@ import { useTranslation } from 'react-i18next';
  */
 export default function SettingsSearch({ value, onChange, onClear, inputRef, onEnterList }) {
   const { t } = useTranslation();
-  const isMacLike =
-    typeof navigator !== 'undefined' && /Mac|iPad|iPhone|iPod/.test(navigator.platform || '');
   const clear = () => (onClear ? onClear() : onChange(''));
 
   const onKeyDown = (e) => {
@@ -78,7 +76,7 @@ export default function SettingsSearch({ value, onChange, onClear, inputRef, onE
           data-testid="settings-search-kbd"
           className="pointer-events-none absolute right-[var(--space-2)] top-1/2 -translate-y-1/2 rounded-[4px] bg-[color-mix(in_srgb,var(--chrome-fg)_7%,transparent)] px-[5px] py-[1px] [font-family:var(--chrome-font-mono)] text-[length:var(--chrome-label-size,0.62rem)] text-[color:var(--chrome-fg-dim)]"
         >
-          {isMacLike ? '⌘K' : 'Ctrl K'}
+          {'Ctrl K'}
         </kbd>
       )}
     </div>

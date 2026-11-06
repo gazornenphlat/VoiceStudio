@@ -153,12 +153,8 @@ export default function Header({
   // breadcrumb + wordmark normally sit — the tabs already say where you are,
   // and two answers to that question in one bar is one too many.
   const tabsInTitlebar = navStyle === 'tabs';
-  // The macOS platform config enables decorated overlay chrome. Its native
-  // traffic lights provide the same window actions as our custom desktop row.
   const isDesktop = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
-  const hasMacTrafficLights =
-    isDesktop && typeof navigator !== 'undefined' && (navigator.platform || '').startsWith('Mac');
-  const showWindowControls = isDesktop && !hasMacTrafficLights;
+  const showWindowControls = isDesktop;
   const { t } = useTranslation();
   // Sysinfo is subscribed here (not in App via useAppData) so the 5s poll
   // only re-renders the header chrome, not the whole App tree.
@@ -304,13 +300,8 @@ export default function Header({
           <TitleTabs mode={mode} setMode={setMode} />
         </div>
       ) : (
-        /* Left: view title + breadcrumb. On macOS the native traffic lights
-           float over this corner, so the block gets an extra start inset. */
-        <div
-          className={`flex items-center gap-[14px] justify-self-start min-w-0${
-            hasMacTrafficLights ? ' header-area__lead--mac-inset' : ''
-          }`}
-        >
+        /* Left: view title + breadcrumb. */
+        <div className="flex items-center gap-[14px] justify-self-start min-w-0">
           <div className="inline-flex items-center gap-[6px] h-[var(--chrome-pill-h)] [font-family:var(--font-sans)] max-[961px]:gap-[5px]">
             <span
               /* Decorative pulse: stop it when the OS asks for reduced motion. */

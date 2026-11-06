@@ -2,10 +2,8 @@
 // string, e.g. "CmdOrCtrl+Shift+Space". Returns null when only modifiers
 // are held (the user hasn't picked a "real" key yet).
 export function keyEventToAccelerator(e) {
-  const isMacLike =
-    typeof navigator !== 'undefined' && /Mac|iPad|iPhone|iPod/.test(navigator.platform || '');
   const mods = [];
-  if (e.metaKey) mods.push(isMacLike ? 'Cmd' : 'Super');
+  if (e.metaKey) mods.push('Super');
   if (e.ctrlKey) mods.push('Ctrl');
   if (e.altKey) mods.push('Alt');
   if (e.shiftKey) mods.push('Shift');

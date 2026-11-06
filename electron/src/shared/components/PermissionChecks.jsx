@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Badge, Button } from '../ui';
 import usePermissions from '../hooks/usePermissions';
 import { detectPlatform, micHintKey } from '../utils/micError';
-import { openAccessibilitySettings, openMicrophoneSettings } from '../utils/permissions';
+import { openMicrophoneSettings } from '../utils/permissions';
 
 /**
  * PermissionChecks — OS-permission rows for the SetupWizard's System Check
@@ -71,7 +71,7 @@ function CheckRow({ id, label, status, detail, onOpenSettings, t }) {
 
 export default function PermissionChecks({ platform = detectPlatform() }) {
   const { t } = useTranslation();
-  const { available, mic, a11y, recheck } = usePermissions();
+  const { available, mic, recheck } = usePermissions();
   if (!available) return null; // browser/dev — nothing to probe, no noise
 
   return (
@@ -102,16 +102,6 @@ export default function PermissionChecks({ platform = detectPlatform() }) {
           }}
           t={t}
         />
-        {platform === 'mac' && (
-          <CheckRow
-            id="accessibility"
-            label={t('permissions.accessibility')}
-            status={a11y ? 'granted' : 'denied'}
-            detail={a11y ? t('permissions.accessibility_why') : t('capture.a11y_setup')}
-            onOpenSettings={() => openAccessibilitySettings()}
-            t={t}
-          />
-        )}
       </div>
     </section>
   );

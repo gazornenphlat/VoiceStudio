@@ -1,5 +1,3 @@
-import { detectPlatform } from './micError';
-
 const DEFAULT_SHORTCUT = 'CmdOrCtrl+Shift+Space';
 
 function keyCode(part) {
@@ -14,7 +12,7 @@ function keyCode(part) {
   return aliases[part] || part;
 }
 
-export function parseShortcut(accelerator = DEFAULT_SHORTCUT, platform = detectPlatform()) {
+export function parseShortcut(accelerator = DEFAULT_SHORTCUT) {
   const parsed = {
     accelerator,
     alt: false,
@@ -32,13 +30,8 @@ export function parseShortcut(accelerator = DEFAULT_SHORTCUT, platform = detectP
     switch (rawPart.toLowerCase()) {
       case 'cmdorctrl':
       case 'commandorcontrol':
-        if (platform === 'mac') {
-          parsed.meta = true;
-          parsed.modifierCodes.add('Meta');
-        } else {
-          parsed.ctrl = true;
-          parsed.modifierCodes.add('Control');
-        }
+        parsed.ctrl = true;
+        parsed.modifierCodes.add('Control');
         break;
       case 'cmd':
       case 'command':
@@ -69,8 +62,8 @@ export function parseShortcut(accelerator = DEFAULT_SHORTCUT, platform = detectP
   return parsed.code ? parsed : null;
 }
 
-export function eventMatchesShortcut(event, accelerator, platform = detectPlatform()) {
-  const shortcut = parseShortcut(accelerator, platform);
+export function eventMatchesShortcut(event, accelerator) {
+  const shortcut = parseShortcut(accelerator);
   return Boolean(
     shortcut &&
     event.code === shortcut.code &&
@@ -95,36 +88,19 @@ export function isShortcutRelease(event, shortcut) {
   return false;
 }
 
-export function formatShortcut(accelerator, platform = detectPlatform()) {
-  const parts = accelerator
+export function formatShortcut(accelerator) {
+  return accelerator
     .split('+')
     .map((part) => part.trim())
-    .filter(Boolean);
-  if (platform !== 'mac') {
-    return parts
-      .map((part) => {
-        if (/^(cmdorctrl|commandorcontrol|ctrl|control)$/i.test(part)) return 'Ctrl';
-        if (/^(cmd|command|meta|super)$/i.test(part)) return 'Super';
-        if (/^(alt|option)$/i.test(part)) return 'Alt';
-        if (/^shift$/i.test(part)) return 'Shift';
-        return part;
-      })
-      .join('+');
-  }
-  const glyphs = {
-    cmdorctrl: '⌘',
-    commandorcontrol: '⌘',
-    cmd: '⌘',
-    command: '⌘',
-    meta: '⌘',
-    super: '⌘',
-    ctrl: '⌃',
-    control: '⌃',
-    alt: '⌥',
-    option: '⌥',
-    shift: '⇧',
-  };
-  return parts.map((part) => glyphs[part.toLowerCase()] || part).join('');
+    .filter(Boolean)
+    .map((part) => {
+      if (/^(cmdorctrl|commandorcontrol|ctrl|control)$/i.test(part)) return 'Ctrl';
+      if (/^(cmd|command|meta|super)$/i.test(part)) return 'Super';
+      if (/^(alt|option)$/i.test(part)) return 'Alt';
+      if (/^shift$/i.test(part)) return 'Shift';
+      return part;
+    })
+    .join('+');
 }
 
 export { DEFAULT_SHORTCUT };

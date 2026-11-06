@@ -15,14 +15,12 @@
 /** Detect the user's OS family for the "where to fix it" hint. */
 export function detectPlatform(nav = typeof navigator !== 'undefined' ? navigator : undefined) {
   const p = nav?.userAgentData?.platform || nav?.platform || '';
-  if (/mac|iphone|ipad/i.test(p)) return 'mac';
   if (/win/i.test(p)) return 'windows';
   return 'linux';
 }
 
 /** i18n key for the per-platform "enable the mic in OS settings" hint. */
 export function micHintKey(platform) {
-  if (platform === 'mac') return 'capture.mic_hint_mac';
   if (platform === 'windows') return 'capture.mic_hint_windows';
   return 'capture.mic_hint_linux';
 }

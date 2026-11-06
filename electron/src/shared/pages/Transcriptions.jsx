@@ -11,7 +11,6 @@ import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Mic, Copy, Trash2, Search, Clock, Languages, FileText, Download } from 'lucide-react';
 import { Button } from '../ui';
-import { detectPlatform } from '../utils/micError';
 import { useDictationReadiness } from '../hooks/useDictationReadiness';
 import AsrModelChooser from '../components/AsrModelChooser';
 import { toast } from 'react-hot-toast';
@@ -286,7 +285,7 @@ export default function TranscriptionsPage() {
           ·
         </span>
         <kbd className="rounded border border-border bg-bg-elev-1 px-2 py-1 font-mono">
-          {detectPlatform() === 'mac' ? '⌘+V' : 'Ctrl+V'}
+          Ctrl+V
         </kbd>
         <span>{t('clone.paste')}</span>
       </div>
