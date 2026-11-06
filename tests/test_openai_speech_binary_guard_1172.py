@@ -83,6 +83,11 @@ def test_speech_maps_invalid_binary_to_503_with_repair_hint(client, monkeypatch)
     assert "Exec format error" not in detail
 
 
+@pytest.mark.skipif(
+    __import__("platform").system() != "Windows",
+    reason="the placeholder is a Windows .exe; the product ships Windows-only, "
+    "and the host-slug binary path is not reliably patchable across engine reloads",
+)
 def test_speech_gguf_placeholder_rejected_at_engine_selection(client, monkeypatch):
     """Selecting the GGUF engine explicitly while bin/ holds a 0-byte
     placeholder must 400 at _resolve_engine (is_available now tells the
