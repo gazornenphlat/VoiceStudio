@@ -41,14 +41,10 @@ RELEASE_FILES = [
 # Platforms whose installers are signed. Kept apart from the table below so that
 # what the helper prints is plain platform names, never anything derived from the
 # credential-name table (a static analyser treats that table as sensitive).
-PLATFORMS = ("macOS", "Windows")
+PLATFORMS = ("Windows",)
 # Repo variable names electron-release.yml reads to sign each platform's
 # installers. Only names are listed and checked here, never values.
 SIGNING_ENV_NAMES = {
-    "macOS": (
-        "ELECTRON_MACOS_CSC_LINK", "ELECTRON_MACOS_CSC_KEY_PASSWORD",
-        "APPLE_API_KEY", "APPLE_API_KEY_ID", "APPLE_API_ISSUER",
-    ),
     "Windows": ("ELECTRON_WINDOWS_CSC_LINK", "ELECTRON_WINDOWS_CSC_KEY_PASSWORD"),
 }
 _VERSION = re.compile(r"(\d+)\.(\d+)\.(\d+)(?:-beta\.(\d+))?")
@@ -261,7 +257,7 @@ def ask_allow_unsigned() -> list[str]:
     """
     gaps, guessed = unsigned_platforms()
     if not gaps:
-        print("Signing: macOS and Windows secrets are configured.")
+        print("Signing: Windows secrets are configured.")
         return []
     for platform in PLATFORMS:
         state = (

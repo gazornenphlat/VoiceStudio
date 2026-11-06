@@ -297,7 +297,7 @@ def test_all_platforms_signed_asks_nothing_and_does_not_allow_unsigned(release, 
     tag = "v0.5.7"
     calls = _drive(release, monkeypatch, ["stable", "", "publish", tag], dry_run=False)
     assert ("dispatch", tag, []) in calls
-    assert "macOS and Windows secrets are configured" in capsys.readouterr().out
+    assert "Windows secrets are configured" in capsys.readouterr().out
 
 
 def test_missing_windows_signing_is_named_and_needs_an_explicit_yes(release, monkeypatch, capsys):
@@ -305,7 +305,7 @@ def test_missing_windows_signing_is_named_and_needs_an_explicit_yes(release, mon
     calls = _drive(release, monkeypatch, ["beta", "", "publish", "yes", tag], dry_run=False,
                    secrets_missing=["Windows"], main_version="0.5.7-beta.1")
     out = capsys.readouterr().out
-    assert "macOS    signed" in out and "Windows  NO signing secrets" in out
+    assert "Windows  NO signing secrets" in out
     assert "UNSIGNED: Windows" in out
     assert ("dispatch", tag, ["Windows"]) in calls
 
