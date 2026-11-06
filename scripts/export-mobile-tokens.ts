@@ -222,10 +222,10 @@ const tokens = {
     control: rem(light.get('--control-radius')!),
   },
   spacing: { gap: rem(light.get('--workspace-gap')!), inset: rem(light.get('--workspace-inset')!) },
-  ios: {
-    cardRadius: rem(light.get('--ios-card-radius')!),
-    fieldRadius: rem(light.get('--ios-field-radius')!),
-    homeWordmarkSize: rem(light.get('--ios-home-wordmark-size')!),
+  phone: {
+    cardRadius: rem(light.get('--phone-card-radius')!),
+    fieldRadius: rem(light.get('--phone-field-radius')!),
+    homeWordmarkSize: rem(light.get('--phone-home-wordmark-size')!),
   },
 };
 
@@ -252,7 +252,7 @@ function kotlin(): string {
   }
   for (const [k, v] of Object.entries(tokens.radius)) s += `    const val RADIUS_${k.toUpperCase()}: Float = ${v.toFixed(2)}f\n`;
   for (const [k, v] of Object.entries(tokens.spacing)) s += `    const val SPACING_${k.toUpperCase()}: Float = ${v.toFixed(2)}f\n`;
-  for (const [k, v] of Object.entries(tokens.ios)) s += `    const val IOS_${k.replace(/[A-Z]/g, (c) => '_' + c).toUpperCase()}: Float = ${v.toFixed(2)}f\n`;
+  for (const [k, v] of Object.entries(tokens.phone)) s += `    const val PHONE_${k.replace(/[A-Z]/g, (c) => '_' + c).toUpperCase()}: Float = ${v.toFixed(2)}f\n`;
   return s + '}\n';
 }
 

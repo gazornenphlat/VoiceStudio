@@ -52,12 +52,12 @@ val LocalRoles = staticCompositionLocalOf { VSTheme.roles("default", true) }
     val control = TextStyle(fontFamily = font, fontSize = VSTokens.TEXT_UI_SIZE.sp, lineHeight = VSTokens.TEXT_UI_LINE_HEIGHT.sp)
     val caption = TextStyle(fontFamily = font, fontSize = VSTokens.TEXT_CAPTION_SIZE.sp, lineHeight = VSTokens.TEXT_CAPTION_LINE_HEIGHT.sp)
     val title = body.copy(fontSize = 17.sp, lineHeight = 22.sp, fontWeight = FontWeight.SemiBold)
-    val heading = title.copy(fontSize = VSTokens.IOS_HOME_WORDMARK_SIZE.sp, lineHeight = (VSTokens.IOS_HOME_WORDMARK_SIZE * 1.2f).sp)
+    val heading = title.copy(fontSize = VSTokens.PHONE_HOME_WORDMARK_SIZE.sp, lineHeight = (VSTokens.PHONE_HOME_WORDMARK_SIZE * 1.2f).sp)
     // Both native apps use the generated mobile presentation radii.
-    val shape = RoundedCornerShape(VSTokens.IOS_FIELD_RADIUS.dp)
+    val shape = RoundedCornerShape(VSTokens.PHONE_FIELD_RADIUS.dp)
     CompositionLocalProvider(LocalRoles provides roles) {
         MaterialTheme(colorScheme = VSTheme.scheme(roles, dark),
-            shapes = Shapes(shape, shape, shape, RoundedCornerShape(VSTokens.IOS_CARD_RADIUS.dp), RoundedCornerShape(VSTokens.IOS_CARD_RADIUS.dp)),
+            shapes = Shapes(shape, shape, shape, RoundedCornerShape(VSTokens.PHONE_CARD_RADIUS.dp), RoundedCornerShape(VSTokens.PHONE_CARD_RADIUS.dp)),
             typography = Typography(displayLarge=title, displayMedium=title, displaySmall=title, headlineLarge=heading, headlineMedium=heading, headlineSmall=heading,
                 titleLarge=title, titleMedium=body.copy(fontWeight=FontWeight.SemiBold), titleSmall=control.copy(fontWeight=FontWeight.SemiBold), bodyLarge=body, bodyMedium=control, bodySmall=caption,
                 labelLarge=control, labelMedium=control, labelSmall=caption), content=content)

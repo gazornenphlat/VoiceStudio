@@ -4065,7 +4065,7 @@
     "keyboard": {
       "done": "تم"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "اسم الخادم",
       "clone_create": "إنشاء نسخة",

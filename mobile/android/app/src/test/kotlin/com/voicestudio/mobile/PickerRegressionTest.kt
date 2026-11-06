@@ -85,8 +85,8 @@ class PickerRegressionTest {
             Action("mobile.speak.generate",onClick={})
         }
         compose.waitForIdle()
-        assertEquals(RoundedCornerShape(VSTokens.IOS_FIELD_RADIUS.dp),control)
-        assertEquals(RoundedCornerShape(VSTokens.IOS_CARD_RADIUS.dp),card)
+        assertEquals(RoundedCornerShape(VSTokens.PHONE_FIELD_RADIUS.dp),control)
+        assertEquals(RoundedCornerShape(VSTokens.PHONE_CARD_RADIUS.dp),card)
     }
     @Test fun searchWithoutMatchesExplainsEmptyChoiceAndMultiChoiceLists() {
         content {ChoicePicker("mobile.speak.voice","one",listOf(Choice("one","Sample voice"))) {}}

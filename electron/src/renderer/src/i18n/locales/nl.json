@@ -4013,7 +4013,7 @@
     "keyboard": {
       "done": "Gereed"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "Servernaam",
       "clone_create": "Kloon maken",

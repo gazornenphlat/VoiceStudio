@@ -70,7 +70,7 @@ import java.io.File
     val pick=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {uri ->
         if(uri!=null) scope.launch {try {sample?.let {File(it).delete()};sample=copyMedia(context,uri,"audio").absolutePath} catch(e:Exception) {vm.fail(e)}}
     }
-    val progressLabel=tr("mobile.ios.progress")
+    val progressLabel=tr("mobile.common.progress")
     Screen(bottomBar=if(cloning) {{
         Column(verticalArrangement=Arrangement.spacedBy(VSTheme.gap)) {
             Action("mobile.voices.new_clone",permission&&sample!=null&&name.isNotBlank()&&!running&&!recording&&(location==RunLocation.COMPUTER||cloneReady)) {

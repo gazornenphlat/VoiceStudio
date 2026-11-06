@@ -4015,7 +4015,7 @@
     "keyboard": {
       "done": "Fine"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "Nome del server",
       "clone_create": "Crea clone",

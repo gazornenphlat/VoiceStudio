@@ -4009,7 +4009,7 @@
     "keyboard": {
       "done": "完成"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "服务器名称",
       "clone_create": "创建克隆",

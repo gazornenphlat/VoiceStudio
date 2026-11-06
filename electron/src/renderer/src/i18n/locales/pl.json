@@ -4039,7 +4039,7 @@
     "keyboard": {
       "done": "Gotowe"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "Nazwa serwera",
       "clone_create": "Utwórz klon",

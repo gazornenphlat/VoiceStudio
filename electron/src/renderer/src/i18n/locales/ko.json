@@ -4013,7 +4013,7 @@
     "keyboard": {
       "done": "완료"
     },
-    "ios": {
+    "common": {
       "app_name": "VoiceStudio",
       "host_label": "서버 이름",
       "clone_create": "클론 만들기",
