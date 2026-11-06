@@ -299,9 +299,9 @@ that variable; the environment wins over the file. Rebuild after changing it.
 App text uses the Electron locale catalogs (`mobile.*` keys). The `mobile`
 workflow builds and tests the app.
 
-## TestFlight (removed)
+## TestFlight (maintainers)
 
-The iOS app and its TestFlight workflow were removed in the Windows-only fork.
+Removed: the iOS app and its TestFlight workflow were dropped in the Windows-only fork.
 Older release notes still link to this heading.
 
 ## Play internal testing (maintainers)
