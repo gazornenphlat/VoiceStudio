@@ -154,31 +154,6 @@ and the 120-second timeout (T-04-06) apply uniformly.
 Freeform path input is rejected with `ValueError` (T-04-05 in the
 plan's threat model).
 
-## macOS Gatekeeper
-
-The bundled `bin/omnivoice-tts-darwin-*` binaries are not code-signed in
-v0.3.x (REL-05 tracks signing as a separate work item). macOS Sequoia
-Gatekeeper will quarantine them on first launch, surfacing the same UX
-as the `.app` quarantine (issue #54).
-
-The workaround is identical:
-
-```
-xattr -cr "/Applications/VoiceStudio.app"
-```
-
-This clears the quarantine xattr recursively — including on the bundled
-`bin/omnivoice-tts-darwin-*` binary inside the `.app`. The
-`is_available()` probe in `backend.py` detects the quarantine xattr and
-returns a clear error message pointing at this command rather than
-silently hanging on a Gatekeeper-killed spawn.
-
-The macOS Apple Silicon Metal build compiles cleanly with `-DGGML_METAL=ON`
-at the pinned `omnivoice.cpp` SHA (#2105), enabling GPU-accelerated GGUF
-voice cloning when the packaged binary passes preflight and is permitted by
-macOS. Missing binaries, placeholders, or Gatekeeper rejection leave
-`VoiceStudioBackend` available as the in-process fallback.
-
 ## Smoke test
 
 `scripts/smoke-gguf.sh --hardware-class {cpu,mid,high}` runs the
