@@ -78,11 +78,6 @@ def _detect_cpu_model() -> str:
                 r"HARDWARE\DESCRIPTION\System\CentralProcessor\0",
             ) as key:
                 return str(winreg.QueryValueEx(key, "ProcessorNameString")[0]).strip()
-        if sys.platform == "darwin":
-            import subprocess
-            return subprocess.check_output(
-                ["sysctl", "-n", "machdep.cpu.brand_string"], text=True, errors="replace", timeout=5
-            ).strip()
         return platform.processor() or ""
     except Exception:
         return platform.processor() or ""
@@ -138,24 +133,6 @@ def _detect_os_gpu_name() -> str:
                 parts = shlex.split(line)
                 if len(parts) >= 4 and parts[1] in {"VGA compatible controller", "3D controller"}:
                     names.append(" ".join(parts[2:4]))
-            return max(names, key=_gpu_name_priority, default="")
-        if sys.platform == "darwin":
-            executable = shutil.which("system_profiler")
-            if not executable:
-                return ""
-            result = subprocess.run(
-                [executable, "SPDisplaysDataType"],
-                capture_output=True,
-                text=True,
-                errors="replace",
-                timeout=3,
-                check=False,
-            )
-            names = [
-                line.split(":", 1)[1].strip()
-                for line in (result.stdout or "").splitlines()
-                if "Chipset Model:" in line
-            ]
             return max(names, key=_gpu_name_priority, default="")
     except Exception:  # noqa: BLE001 - best-effort label; it runs at import time
         # A probe failure must never stop the backend from starting (#3612).
@@ -555,11 +532,6 @@ def _tauri_plugin_log_candidates():
     """
     home = os.path.expanduser("~")
     bid = "com.debpalash.omnivoice-studio"
-    if sys.platform == "darwin":
-        return [
-            os.path.join(home, "Library/Logs", bid, "tauri.log"),
-            os.path.join(home, "Library/Logs", bid, "VoiceStudio.log"),
-        ]
     if sys.platform.startswith("linux"):
         data_dir = os.environ.get("XDG_DATA_HOME") or os.path.join(home, ".local/share")
         return [
@@ -602,9 +574,7 @@ def _backend_redirect_log_candidates():
             os.path.join(override, "backend_err.log"),
         ]
     home = os.path.expanduser("~")
-    if sys.platform == "darwin":
-        base = os.path.join(home, "Library/Logs/OmniVoice")
-    elif sys.platform.startswith("linux"):
+    if sys.platform.startswith("linux"):
         state_dir = os.environ.get("XDG_STATE_HOME") or os.path.join(home, ".local/state")
         base = os.path.join(state_dir, "OmniVoice")
     elif sys.platform.startswith("win"):
