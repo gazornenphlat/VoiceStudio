@@ -388,17 +388,6 @@ def _dots_host() -> tuple[bool, str]:
     )
 
 
-def _no_intel_mac(message: str) -> Callable[[], tuple[bool, str]]:
-    """A host gate for an engine whose pinned PyTorch has no Intel Mac build
-    (PyTorch stopped publishing macOS x86_64 wheels after 2.2)."""
-    def gate() -> tuple[bool, str]:
-        import platform
-        if sys.platform == "darwin" and platform.machine().lower() == "x86_64":
-            return False, message
-        return True, ""
-    return gate
-
-
 def _in_app_env(module: str) -> Callable[[], bool]:
     """An install made with ``uv sync --extra`` lives in the app's own
     environment. It counts as installed, so the installer never provisions a
@@ -587,9 +576,6 @@ SPECS: dict[str, SidecarSpec] = {
         # CPU torch + scipy. The gated weights download on first use.
         required_bytes=3 * _GIB,
         installed_probe=_in_app_env("pocket_tts"),
-        host_supported=_no_intel_mac(
-            "PocketTTS needs a PyTorch version that has no Intel Mac build."
-        ),
     ),
     # Run in a sidecar from its own venv (engines/voxcpm2_subprocess). voxcpm
     # leaves torch unpinned, so the pair is pinned here; each build of it was
@@ -611,9 +597,6 @@ SPECS: dict[str, SidecarSpec] = {
         # CUDA torch (~5 GB unpacked) + transformers.
         required_bytes=10 * _GIB,
         installed_probe=_in_app_env("voxcpm"),
-        host_supported=_no_intel_mac(
-            "VoxCPM2 needs a PyTorch version that has no Intel Mac build."
-        ),
     ),
     # Upstream is unpinned and its entry point has moved before (#1287), so the
     # install pins a reviewed commit (2026-09-06) and the sidecar drives the
@@ -651,9 +634,6 @@ SPECS: dict[str, SidecarSpec] = {
         # The model and its audio tokenizer download on first synthesis.
         required_bytes=8 * _GIB,
         installed_probe=_in_app_env("moss_tts_nano"),
-        host_supported=_no_intel_mac(
-            "MOSS-TTS-Nano pins a PyTorch version that has no Intel Mac build."
-        ),
     ),
     # A reviewed commit (2026-05-25) plus the Matcha-TTS submodule it imports.
     # No pyproject: its dependencies come from the trimmed requirements file,
@@ -724,9 +704,6 @@ SPECS: dict[str, SidecarSpec] = {
         weights_bytes=6 * _GIB,
         dependency_bytes=7 * _GIB,
         installed_probe=_in_app_env("cosyvoice"),
-        host_supported=_no_intel_mac(
-            "CosyVoice 3 needs a PyTorch version that has no Intel Mac build."
-        ),
     ),
 }
 

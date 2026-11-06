@@ -77,15 +77,6 @@ class PocketTTSBackend(SubprocessBackend):
     supports_voice_design = False
 
     @classmethod
-    def _platform_error(cls) -> str | None:
-        if sys.platform == "darwin" and platform.machine().lower() == "x86_64":
-            return (
-                "PocketTTS is unavailable on Intel Macs because its required "
-                "PyTorch version has no macOS x86_64 wheel."
-            )
-        return None
-
-    @classmethod
     def _license_accepted(cls) -> bool:
         """Read acknowledgement fail-closed at every construction path."""
         try:
@@ -103,8 +94,6 @@ class PocketTTSBackend(SubprocessBackend):
         # Availability probes are advisory. Construction is the shared
         # authorization boundary for HTTP, WebSocket, audiobook, and direct
         # backend selection, so none can reach gated weights before consent.
-        if platform_error := self._platform_error():
-            raise RuntimeError(platform_error)
         if not self._license_accepted():
             raise RuntimeError(
                 "PocketTTS license not accepted. Review it in Model Catalogue."
@@ -132,8 +121,6 @@ class PocketTTSBackend(SubprocessBackend):
 
     @classmethod
     def is_available(cls) -> tuple[bool, str]:
-        if platform_error := cls._platform_error():
-            return False, platform_error
         # Installed either into its own venv by the one-click installer, which
         # verified `import pocket_tts` there before saving the path, or into the
         # app's environment by `uv sync --extra pockettts`.

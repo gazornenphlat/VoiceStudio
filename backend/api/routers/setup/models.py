@@ -564,7 +564,8 @@ def recommendations():
     target_os = "darwin" if "darwin" in tags else "win32" if "win32" in tags else "linux"
     target_arch = next((tag.split("-", 1)[1] for tag in tags if tag.startswith(target_os + "-")), _platform.machine())
     is_mac_arm = target_os == "darwin" and target_arch == "arm64"
-    is_mac_intel = target_os == "darwin" and target_arch == "x86_64"
+    # Intel Macs are no longer supported; the field stays so the API shape is unchanged.
+    is_mac_intel = False
     is_linux = target_os == "linux"
     is_windows = target_os == "win32"
     has_cuda = "cuda" in tags and "rocm" not in tags
@@ -573,8 +574,6 @@ def recommendations():
     # Device label — used as the card title.
     if is_mac_arm:
         device_label = f"Apple Silicon ({target_arch})"
-    elif is_mac_intel:
-        device_label = "macOS Intel (x86_64)"
     elif is_windows:
         device_label = "Windows x64" + (" + CUDA" if has_cuda else " + ROCm" if has_rocm else "")
     elif is_linux:

@@ -1236,7 +1236,6 @@ def test_verify_probe_runs_in_the_engines_venv_and_compiles(monkeypatch, engine_
         ("mps", "darwin", "arm64", {"dots-tts", "pockettts", "voxcpm2", "moss-tts-nano", "cosyvoice"}),
         # Intel Mac: PyTorch publishes no build PocketTTS, VoxCPM2,
         # MOSS-TTS-Nano or CosyVoice can use.
-        ("cpu", "darwin", "x86_64", {"dots-tts"}),
     ],
 )
 def test_installable_engine_ids_follow_the_host(monkeypatch, family, platform, machine, expected):

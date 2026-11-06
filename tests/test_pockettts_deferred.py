@@ -77,24 +77,6 @@ def test_pockettts_is_a_pinned_optional_extra():
     ]
 
 
-def test_pockettts_reports_the_intel_mac_wheel_gap(monkeypatch):
-    monkeypatch.setattr("engines.pockettts.sys.platform", "darwin")
-    monkeypatch.setattr("engines.pockettts.platform.machine", lambda: "x86_64")
-    ok, reason = _backend_cls().is_available()
-    assert ok is False
-    assert "Intel Macs" in reason
-    assert "PyTorch" in reason
-
-
-def test_direct_construction_rejects_intel_mac(monkeypatch, mock_settings_store):
-    mock_settings_store["pockettts"] = True
-    monkeypatch.setattr("engines.pockettts.sys.platform", "darwin")
-    monkeypatch.setattr("engines.pockettts.platform.machine", lambda: "x86_64")
-
-    with pytest.raises(RuntimeError, match="Intel Macs"):
-        _backend_cls()()
-
-
 @pytest.mark.parametrize(
     ("ref", "valid"),
     [
@@ -288,5 +270,4 @@ def test_prefers_the_venv_its_one_click_install_made(monkeypatch, tmp_path, mock
     assert _backend_cls().venv_python() == py
     # Available without pocket_tts importable in the app's own environment.
     monkeypatch.setitem(sys.modules, "pocket_tts", None)
-    if _backend_cls()._platform_error() is None:
-        assert _backend_cls().is_available() == (True, "ready (CPU-only)")
+    assert _backend_cls().is_available() == (True, "ready (CPU-only)")
