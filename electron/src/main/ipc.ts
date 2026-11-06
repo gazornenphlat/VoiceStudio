@@ -102,13 +102,6 @@ function nativePermissions(): NativePermissions {
   return {
     platform: process.platform,
     microphone: microphonePermission(),
-    ...(process.platform === 'darwin'
-      ? {
-          accessibility: systemPreferences.isTrustedAccessibilityClient(false)
-            ? ('granted' as const)
-            : ('denied' as const),
-        }
-      : {}),
   };
 }
 
@@ -117,11 +110,7 @@ async function openPermissionSettings(kind: unknown): Promise<boolean> {
     throw new Error('Invalid permission settings request');
   }
   let target = '';
-  if (process.platform === 'darwin') {
-    target = `x-apple.systempreferences:com.apple.preference.security?Privacy_${
-      kind === 'microphone' ? 'Microphone' : 'Accessibility'
-    }`;
-  } else if (process.platform === 'win32' && kind === 'microphone') {
+  if (process.platform === 'win32' && kind === 'microphone') {
     target = 'ms-settings:privacy-microphone';
   }
   if (!target) return false;

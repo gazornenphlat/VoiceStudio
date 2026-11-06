@@ -1,12 +1,11 @@
 import { createTrayIcon } from './tray-icon';
-import { MAC_TRAFFIC_LIGHTS } from '../shared/utils/windowChrome';
 import { installWatchFolders } from './watch-folders';
 import { installNativeCapture } from './native-capture';
 import { isTrustedRenderer } from './trusted-renderer';
 import { dirname, join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow, ipcMain, Menu, nativeImage, session, shell, Tray } from 'electron';
+import { app, BrowserWindow, ipcMain, session, shell, Tray } from 'electron';
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import { BackendSupervisor, backendRoot } from './backend';
 import { registerIpc, wireWindowMaximizeEvents } from './ipc';
@@ -25,7 +24,7 @@ import {
 } from './main-error-journal';
 import { activateLiveWindow, isLiveWindow } from './window-safety';
 import { startAccount } from './account';
-import { installAppIdentity, installMacApplicationMenu } from './app-identity';
+import { installAppIdentity } from './app-identity';
 import { APP_ID, PRODUCT_NAME } from '../../../config/app-config.mjs';
 import { restoreSecurityScopedDirectories } from './security-scoped-files';
 
@@ -154,9 +153,7 @@ function createWindow(): BrowserWindow {
     show: false,
     backgroundColor: BACKGROUND,
     titleBarStyle: 'hidden',
-    ...(process.platform === 'darwin'
-      ? { trafficLightPosition: MAC_TRAFFIC_LIGHTS }
-      : { titleBarOverlay: OVERLAY }),
+    titleBarOverlay: OVERLAY,
     webPreferences: {
       preload: PRELOAD_PATH,
       contextIsolation: true,
@@ -172,21 +169,11 @@ function createWindow(): BrowserWindow {
   win.on('close', (event) => {
     if (quitting) return;
     event.preventDefault();
-    if (process.platform === 'darwin') {
-      observeMainProcessTask(
-        flushRendererPersistence().finally(() => {
-          if (!win.isDestroyed()) win.destroy();
-        }),
-        mainErrors,
-        'Window persistence flush',
-      );
-      return;
-    }
     observeMainProcessTask(beginOrderlyQuit(), mainErrors, 'Orderly quit');
   });
   win.on('closed', () => {
     if (mainWindow === win) mainWindow = null;
-    if (process.platform !== 'darwin' && !quitting) app.quit();
+    if (!quitting) app.quit();
   });
   wireWindowMaximizeEvents(win);
   installBlankWindowGuard(
@@ -254,7 +241,6 @@ if (process.env.VOICESTUDIO_ALLOW_MULTIPLE_INSTANCES !== '1' && !app.requestSing
     .whenReady()
     .then(async () => {
       electronApp.setAppUserModelId(APP_ID);
-      if (process.platform === 'darwin') installMacApplicationMenu(app, Menu, __APP_VERSION__);
       installRendererPermissions(session.defaultSession, process.env.ELECTRON_RENDERER_URL);
       app.on('browser-window-created', (_event, window) => optimizer.watchWindowShortcuts(window));
       closeDirectoryScopes = restoreSecurityScopedDirectories();
@@ -339,8 +325,6 @@ if (process.env.VOICESTUDIO_ALLOW_MULTIPLE_INSTANCES !== '1' && !app.requestSing
         () => backend.baseUrl,
         () => backend.requestHeaders(),
       );
-      const icon = nativeImage.createFromPath(brandIconPath('icon-macos.png'));
-      if (process.platform === 'darwin') app.dock?.setIcon(icon);
       tray = new Tray(createTrayIcon(brandIconPath('32x32.png')));
       tray.setToolTip(PRODUCT_NAME);
       closeCapture = installNativeCapture(PRELOAD_PATH, tray, () => mainWindow);
@@ -363,7 +347,7 @@ if (process.env.VOICESTUDIO_ALLOW_MULTIPLE_INSTANCES !== '1' && !app.requestSing
     });
 
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
+    app.quit();
   });
 
   // The first pass gives renderer persistence a bounded chance to settle, then
