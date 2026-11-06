@@ -4,7 +4,7 @@ Source: https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar
 SHA-256: ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 Corresponding encoder/application sources and relink instructions:
 https://github.com/debpalash/VoiceStudio (mobile/native/mp3/README.md)
-Vendored source: mobile/ios/VoiceStudioKit/Sources/VSNative/Lame
+Vendored source: mobile/native/mp3/src/Lame
 
 Original upstream COPYING:
 

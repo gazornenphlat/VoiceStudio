@@ -7,7 +7,7 @@ from pathlib import Path
 import tarfile
 
 ROOT = Path(__file__).resolve().parents[3]
-SOURCE = ROOT / 'mobile/ios/VoiceStudioKit/Sources/VSNative/Lame'
+SOURCE = ROOT / 'mobile/native/mp3/src/Lame'
 ARCHIVE_SHA256 = 'ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e'
 
 

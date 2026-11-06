@@ -13,7 +13,7 @@ foreach(runtime omni llama)
 endforeach()
 
 # Pinned, vendored encoder sources are shared with SwiftPM; no binary download.
-set(VS_COMMON "${CMAKE_CURRENT_SOURCE_DIR}/../../ios/VoiceStudioKit/Sources/VSNative")
+set(VS_COMMON "${CMAKE_CURRENT_SOURCE_DIR}/../mp3/src")
 file(GLOB LAME_SOURCES CONFIGURE_DEPENDS "${VS_COMMON}/Lame/libmp3lame/*.c")
 add_library(vs_mp3 SHARED mp3.c "${VS_COMMON}/Mp3Encoder.c" ${LAME_SOURCES})
 target_include_directories(vs_mp3 PRIVATE "${VS_COMMON}/include" "${VS_COMMON}/Lame" "${VS_COMMON}/Lame/include")

@@ -7,7 +7,7 @@ Audio passes through bounded 8192-frame chunks of mono 24 kHz PCM, producing
 publication, and whether the ID3 comment identifies synthetic audio.
 
 The unmodified upstream files are checked into
-`mobile/ios/VoiceStudioKit/Sources/VSNative/Lame`. `source.json` identifies every
+`mobile/native/mp3/src/Lame`. `source.json` identifies every
 upstream file and its SHA-256. The separate portable `config.h` disables decoder,
 assembler, SIMD and frontend functionality; all the required encoder sources,
 headers, configuration and build instructions are present in this checkout.
@@ -35,17 +35,8 @@ rebuild/relink the application; no secret application signing key is needed to
 build your own development installation. Deliberate source modifications require
 updating the matching hashes in `source.json` before running guarded builds.
 
-For iOS, `mobile/ios/VoiceStudioKit/Package.swift` builds a separate `VSLame`
-static target and links it to `VSNative`. After modifying/replacing compatible
-encoder sources, run `swift package clean` followed by `swift test` in
-`mobile/ios/VoiceStudioKit` to rebuild the library and core tests. Build the app
-with the native setup in `docs/mobile.md` and `mobile/native/ios/build.py ios`,
-then run XcodeGen in `mobile/ios/VoiceStudio` and build the `VoiceStudio` scheme
-with your own development signing identity. The application is rebuilt from
-source together with the replacement encoder, so the final executable is relinked.
-
 For Android, `mobile/native/android/CMakeLists.txt` compiles `libvs_mp3.so`
-directly from the same encoder sources, `Mp3Encoder.c`, and `mp3.c`. Rebuild with
+directly from the same encoder sources in `mobile/native/mp3/src`, `Mp3Encoder.c`, and `mp3.c`. Rebuild with
 `bash mobile/native/android/build.sh` (NDK 27.1.12297006, API 29, arm64-v8a and
 x86_64), then run `./gradlew :app:assembleDebug` in `mobile/android` with JDK 21.
 The rebuilt APK contains the replacement shared library and can be installed
