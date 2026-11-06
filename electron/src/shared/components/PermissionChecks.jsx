@@ -9,8 +9,8 @@ import { openMicrophoneSettings } from '../utils/permissions';
 
 /**
  * PermissionChecks — OS-permission rows for the SetupWizard's System Check
- * step: Microphone (all platforms) and Accessibility (macOS only), in the
- * same LED-row grammar as PreflightPanel. Renders nothing outside the Tauri
+ * step: Microphone (all platforms), in the same LED-row grammar as
+ * PreflightPanel. Renders nothing outside the Tauri
  * shell (browser web UI / Docker have no OS grants to probe).
  *
  * Status → chip: granted = ok, denied = warn (+ an Open Settings deep-link),

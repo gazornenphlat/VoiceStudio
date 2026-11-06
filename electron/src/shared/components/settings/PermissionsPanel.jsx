@@ -15,12 +15,6 @@ import { openMicrophoneSettings } from '../../utils/permissions';
  *
  *   • Microphone — dictation + voice recording (all platforms; Linux has no
  *     per-app mic grant, so the status is honestly "Unknown" there).
- *   • Accessibility (macOS only) — lets dictation paste/type the transcript
- *     into other apps.
- *
- * Input Monitoring is deliberately NOT listed: the global dictation shortcut
- * registers via tauri-plugin-global-shortcut (Carbon hotkey registration on
- * macOS), which works without that grant.
  *
  * Status re-probes on window focus (usePermissions) — flip the toggle in
  * System Settings, come back, the chip is already green — plus an explicit

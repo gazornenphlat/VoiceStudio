@@ -24,7 +24,6 @@ const mocks = vi.hoisted(() => {
     loadDictationPrefs: () => {},
   };
   const holder = {
-    a11y: true,
     handlers: {},
     invoked: [],
     hide: vi.fn(async () => {}),
@@ -49,7 +48,6 @@ vi.mock('@tauri-apps/api/core', () => ({
   invoke: vi.fn(async (cmd) => {
     mocks.holder.invoked.push(cmd);
     if (cmd === 'begin_dictation_capture_registration') return 1;
-    if (cmd === 'check_accessibility') return mocks.holder.a11y;
     return undefined;
   }),
 }));
@@ -87,7 +85,6 @@ beforeEach(() => {
   window.__TAURI_INTERNALS__ = {};
   mocks.holder.handlers = {};
   mocks.holder.invoked = [];
-  mocks.holder.a11y = true;
   mocks.holder.label = 'widget';
   mocks.state.dictationEnabled = true;
   mocks.state.dictationMode = 'toggle';

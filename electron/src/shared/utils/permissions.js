@@ -1,6 +1,6 @@
 /**
  * permissions — browser-safe wrappers around the Tauri shell's OS-permission
- * probes (microphone TCC / ConsentStore, macOS Accessibility) and the
+ * probes (microphone TCC / ConsentStore) and the
  * deep-links into the matching OS settings panes.
  *
  * Every function degrades gracefully outside the Tauri shell (web UI /
@@ -85,12 +85,3 @@ export function openMicrophoneSettings() {
   return openSettingsPane('open_microphone_settings');
 }
 
-/**
- * Deep-link macOS Privacy → Input Monitoring. Exposed for completeness —
- * the global dictation shortcut uses tauri-plugin-global-shortcut (Carbon
- * hotkey registration), which does NOT need this grant, so no default UI
- * surfaces it.
- */
-export function openInputMonitoringSettings() {
-  return openSettingsPane('open_input_monitoring_settings');
-}

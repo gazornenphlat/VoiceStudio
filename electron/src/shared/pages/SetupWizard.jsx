@@ -370,7 +370,7 @@ export default function SetupWizard({ onReady }) {
           <div className="flex min-h-0 flex-auto flex-col gap-3" key="step-0">
             <div className="fr-rise min-h-0 flex-1 overflow-y-auto" style={{ '--rise': 1 }}>
               <PreflightPanel report={pre} loading={preLoading} onRecheck={recheckPreflight} />
-              {/* OS permissions (mic + macOS Accessibility) — advisory rows
+              {/* OS permissions (microphone) — advisory rows
                   that never gate Continue; renders nothing outside Tauri. */}
               <PermissionChecks />
               {/* Invisible when the media engine is ready; a quiet progress

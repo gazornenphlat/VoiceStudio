@@ -29,7 +29,6 @@ const mocks = vi.hoisted(() => {
   };
   const holder = {
     // Per-test knobs for the Tauri invoke mock.
-    a11y: true,
     paste: async () => 'inserted',
     copy: async () => 'copied',
     type: async () => 'inserted',
@@ -59,7 +58,6 @@ const mocks = vi.hoisted(() => {
       if (cmd === 'begin_dictation_capture_registration') {
         return holder.calls.filter(([command]) => command === cmd).length;
       }
-      if (cmd === 'check_accessibility') return holder.a11y;
       if (cmd === 'simulate_paste') return holder.paste(cmd, args);
       if (cmd === 'copy_dictation_output_session') return holder.copy(cmd, args);
       if (cmd === 'simulate_type') return holder.type(cmd, args);
@@ -171,7 +169,6 @@ async function startNativeSession(sessionId = 'capture-session-1') {
 describe('CaptureWidget', () => {
   beforeEach(() => {
     window.__TAURI_INTERNALS__ = {};
-    mocks.holder.a11y = true;
     mocks.holder.paste = async () => 'inserted';
     mocks.holder.copy = async () => 'copied';
     mocks.holder.type = async () => 'inserted';

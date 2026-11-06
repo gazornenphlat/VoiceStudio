@@ -70,7 +70,6 @@ function stubInvoke({ mic = 'granted' } = {}) {
   invokeMock.mockImplementation(async (cmd, payload) => {
     if (cmd === 'begin_dictation_capture_registration') return 1;
     if (cmd === 'check_microphone') return mic;
-    if (cmd === 'check_accessibility') return true;
     if (cmd === 'request_dictation_capture') {
       const event = payload?.action === 'stop' ? 'tray-dictate-stop' : 'tray-dictate';
       const eventPayload =

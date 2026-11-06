@@ -9,7 +9,6 @@ import {
   inTauri,
   checkMicrophone,
   openMicrophoneSettings,
-  openInputMonitoringSettings,
 } from './permissions';
 
 let warnSpy;
@@ -36,7 +35,6 @@ describe('permissions — browser fallback (no Tauri shell)', () => {
 
   it('every open-settings deep-link resolves false without throwing', async () => {
     await expect(openMicrophoneSettings()).resolves.toBe(false);
-    await expect(openInputMonitoringSettings()).resolves.toBe(false);
     expect(invokeMock).not.toHaveBeenCalled();
   });
 });
@@ -76,9 +74,4 @@ describe('permissions — inside the Tauri shell', () => {
     await expect(openMicrophoneSettings()).resolves.toBe(false);
   });
 
-  it('openInputMonitoringSettings resolves false on the non-macOS rejection', async () => {
-    invokeMock.mockRejectedValue('settings: input monitoring settings are macOS-only');
-    await expect(openInputMonitoringSettings()).resolves.toBe(false);
-    expect(invokeMock).toHaveBeenCalledWith('open_input_monitoring_settings');
-  });
 });

@@ -14,10 +14,9 @@ vi.mock('@tauri-apps/api/core', () => ({
 
 import PermissionChecks, { permissionChip } from '../components/PermissionChecks';
 
-function stubInvoke({ mic = 'granted', a11y = true } = {}) {
+function stubInvoke({ mic = 'granted' } = {}) {
   invokeMock.mockImplementation(async (cmd) => {
     if (cmd === 'check_microphone') return mic;
-    if (cmd === 'check_accessibility') return a11y;
     return undefined;
   });
 }

@@ -134,7 +134,6 @@ beforeEach(() => {
   invokeMock.mockImplementation(async (cmd) => {
     if (cmd === 'begin_dictation_capture_registration') return 1;
     if (cmd === 'check_microphone') return 'granted';
-    if (cmd === 'check_accessibility') return true;
     if (cmd === 'mark_dictation_capture_ready' && eventState.pendingStart) {
       eventState.pendingStart = false;
       return eventHandlers['tray-dictate']?.(shortcutEvent());
@@ -204,7 +203,6 @@ describe('CaptureWidget — connect-time asr_model_missing during mic setup', ()
   it('does not start or complete a delivery whose acknowledgement fails', async () => {
     invokeMock.mockImplementation(async (cmd) => {
       if (cmd === 'begin_dictation_capture_registration') return 1;
-      if (cmd === 'check_accessibility') return true;
       if (cmd === 'acknowledge_dictation_capture_delivery') throw new Error('receipt refused');
       return undefined;
     });

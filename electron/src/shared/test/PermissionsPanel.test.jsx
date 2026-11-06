@@ -23,10 +23,9 @@ vi.mock('@tauri-apps/api/core', () => ({
 import PermissionsPanel from '../components/settings/PermissionsPanel';
 
 /** Route the invoke mock per command. */
-function stubInvoke({ mic = 'granted', a11y = true } = {}) {
+function stubInvoke({ mic = 'granted' } = {}) {
   invokeMock.mockImplementation(async (cmd) => {
     if (cmd === 'check_microphone') return mic;
-    if (cmd === 'check_accessibility') return a11y;
     return undefined;
   });
 }
