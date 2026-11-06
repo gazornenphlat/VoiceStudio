@@ -87,24 +87,25 @@ def test_speech_gguf_placeholder_rejected_at_engine_selection(client, monkeypatc
     """Selecting the GGUF engine explicitly while bin/ holds a 0-byte
     placeholder must 400 at _resolve_engine (is_available now tells the
     truth) with the actionable reason — never reach the exec path."""
-    import sys
     import tempfile
     from pathlib import Path
 
     from services.tts_backend import get_backend_class
 
-    # Other tests evict and re-import engine modules, so the registered class can
-    # live in a different module object than a fresh import. Patch the one it uses.
-    gguf_backend = sys.modules[get_backend_class("omnivoice-gguf").__module__]
+    # Other tests evict and re-import engine modules, so the module object a fresh
+    # import returns is not always the one the registered class runs. Patch the
+    # globals of the function the registered class actually calls.
+    binary_status = get_backend_class("omnivoice-gguf")._binary_status.__func__
+    module_globals = binary_status.__globals__
 
     placeholder_dir = Path(tempfile.mkdtemp(prefix="gguf-placeholder-"))
     placeholder = placeholder_dir / "omnivoice-tts-windows-x86_64.exe"
     placeholder.write_bytes(b"")
     placeholder.chmod(0o755)
 
-    monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: placeholder)
-    monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
+    monkeypatch.setitem(module_globals, "_binary_path", lambda slug=None: placeholder)
+    monkeypatch.setitem(module_globals, "_load_checksum_manifest", lambda: {})
+    monkeypatch.setitem(module_globals, "_is_macos_quarantined", lambda p: False)
 
     res = client.post("/v1/audio/speech", json={
         "model": "omnivoice-gguf", "input": "hello",
