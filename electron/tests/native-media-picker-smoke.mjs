@@ -12,7 +12,7 @@ const executable =
     : resolve(
         workspaceRoot,
         'electron/node_modules/electron/dist',
-        process.platform === 'darwin' ? 'Electron.app/Contents/MacOS/Electron' : 'electron',
+        'electron',
       );
 const backend = process.env.VOICESTUDIO_BACKEND_URL || 'http://127.0.0.1:3900';
 const [infoResponse, toolsResponse] = await Promise.all([

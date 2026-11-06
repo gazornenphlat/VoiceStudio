@@ -73,7 +73,6 @@ export async function selectTorchVariant({
     if (arch !== 'x64') throw new Error('Windows ROCm requires Windows x64 Python 3.12 (cp312).');
     return 'rocm';
   }
-  if (platform === 'darwin') return 'native';
   if (requested === 'rocm' && platform === 'linux') return 'rocm';
   const cpuWheelsApply =
     (platform === 'linux' && arch === 'x64') ||

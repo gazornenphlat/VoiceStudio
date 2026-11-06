@@ -8,7 +8,7 @@ const browser = await chromium.launch({
 });
 const ui = process.env.VOICESTUDIO_UI_URL || 'http://localhost:3912';
 try {
-  for (const platform of ['win32', 'darwin', 'linux']) {
+  for (const platform of ['win32', 'linux']) {
     for (const locale of ['en', 'de', 'ar']) {
       const strings = JSON.parse(
         readFileSync(

@@ -12,7 +12,7 @@ const executable =
     : resolve(
         workspaceRoot,
         'electron/node_modules/electron/dist',
-        process.platform === 'darwin' ? 'Electron.app/Contents/MacOS/Electron' : 'electron',
+        'electron',
       );
 const launchEnvironment = { ...process.env };
 delete launchEnvironment.ELECTRON_RUN_AS_NODE;

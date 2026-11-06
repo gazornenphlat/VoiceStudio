@@ -11,8 +11,6 @@ const executablePath = process.env.VOICESTUDIO_PACKAGED_EXE
   : resolve(
       process.platform === 'win32'
         ? 'electron/release/win-unpacked/VoiceStudio.exe'
-        : process.platform === 'darwin'
-          ? 'electron/release/mac/VoiceStudio.app/Contents/MacOS/VoiceStudio'
           : 'electron/release/linux-unpacked/voicestudio-electron',
     );
 assert.ok(existsSync(executablePath), `Packaged executable does not exist: ${executablePath}`);

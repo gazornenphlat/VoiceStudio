@@ -11,8 +11,6 @@ const developmentExecutable = resolve(
   'electron/node_modules/electron/dist',
   process.platform === 'win32'
     ? 'electron.exe'
-    : process.platform === 'darwin'
-      ? 'Electron.app/Contents/MacOS/Electron'
       : 'electron',
 );
 const profileDirectory = process.env.VOICESTUDIO_TEST_PROFILE?.trim() || join(folder, 'profile');

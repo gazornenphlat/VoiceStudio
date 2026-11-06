@@ -19,17 +19,7 @@ const defaultExecutableCandidates =
           'electron/release/win-unpacked/VoiceStudio.exe',
         ]
       : ['electron/release/win-unpacked/VoiceStudio.exe']
-    : process.platform === 'darwin'
-      ? targetArch === 'arm64'
-        ? [
-            'electron/release/mac-arm64/VoiceStudio.app/Contents/MacOS/VoiceStudio',
-            'electron/release/mac/VoiceStudio.app/Contents/MacOS/VoiceStudio',
-          ]
-        : [
-            'electron/release/mac/VoiceStudio.app/Contents/MacOS/VoiceStudio',
-            'electron/release/mac-x64/VoiceStudio.app/Contents/MacOS/VoiceStudio',
-          ]
-      : targetArch === 'arm64'
+    : targetArch === 'arm64'
         ? [
             'electron/release/linux-arm64-unpacked/voicestudio-electron',
             'electron/release/linux-unpacked/voicestudio-electron',
@@ -201,14 +191,7 @@ try {
     );
     const setupStatus = await waitForRuntimeGate(window, 30_000);
     const installButton = window.getByRole('button', { name: 'Install local runtime', exact: true });
-    if (process.platform === 'darwin' && targetArch === 'x64') {
-      assert.equal(setupStatus.setupIssue, 'unsupported_platform');
-      await window.getByRole('textbox', { name: 'Backend URL', exact: true }).waitFor();
-      await window.getByRole('button', { name: 'Test connection', exact: true }).waitFor();
-      assert.equal(await installButton.count(), 0, 'Intel Macs must offer remote setup');
-    } else {
-      await installButton.waitFor();
-    }
+    await installButton.waitFor();
     assert.equal(
       await window.evaluate(() => typeof window.voicestudio.backend.cleanSetupRuntime),
       'function',

@@ -11,8 +11,6 @@ const developmentExecutable = resolve(
   'node_modules/electron/dist',
   process.platform === 'win32'
     ? 'electron.exe'
-    : process.platform === 'darwin'
-      ? 'Electron.app/Contents/MacOS/Electron'
       : 'electron',
 );
 let app;

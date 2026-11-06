@@ -15,8 +15,6 @@ const profile = mkdtempSync(join(tmpdir(), 'voicestudio-agent-acceptance-'));
 const defaultExecutable =
   process.platform === 'win32'
     ? resolve('electron/release/win-unpacked/VoiceStudio.exe')
-    : process.platform === 'darwin'
-      ? resolve('electron/release/mac/VoiceStudio.app/Contents/MacOS/VoiceStudio')
       : resolve('electron/release/linux-unpacked/voicestudio-electron');
 const executablePath = process.env.VOICESTUDIO_PACKAGED_EXE
   ? resolve(process.env.VOICESTUDIO_PACKAGED_EXE)
