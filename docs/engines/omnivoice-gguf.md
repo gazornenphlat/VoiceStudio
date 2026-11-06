@@ -141,15 +141,12 @@ location instead.
 
 ## Setup
 
-The desktop installers ship this native binary under `resources/bin/`
-([#2780](https://github.com/debpalash/VoiceStudio/issues/2780)): Windows x64,
+The Windows installers ship this native binary under `resources/bin/`
+([#2780](https://github.com/debpalash/VoiceStudio/issues/2780)): Windows x64 and
 Windows on ARM (the x64 binary, run under emulation like the rest of the local
-backend), macOS Apple Silicon and the Linux AppImage/deb. The Windows binary
-carries its own Visual C++ runtime, so no redistributable install is needed.
-The Intel Mac download has no binary because Intel Macs cannot run the local
-backend at all (macOS install). Store builds (Microsoft
-Store, Mac App Store, Snap Store) and the Docker image do not include it yet;
-use the default in-process OmniVoice engine there, which is the same model.
+backend). The Windows binary carries its own Visual C++ runtime, so no
+redistributable install is needed. The Microsoft Store build does not include it
+yet; use the default in-process OmniVoice engine there, which is the same model.
 
 Select the engine via **Model Catalogue** (TTS tab → **Use**) or
 `OMNIVOICE_TTS_BACKEND=omnivoice-gguf`.
@@ -174,7 +171,7 @@ failing at spawn time; build one with
 `scripts/build-omnivoice-tts.sh --platform <slug>` or use the default
 in-process engine.
 
-**x86-64 CPUs:** Windows, Linux and Intel Mac builds compile every ggml CPU
+**x86-64 CPUs:** Windows builds compile every ggml CPU
 variant (`GGML_CPU_ALL_VARIANTS`) and pick the best one this processor supports
 at startup, so a binary built on a newer machine (for example one with AVX-512)
 also runs on older or AVX2-only CPUs ([#2780](https://github.com/debpalash/VoiceStudio/issues/2780)).
@@ -182,19 +179,10 @@ A binary built some other way that stops with an *illegal instruction* is
 reported as such, and the engine shows *Unavailable* until that binary is
 rebuilt with `scripts/build-omnivoice-tts.sh` or replaced.
 
-**Linux ARM64 (Asahi Apple Silicon):** the `linux-aarch64` binary prefers
-GGML's Vulkan backend when built on a host with `glslc` and the Khronos
-SPIRV headers installed (Arch: `pacman -S shaderc spirv-headers`; Debian:
-`apt install glslc libvulkan-dev spirv-headers`), so Apple GPUs accelerate
-generation through the open-source Honeykrisp driver. Without those deps the
-build falls back to CPU. Expect roughly 2–4x slower generation than macOS
-Metal while upstream Mesa and llama.cpp Vulkan optimizations mature; still
-well ahead of CPU-only.
-
 ## Vulkan acceleration
 
-The Windows x64 and Linux x64 installers ship the runtime with GGML's Vulkan
-module (`ggml-vulkan`), built in CI with the Vulkan SDK. Any GPU with a working
+The Windows x64 installer ships the runtime with GGML's Vulkan module
+(`ggml-vulkan`), built in CI with the Vulkan SDK. Any GPU with a working
 Vulkan driver is used: AMD Radeon and Ryzen AI, Intel Arc and Core Ultra, and
 NVIDIA.
 
@@ -218,8 +206,7 @@ the card the quant is sized on. In automatic mode VoiceStudio does not set
 `GGML_BACKEND`, so GGML makes this choice itself. Settings › GPU acceleration then lists
 the engine as using the GPU (Vulkan) with the adapter's name.
 
-Windows x64 and Linux x64/ARM64 source builds try Vulkan when the Vulkan SDK
-(Windows), or `glslc` and SPIRV headers (Linux), are available. Missing build
+Windows x64 source builds try Vulkan when the Vulkan SDK is available. Missing build
 dependencies or a failed Vulkan build fall back to CPU. The GPU backend ships
 as an optional GGML module beside the executable; keep those libraries with the
 binary. Install a working Vulkan GPU driver on the runtime host. Without one,
@@ -251,7 +238,7 @@ explicit quant override remains authoritative in either case.
 ## Checking Vulkan on your machine
 
 1. **Driver.** Run `vulkaninfo --summary` (installed with the GPU driver on
-   Windows; `vulkan-tools` on Linux). It should list your GPU with
+   Windows). It should list your GPU with
    `PHYSICAL_DEVICE_TYPE_DISCRETE_GPU` or `..._INTEGRATED_GPU`. Only
    `llvmpipe` or an error means no Vulkan driver: install or update the GPU
    driver first.
@@ -269,8 +256,7 @@ explicit quant override remains authoritative in either case.
    *Use your GPU for faster speech?* prompt appears once; **Use GPU** switches
    to this engine.
 5. **Generate** one sentence. Press Download first, or let the first
-   generation fetch the weights. Watch GPU usage in Task Manager (Windows) or
-   `radeontop` / `intel_gpu_top` (Linux).
+   generation fetch the weights. Watch GPU usage in Task Manager.
 
 Expected automatic picks:
 
@@ -293,8 +279,6 @@ Before reporting ready, the engine:
 - verifies the binary, and every ggml shared library listed next to it,
   against the SHA-256 manifest (`bin/checksums.sha256`), and runs the binary
   with `bin/` as its working directory so no other library can be loaded;
-- detects macOS Gatekeeper quarantine and prints the exact
-  `xattr -cr '/Applications/VoiceStudio.app'` fix;
 - restores a missing execute bit (a git clone or zip extract on POSIX can
   drop `+x`, which used to surface as a permission error mislabeled as
   out-of-memory — [#437](https://github.com/debpalash/VoiceStudio/issues/437)).
@@ -316,8 +300,8 @@ Before reporting ready, the engine:
 
 ## Troubleshooting
 
-- "GGUF binary missing": this build doesn't include the runtime (an Intel
-  Mac, a store build, Docker or a source checkout; see Setup) — use the default
+- "GGUF binary missing": this build doesn't include the runtime (a store
+  build or a source checkout; see Setup) — use the default
   engine, reinstall from the GitHub Release download, or build the binary from a
   source checkout.
   The log line `Engine health check failed; engine=omnivoice-gguf` withholds the
@@ -327,7 +311,7 @@ Before reporting ready, the engine:
   once with network access. Offline, follow the steps in [Weights](#weights);
   the download has to land in the app's own cache.
 - The quant picker says *Q4_K_M* on a GPU: no Vulkan GPU was verified. Install
-  the GPU's Vulkan driver (and `vulkan-tools` on Linux), then restart the
+  the GPU's Vulkan driver, then restart the
   backend.
 - Checksum mismatch or quarantine messages: follow the printed fix, or
   reinstall.

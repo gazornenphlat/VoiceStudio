@@ -35,7 +35,7 @@ New to VoiceStudio? [Install the Windows app](../install/windows.md) first.
 | GPT-SoVITS | [gpt-sovits](gpt-sovits.md) | external server | ✅ | its own API server |
 | Sherpa-ONNX | [sherpa-onnx](sherpa-onnx.md) | CUDA · CPU | — | `pip install sherpa-onnx` + model dir |
 | IndexTTS 2.5 | [indextts](indextts.md) | CUDA · CPU | ✅ + emotion | one-click sidecar install |
-| OmniVoice GGUF | [omnivoice-gguf](omnivoice-gguf.md) | CUDA · MPS · CPU | ✅ | native binary bundled in the desktop installers (not Intel Mac) |
+| OmniVoice GGUF | [omnivoice-gguf](omnivoice-gguf.md) | CUDA · MPS · CPU | ✅ | native binary bundled in the Windows installers |
 | Supertonic-3 | [supertonic3](supertonic3.md) | CPU | — (7 preset voices) | `uv sync --extra supertonic` + license |
 | MOSS-TTS-v1.5 (8B) | [moss-tts-v15](moss-tts-v15.md) | CUDA · CPU | ✅ | clone + env var |
 | dots.tts (2B) | [dots-tts](dots-tts.md) | CUDA · CPU (not Windows; use audio.cpp dots.tts) | ✅ | clone + env var |
