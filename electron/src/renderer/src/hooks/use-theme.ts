@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import { mirrorUiPreference } from '@/lib/ui-preference-mirror';
 import { THEME_COLOR_ROLES } from '@/lib/themes/t3-palettes';
 import {
   colorVariable,
@@ -77,6 +78,7 @@ export function updateTheme(patch: Partial<ThemePreferences>) {
   } catch {
     /* Session settings remain usable. */
   }
+  mirrorUiPreference(THEME_STORAGE_KEY, JSON.stringify(preferences));
   refresh();
 }
 export function setTheme(mode: ThemeMode) {

@@ -155,6 +155,9 @@ const bridge: VoiceStudioBridge = {
     revealPath: (path) => ipcRenderer.invoke('files:revealPath', path) as Promise<void>,
     openExternal: (url) => ipcRenderer.invoke('files:openExternal', url) as Promise<void>,
   },
+  uiPreferences: {
+    set: (key, value) => ipcRenderer.invoke('ui-prefs:set', key, value) as Promise<void>,
+  },
   window: {
     minimize: () => ipcRenderer.send('window:minimize'),
     toggleMaximize: () => ipcRenderer.send('window:toggleMaximize'),
@@ -163,5 +166,13 @@ const bridge: VoiceStudioBridge = {
     isMaximized: () => ipcRenderer.invoke('window:isMaximized') as Promise<boolean>,
   },
 };
+
+// Restore saved appearance and language choices before the page's own scripts read them.
+try {
+  const saved = ipcRenderer.sendSync('ui-prefs:load') as Record<string, string> | undefined;
+  for (const [key, value] of Object.entries(saved ?? {})) window.localStorage.setItem(key, value);
+} catch {
+  // Storage can be unavailable in hardened contexts; the defaults still apply.
+}
 
 contextBridge.exposeInMainWorld('voicestudio', bridge);

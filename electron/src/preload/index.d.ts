@@ -368,6 +368,10 @@ export interface SetupConnectionCheck {
 }
 
 export interface VoiceStudioBridge {
+  /** Mirrors allowlisted appearance and language choices so they survive restarts. */
+  uiPreferences: {
+    set(key: string, value: string | null): Promise<void>;
+  };
   /** VoiceStudio Cloud account; never carries a token. */
   account: {
     get(): Promise<AccountPublicState>;

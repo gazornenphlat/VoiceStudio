@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import en from './locales/en.json';
 import { matchLocale } from './locale-match';
 import { onStorageKey } from '@/lib/storage-events';
+import { mirrorUiPreference } from '@/lib/ui-preference-mirror';
 
 export const SUPPORTED_LOCALES = [
   'en',
@@ -139,6 +140,7 @@ export async function setAppLanguage(locale: AppLocale) {
   } catch {
     // The in-memory choice still applies for this session.
   }
+  mirrorUiPreference(LOCALE_KEY, locale);
   await i18next.changeLanguage(locale);
   return true;
 }

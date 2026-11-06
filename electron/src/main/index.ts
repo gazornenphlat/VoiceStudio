@@ -10,6 +10,7 @@ import { app, BrowserWindow, ipcMain, Menu, nativeImage, session, shell, Tray } 
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import { BackendSupervisor, backendRoot } from './backend';
 import { registerIpc, wireWindowMaximizeEvents } from './ipc';
+import { registerUiPreferences } from './ui-preferences';
 import { APP_ORIGIN, installAppProtocol, registerAppScheme } from './protocol';
 import { electronProxyPort, startDevBackendProxy } from './dev-backend-proxy';
 import { DesktopUpdater, registerUpdateIpc } from './updater';
@@ -51,6 +52,7 @@ const mainErrors = new MainErrorJournal(
   __APP_VERSION__,
 );
 installMainProcessErrorHandlers(mainErrors);
+registerUiPreferences(join(app.getPath('userData'), 'ui-preferences.json'));
 
 let mainWindow: BrowserWindow | null = null;
 let closeWatch: (() => void) | null = null;

@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { onStorageKey } from '@/lib/storage-events';
+import { mirrorUiPreference } from '@/lib/ui-preference-mirror';
 
 type Appearance = { font: 'inter' | 'system'; scale: number; glass: boolean };
 export const appearanceScales = [90, 100, 110, 125] as const;
@@ -55,6 +56,7 @@ export function updateAppearance(patch: Partial<Appearance>) {
   } catch {
     /* Session preferences still work. */
   }
+  mirrorUiPreference(key, JSON.stringify(current));
   listeners.forEach((listener) => listener());
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { mirrorUiPreference } from '@/lib/ui-preference-mirror';
 import {
   AlertTriangleIcon,
   ArchiveIcon,
@@ -148,7 +149,11 @@ async function clearFrontendState(plan: ReturnType<typeof resetPlan>): Promise<v
     localStorage.removeItem('omni_transcriptions');
   }
   if (plan.setup) forgetSetupProgress();
-  if (plan.prefs) for (const key of UI_PREFERENCE_KEYS) localStorage.removeItem(key);
+  if (plan.prefs)
+    for (const key of UI_PREFERENCE_KEYS) {
+      localStorage.removeItem(key);
+      mirrorUiPreference(key, null);
+    }
   if (plan.settings) for (const key of LOCAL_SETTING_KEYS) localStorage.removeItem(key);
 }
 
