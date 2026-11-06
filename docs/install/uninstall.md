@@ -20,7 +20,7 @@ The Electron build finishes deletion through its signed desktop helper after the
 window exits, because Chromium keeps parts of its profile directory locked while
 the app is open. The same ownership checks and model-cache opt-in still apply.
 
-This is the right path if you installed the **.dmg / .exe / AppImage / .deb** —
+This is the right path if you installed the **.exe** —
 you don't have the repo, so the script below isn't available to you.
 
 > **You may not need to uninstall.** Right above it, **Reset & remove** does the
@@ -53,26 +53,16 @@ Two things it deliberately does **not** touch:
   with a working app that restarts on the first-run screen. If you want the
   interpreter gone too, that's **Remove all data** — the section above.
 
-The shared Hugging Face model cache is called out separately wherever it applies:
-on macOS and Linux it's the standard cache other AI tools use too, so removing it
-may delete models VoiceStudio never downloaded. (On Windows, and in portable
-installs, the cache is VoiceStudio's own — there's nothing to share, and the app
-says so.)
+The shared Hugging Face model cache is called out separately wherever it applies.
+On Windows, and in portable installs, the cache is VoiceStudio's own — there's
+nothing to share, and the app says so.
 
 ## The one-command uninstaller (from a clone)
 
 From a clone or the source tarball:
 
-```bash
-# macOS / Linux — prints what it WOULD delete, with sizes, and stops:
-scripts/uninstall.sh
-
-# actually delete, after you've read the dry-run:
-scripts/uninstall.sh --yes
-```
-
 ```powershell
-# Windows (PowerShell) — dry-run, then delete:
+# dry-run, then delete:
 powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1
 powershell -ExecutionPolicy Bypass -File scripts\uninstall.ps1 -Yes
 ```
@@ -85,8 +75,7 @@ blocks the uninstall. If you never opted in (the default), nothing is sent and
 nothing is printed; the dry-run never sends anything either way.
 
 It covers the current desktop app and anything a final Tauri-era install
-(`com.debpalash.omnivoice-studio`) left behind. Add `--app` (macOS/Linux) or
-`-RemoveApp` (Windows) to also remove the installed app itself. On Windows,
+(`com.debpalash.omnivoice-studio`) left behind. Add `-RemoveApp` to also remove the installed app itself. On Windows,
 run `-Yes -RemoveApp` from a normal PowerShell window, without administrator
 rights. An elevated request stops before removing app data or launching an
 uninstaller; a dry run still lists the plan. If the installed app needs
@@ -98,7 +87,7 @@ The script honors your custom locations: if you set `OMNIVOICE_DATA_DIR`,
 `OMNIVOICE_CACHE_DIR`, `OMNIVOICE_ENGINES_DIR`, `HF_HOME`, or `HF_HUB_CACHE` (or picked custom
 data/model folders during setup), export the same variables before running it
 and it will target those instead of the defaults. It never touches anything
-outside the VoiceStudio folders, and without `--app` / `-RemoveApp` it does
+outside the VoiceStudio folders, and without `-RemoveApp` it does
 **not** delete the app itself (see "Remove the app" below) — so it's safe to run
 even if you only want to reclaim disk space and keep the app installed. A
 runtime you moved to a custom folder is removed only if the app created it
@@ -114,29 +103,6 @@ Four kinds of data, in up to four locations:
 | **Managed Python env** (`runtime/project/.venv` in the app folder) | GBs | Rebuilt automatically if you reinstall. |
 | **App data** (voices, projects, DB, generated audio, sidecar engines, logs) | small–GBs | Your voice profiles and history live here. |
 | **App folder** (window state, update settings, desktop logs, updater cache) | tiny | Desktop-shell state. |
-
-### macOS
-
-```
-~/Library/Application Support/OmniVoice/      ← app data (voices, projects, omnivoice.db, outputs, omnivoice.log)
-~/Library/Application Support/VoiceStudio/    ← app folder + the managed Python env (runtime/project/.venv)
-~/Library/Logs/VoiceStudio/                   ← desktop-shell logs
-~/Library/Caches/voicestudio-electron-updater/ ← downloaded updates
-~/.config/omnivoice/                          ← saved env file (cache location, HF token)
-~/.cache/huggingface/                         ← model weights (shared HF cache — see caveat)
-```
-
-### Linux (AppImage / .deb)
-
-```
-~/.omnivoice/                                 ← app data (voices, projects, omnivoice.db, outputs, omnivoice.log)
-~/.config/VoiceStudio/                        ← app folder, desktop logs, AND the managed Python env (runtime/project/.venv)
-~/.cache/voicestudio-electron-updater/        ← downloaded updates
-~/.config/omnivoice/                          ← saved env file (cache location, HF token)
-~/.cache/huggingface/                         ← model weights (shared HF cache — see caveat)
-```
-
-`$XDG_CONFIG_HOME` / `$XDG_CACHE_HOME` replace `~/.config` / `~/.cache` when set.
 
 ### Windows
 
@@ -154,10 +120,7 @@ If you used VoiceStudio before the Electron desktop app, these may also exist;
 the script removes them too:
 
 ```
-macOS:   ~/Library/Application Support/com.debpalash.omnivoice-studio/, ~/Library/Logs/OmniVoice/,
-         ~/Library/Logs/com.debpalash.omnivoice-studio/
-Linux:   ~/.local/share/com.debpalash.omnivoice-studio/, ~/.local/state/VoiceStudio/
-Windows: %LOCALAPPDATA%\com.debpalash.omnivoice-studio\, %LOCALAPPDATA%\OmniVoice\Logs\
+%LOCALAPPDATA%\com.debpalash.omnivoice-studio\, %LOCALAPPDATA%\OmniVoice\Logs\
 ```
 
 On Windows, if `HF_HOME` isn't set, VoiceStudio redirects the model cache to
@@ -196,25 +159,12 @@ model paths don't hit the 260-character `MAX_PATH` limit.
 The steps above clear the **data**; removing the installed **app** is the
 normal per-platform step:
 
-- **macOS:** drag **VoiceStudio.app** from `/Applications` to the Trash.
 - **Windows:** **Settings → Apps → Installed apps → VoiceStudio →
   Uninstall** (or via "Add or remove programs"). The non-elevated artifact
   appears as **VoiceStudio (Current User)** and can be removed by that user
   without administrator approval.
-- **Linux (AppImage):** delete the `.AppImage` file. If you integrated it into
-  your menu (e.g. with AppImageLauncher or a hand-written `.desktop` file),
-  also remove `~/.local/share/applications/*voicestudio*.desktop` (or `*omnivoice*.desktop` from an older install) and any icon
-  under `~/.local/share/icons/`.
-- **Linux (.deb):** `sudo apt remove voicestudio-electron` (this removes the
-  program; your data folders above are user data and are left in place —
-  delete them with the script or by hand). An older Tauri-era package may also
-  be installed: `sudo apt remove voicestudio`, or `omnivoice-studio` from before
-  the rename — they are separate packages.
-
 ## Reinstalling later
 
 Nothing above is required before reinstalling — a fresh install rebuilds the
-Python env and re-downloads models on demand. Keep `~/Library/Application
-Support/OmniVoice/` (macOS) / `~/.omnivoice/` (Linux) / `%APPDATA%\OmniVoice\`
-(Windows) if you want to preserve your **voice profiles and projects** across a
+Python env and re-downloads models on demand. Keep `%APPDATA%\OmniVoice\` if you want to preserve your **voice profiles and projects** across a
 reinstall; delete it too for a truly clean slate.
