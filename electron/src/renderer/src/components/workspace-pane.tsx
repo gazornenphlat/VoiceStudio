@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { ChevronRightIcon, XIcon, type LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isMac } from './bridge';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { usePaneResize } from '@/hooks/use-pane-resize';
@@ -56,7 +55,7 @@ export function WorkspacePane({
       <header
         className={cn(
           'workspace-titlebar flex h-12 shrink-0 items-center justify-between gap-2 border-b border-border/45 bg-background/30 px-3 shadow-[0_1px_0_color-mix(in_oklab,var(--foreground)_2%,transparent)] backdrop-blur-xl',
-          !isMac() && 'native-controls-right',
+          'native-controls-right',
         )}
       >
         <div className="flex min-w-0 flex-1 items-center gap-2.5">

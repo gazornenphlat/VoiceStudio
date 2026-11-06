@@ -32,7 +32,6 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/popover';
 import { Input } from '@/components/ui/input';
 import { Kbd, KbdGroup } from '@/components/ui/kbd';
-import { isMac } from '@/components/bridge';
 import { Label } from '@/components/ui/label';
 import { ProgressIndicator, ProgressTrack } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
@@ -327,7 +326,6 @@ export function VoiceControls({ size = 'icon-lg' }: { size?: 'icon-sm' | 'icon-l
 export function ActionBar({ setup: shared }: { setup?: EngineSetup } = {}) {
   const { t } = useTranslation();
   const demo = useCloneDemo();
-  const mac = isMac();
   const readinessId = useId();
   const {
     generate,
@@ -426,7 +424,7 @@ export function ActionBar({ setup: shared }: { setup?: EngineSetup } = {}) {
                 </span>
               ) : (
                 <KbdGroup aria-hidden="true" className="shrink-0">
-                  {[mac ? '⌘' : 'Ctrl', '↵'].map((key) => (
+                  {['Ctrl', '↵'].map((key) => (
                     <Kbd
                       key={key}
                       className="h-5 min-w-5 rounded-[5px] bg-primary-foreground/15 px-1 text-[11px] text-primary-foreground/85 shadow-[inset_0_-1px_0_rgb(0_0_0/18%)]"

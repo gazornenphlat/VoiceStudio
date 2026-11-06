@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from 'react';
-import { isMac } from '@/components/bridge';
 import { cn } from '@/lib/utils';
 import { AccountMenu } from './account-menu';
 import { SystemNotifications } from './system-notifications';
@@ -47,7 +46,7 @@ export function AccountCorner({ notificationsEnabled }: { notificationsEnabled: 
       className={cn(
         // Spans the 52px title bar so the corner centres on the same line as every header control.
         'app-no-drag fixed top-0 z-50 flex h-[52px] items-center gap-1',
-        isMac() ? 'right-3.5' : 'right-[148px]',
+        'right-[148px]',
       )}
     >
       <AccountMenu />

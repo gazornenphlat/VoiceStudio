@@ -1,7 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { FilmIcon } from 'lucide-react';
-import { MAC_TRAFFIC_LIGHTS_INLINE_END } from '@shared/utils/windowChrome';
 import { SecondarySidebar } from './workspace-sidebar';
 import { WorkspaceHeader } from '@/components/app-shell/workspace-header';
 
@@ -145,30 +144,6 @@ describe('tabs', () => {
     expect((saved as HTMLInputElement).value).toBe('xyz');
     expect(flags[0]).toBe(true);
     expect(flags.includes(false)).toBe(true);
-  });
-});
-
-describe('macOS traffic lights', () => {
-  const header = () => slot('secondary-sidebar-header')!;
-  const columnStartingAt = (left: number) => {
-    platform.mac = true;
-    vi.stubGlobal('ResizeObserver', NoopObserver);
-    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({ left } as DOMRect);
-    render(pane());
-  };
-  afterEach(() => {
-    platform.mac = false;
-  });
-
-  it('insets the header when the column begins under them', () => {
-    columnStartingAt(64);
-    expect(header().style.paddingInlineStart).toBe(`${MAC_TRAFFIC_LIGHTS_INLINE_END - 64 + 12}px`);
-    expect(header().style.paddingTop).toBe('');
-  });
-
-  it('leaves the header alone far from them', () => {
-    columnStartingAt(300);
-    expect(header().style.paddingInlineStart).toBe('');
   });
 });
 

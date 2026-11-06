@@ -12,41 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { usePaneResize } from '@/hooks/use-pane-resize';
 import { cn } from '@/lib/utils';
-import { isMac } from '@/components/bridge';
-import { useWindowFullscreen } from '@/hooks/use-window-fullscreen';
 
-/**
- * How far a titlebar row must inset its content to clear the macOS traffic
- * lights. Measured, not assumed: the lights reach past the slim rail into a
- * column beside it, but never into one further right.
- */
-function useTrafficLightInset(enabled: boolean) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inset, setInset] = useState(0);
-  useLayoutEffect(() => {
-    const row = ref.current;
-    if (!enabled || !row) return setInset(0);
-    const measure = () =>
-      setInset(
-        Math.max(0, Math.ceil(MAC_TRAFFIC_LIGHTS_INLINE_END - row.getBoundingClientRect().left)),
-      );
-    measure();
-    // The row moves when a column before it resizes (rail collapse, pane drag).
-    const observer = new ResizeObserver(measure);
-    const column = row.parentElement;
-    for (let node = column?.previousElementSibling; node; node = node.previousElementSibling) {
-      observer.observe(node);
-    }
-    observer.observe(row);
-    window.addEventListener('resize', measure);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, [enabled]);
-  return [ref, inset] as const;
-}
-import { MAC_TRAFFIC_LIGHTS_INLINE_END } from '@shared/utils/windowChrome';
 import { paneTitleInShell } from '@/components/app-shell/workspace-header';
 
 /** Whether the page header above already shows this pane's title. */
@@ -123,11 +89,10 @@ export function SecondarySidebar({
   tabsInHeader?: boolean;
 }) {
   const { t } = useTranslation();
-  const fullscreen = useWindowFullscreen();
   const [uncontrolledCollapsed, setUncontrolledCollapsed] = useState(false);
   const collapsed = controlledCollapsed ?? uncontrolledCollapsed;
   // Collapsed, the header row is an empty drag strip, so nothing needs to clear the lights.
-  const [headerRef, lightsInset] = useTrafficLightInset(isMac() && !fullscreen && !collapsed);
+  const headerRef = useRef<HTMLDivElement>(null);
   const titleInShell = useTitleInShell(headerRef, title);
   const [view, setView] = useState<'controls' | 'library'>('controls');
   const [libraryVisited, setLibraryVisited] = useState(false);
@@ -239,7 +204,6 @@ export function SecondarySidebar({
       <div
         ref={headerRef}
         data-slot="secondary-sidebar-header"
-        style={lightsInset ? { paddingInlineStart: lightsInset + 12 } : undefined}
         className={cn(
           'workspace-titlebar flex h-12 shrink-0 items-center gap-2.5 border-b border-border/45',
           collapsed ? 'px-1' : 'px-3',

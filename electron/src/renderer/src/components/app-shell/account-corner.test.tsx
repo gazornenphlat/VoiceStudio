@@ -29,16 +29,12 @@ it('puts the notifications bell to the right of the account control', () => {
   expect(bell).toHaveAttribute('data-titlebar', 'true');
 });
 
-it('sits left of the Windows/Linux window buttons, and at the corner on macOS', () => {
-  const { unmount } = render(<AccountCorner notificationsEnabled={false} />);
-  const corner = () => document.querySelector('[data-slot="account-corner"]')!;
-  expect(corner().className).toMatch(/fixed/);
-  expect(corner().className).toMatch(/app-no-drag/);
-  expect(corner().className).toMatch(/right-\[148px\]/);
-  unmount();
-  mock.mac = true;
+it('sits left of the Windows window buttons', () => {
   render(<AccountCorner notificationsEnabled={false} />);
-  expect(corner().className).toMatch(/right-3\.5/);
+  const corner = document.querySelector('[data-slot="account-corner"]')!;
+  expect(corner.className).toMatch(/fixed/);
+  expect(corner.className).toMatch(/app-no-drag/);
+  expect(corner.className).toMatch(/right-\[148px\]/);
 });
 
 it('reserves title-bar space while it shows and frees it when it goes', () => {

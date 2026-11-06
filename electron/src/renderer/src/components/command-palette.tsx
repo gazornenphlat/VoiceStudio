@@ -15,7 +15,6 @@ import { patchCloneSettings } from '@/lib/store/clone-settings';
 import { SETTINGS_ENTRIES } from '@/features/settings/settings-index';
 import { cn } from '@/lib/utils';
 import { Kbd } from '@/components/ui/kbd';
-import { isMac } from '@/components/bridge';
 import { KeyboardCheatsheet } from '@/components/keyboard-cheatsheet';
 import { useTheme } from '@/hooks/use-theme';
 import { formatRelative } from '@/features/clone/format';
@@ -103,7 +102,7 @@ export function CommandPalette() {
   const actionGroup = t('nav.clone');
   const personaGroup = t('nav.persona');
   const takeGroup = t('clone.history_title');
-  const modifier = isMac() ? '⌘' : 'Ctrl';
+  const modifier = 'Ctrl';
   const source: CommandItem[] = [
     {
       id: 'home',

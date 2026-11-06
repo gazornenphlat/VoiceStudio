@@ -4,7 +4,6 @@ import { CommandPalette } from '@/components/command-palette';
 import { Outlet, useRouterState } from '@tanstack/react-router';
 import { BackendGate } from '../backend-gate';
 import { RepairAgentDock } from './repair-agent-dock';
-import { isMac } from '../bridge';
 import { cn } from '@/lib/utils';
 import { useBackendStatus } from '@/hooks/use-backend-status';
 import { isBackendReachable } from '@shared/utils/backendStage';
@@ -17,16 +16,11 @@ export function AppShell() {
     select: (state) => state.location.pathname,
   });
   const shellOnly = pathname.startsWith('/settings') || pathname === '/pro';
-  // Settings pads its own header (account-corner-safe); every other page, /pro
-  // included, gets the shared clearance so its search button never sits under
-  // the account corner and notifications bell.
-  const macWorkspace = isMac() && !pathname.startsWith('/settings');
   const SettingsWorkspace = pathname === '/settings/openapi' ? 'div' : 'main';
   return (
     <div
       className={cn(
         'app-surface relative flex h-full flex-col bg-background text-foreground',
-        macWorkspace && 'macos-notification-safe-area',
       )}
     >
       <div className="flex min-h-0 flex-1">

@@ -76,27 +76,6 @@ it('keeps branded chrome outside the scrolling installer content', () => {
   expect(scrollRegion).not.toContainElement(header);
 });
 
-it('keeps the startup brand clear of macOS traffic lights only on macOS', () => {
-  backendStatus.stage = 'starting';
-  platform.current = 'darwin';
-
-  const { rerender } = render(
-    <BackendGate>
-      <div>workspace</div>
-    </BackendGate>,
-  );
-
-  expect(screen.getByRole('banner')).toHaveClass('pl-24');
-
-  platform.current = 'win32';
-  rerender(
-    <BackendGate>
-      <div>workspace</div>
-    </BackendGate>,
-  );
-  expect(screen.getByRole('banner')).not.toHaveClass('pl-24');
-});
-
 it('shows package installation after the last large download instead of a stale package', () => {
   backendStatus.stage = 'installing';
   backendStatus.setupPhase = 'installing_deps';

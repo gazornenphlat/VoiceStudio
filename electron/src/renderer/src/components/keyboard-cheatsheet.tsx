@@ -1,6 +1,5 @@
 import { CommandIcon, KeyboardIcon, ScissorsIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isMac } from '@/components/bridge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Kbd } from '@/components/ui/kbd';
 
@@ -17,7 +16,7 @@ export function KeyboardCheatsheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const { t } = useTranslation();
-  const modifier = isMac() ? '⌘' : 'Ctrl';
+  const modifier = 'Ctrl';
   const sections: Array<{
     title: string;
     icon: typeof CommandIcon;

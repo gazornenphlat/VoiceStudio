@@ -5,7 +5,6 @@ import { SearchIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { isMac } from '@/components/bridge';
 
 /**
  * True when a page's own pane is titled exactly like the page, so the pane
@@ -24,10 +23,10 @@ export function WorkspaceHeader({ children }: { children: ReactNode }) {
       data-slot="workspace-header"
       className={cn(
         'workspace-titlebar flex shrink-0 items-center gap-3 border-b border-border/50 px-5',
-        !isMac() && 'native-controls-right',
+        'native-controls-right',
       )}
     >
-      {!isMac() && <SidebarToggle />}
+      <SidebarToggle />
       {/* The page's own items fill the bar, so one pushed right with ms-auto sits beside
           search instead of splitting the free space with it. */}
       <div
@@ -46,11 +45,11 @@ export function WorkspaceHeader({ children }: { children: ReactNode }) {
           size="sm"
           className="h-7 shrink-0 gap-1.5 px-2 text-muted-foreground hover:text-foreground"
           aria-label={t('preferences.search')}
-          title={isMac() ? 'Command + K' : 'Ctrl + K'}
+          title="Ctrl + K"
           onClick={() => window.dispatchEvent(new Event('voicestudio:commands'))}
         >
           <SearchIcon />
-          <span className="hidden text-xs font-medium lg:inline">{isMac() ? '⌘K' : 'Ctrl K'}</span>
+          <span className="hidden text-xs font-medium lg:inline">Ctrl K</span>
         </Button>
       </div>
     </header>

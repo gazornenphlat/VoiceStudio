@@ -47,16 +47,3 @@ describe('AppShell', () => {
   });
 });
 
-it.each([
-  ['/pro', true],
-  ['/integrations', true],
-  ['/settings/general', false],
-])('gives %s headers clearance from the macOS account corner: %s', (path, padded) => {
-  where.mac = true;
-  where.path = path;
-  const { container } = render(<AppShell />);
-  expect(container.firstElementChild!.classList.contains('macos-notification-safe-area')).toBe(
-    padded,
-  );
-  where.mac = false;
-});

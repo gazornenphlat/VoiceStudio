@@ -1,22 +1,21 @@
 import { AudioLinesIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { appVersion, isMac } from '../bridge';
+import { appVersion } from '../bridge';
 import { ThemeToggle } from './theme-toggle';
 
 /**
- * Frameless-window title bar. Windows/Linux draw their own caption buttons via
- * `titleBarOverlay` on the right (~140px), macOS its traffic lights on the left
- * (~80px); the padding keeps our content out from under either.
+ * Frameless-window title bar. Windows draws its caption buttons via
+ * `titleBarOverlay` on the right (~140px); the padding keeps our content out
+ * from under them.
  */
 export function TopBar() {
   const { t } = useTranslation();
-  const mac = isMac();
   return (
     <header
       className={cn(
         'app-drag flex h-9 shrink-0 items-center gap-3 border-b bg-(--toolbar-background) px-3 text-sidebar-foreground select-none',
-        mac ? 'pl-20' : 'pr-[140px]',
+        'pr-[140px]',
       )}
     >
       <div className="flex min-w-0 items-center gap-2">

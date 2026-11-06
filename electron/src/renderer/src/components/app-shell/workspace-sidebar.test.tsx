@@ -1,6 +1,5 @@
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { MAC_TRAFFIC_LIGHTS_BAND } from '@shared/utils/windowChrome';
 
 const host = vi.hoisted(() => ({
   mac: false,
@@ -78,17 +77,6 @@ describe('expanded sidebar', () => {
     expect(host.open).toHaveBeenCalledWith(false);
   });
 
-  it('pads below the traffic lights only on macOS, and spells out Settings there', () => {
-    const { unmount } = show({ mac: true });
-    const row = document.querySelector<HTMLElement>('[data-slot="titlebar-row"]')!;
-    expect(row.style.paddingTop).toBe(`${MAC_TRAFFIC_LIGHTS_BAND}px`);
-    expect(within(screen.getByLabelText('status-stub')).getByText('nav.settings')).toBeTruthy();
-    unmount();
-    show();
-    expect(
-      document.querySelector<HTMLElement>('[data-slot="titlebar-row"]')!.style.paddingTop,
-    ).toBe('');
-  });
 });
 
 describe('icon rail', () => {

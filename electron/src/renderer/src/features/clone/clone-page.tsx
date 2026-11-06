@@ -13,7 +13,6 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from '@tanstack/react-router';
 import { HistoryIcon, AudioLinesIcon, ChevronDownIcon, PencilIcon, SearchIcon } from 'lucide-react';
-import { isMac } from '@/components/bridge';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { WorkspacePane } from '@/components/workspace-pane';
@@ -148,7 +147,6 @@ export function ClonePage() {
               !editingProfile &&
                 !selectedTake &&
                 (!panel || choosingVoice) &&
-                !isMac() &&
                 'native-controls-right',
             )}
           >

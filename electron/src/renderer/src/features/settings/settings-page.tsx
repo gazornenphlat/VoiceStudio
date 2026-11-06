@@ -39,7 +39,6 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isMac } from '@/components/bridge';
 import { cn } from '@/lib/utils';
 import { SettingsContent, SettingsPageTitleContext } from './settings-layout';
 import { SettingsNav, type SettingsLocation } from './settings-nav';
@@ -254,7 +253,7 @@ export function SettingsPage() {
         <header
           className={cn(
             'workspace-titlebar flex shrink-0 items-center gap-2 px-5 text-sm',
-            isMac() ? 'account-corner-safe' : 'native-controls-right',
+            'native-controls-right',
           )}
         >
           <span className="text-muted-foreground">{t('nav.settings')}</span>

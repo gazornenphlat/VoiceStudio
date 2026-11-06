@@ -11,11 +11,6 @@ export function appVersion(): string {
   return getBridge()?.app.version ?? __APP_VERSION__;
 }
 
-/** The Windows build never runs on macOS, so macOS-only layout branches are unreachable. */
-export function isMac(): boolean {
-  return false;
-}
-
 export type PlatformFamily = 'windows' | 'linux';
 
 /** Which OS design language native-feeling UI should follow; browser tabs fall back to the user agent. */
