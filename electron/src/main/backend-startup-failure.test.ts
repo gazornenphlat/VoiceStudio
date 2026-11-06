@@ -156,21 +156,6 @@ it('repairs the managed runtime when the backend died importing its dependencies
   await supervisor.shutdown();
 });
 
-it('never starts a runtime repair on an Intel Mac, which cannot install one', async () => {
-  restoreHost();
-  restoreHost = pinHost('darwin', 'x64');
-  const supervisor = new BackendSupervisor();
-  const { child, internal } = launch(supervisor);
-  internal.runtimeProject = OWN_PROJECT;
-  internal.pushLog('err', ['    import torchaudio', FATAL_STARTUP].join('\n'), true);
-
-  child.emit('exit', 1, null);
-  await vi.advanceTimersByTimeAsync(11_000);
-
-  expect(mocks.install).not.toHaveBeenCalled();
-  await supervisor.shutdown();
-});
-
 it('leaves a crash alone when the backend died for an unrelated reason', async () => {
   const supervisor = new BackendSupervisor();
   const { child, internal } = launch(supervisor);

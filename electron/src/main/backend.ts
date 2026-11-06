@@ -270,9 +270,9 @@ export function bundledUvPath(resourcesPath: string, platform = process.platform
   return join(resourcesPath, 'tools', platform === 'win32' ? 'uv.exe' : 'uv');
 }
 
-/** Whether this host has no installable managed AI runtime. */
-export function isUnsupportedPlatform(platform = process.platform, arch = process.arch): boolean {
-  return platform === 'darwin' && arch === 'x64';
+/** Whether this host has no installable managed AI runtime. Every Windows host can install one. */
+export function isUnsupportedPlatform(): boolean {
+  return false;
 }
 
 /**
@@ -289,7 +289,7 @@ export function platformSetupIssue(
   arch = process.arch,
   translated = app.runningUnderARM64Translation === true,
 ): 'unsupported_platform' | 'wrong_architecture' | undefined {
-  if (!isUnsupportedPlatform(platform, arch)) return undefined;
+  if (!isUnsupportedPlatform()) return undefined;
   return translated ? 'wrong_architecture' : 'unsupported_platform';
 }
 
@@ -386,8 +386,6 @@ function legacyTauriRoots(): string[] {
       .filter((value): value is string => Boolean(value))
       .map((root) => join(root, TAURI_APP_ID));
   }
-  if (process.platform === 'darwin')
-    return [join(homedir(), 'Library', 'Application Support', TAURI_APP_ID)];
   return [
     join(process.env.XDG_DATA_HOME || join(homedir(), '.local', 'share'), TAURI_APP_ID),
     join(process.env.XDG_CONFIG_HOME || join(homedir(), '.config'), TAURI_APP_ID),

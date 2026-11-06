@@ -90,8 +90,6 @@ describe('locked wheel planning (#3411)', () => {
     ['x-1-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl', 'linux', 'x64', true],
     ['x-1-cp39-abi3-musllinux_1_2_x86_64.whl', 'linux', 'x64', false],
     ['x-1-cp39-abi3-win_amd64.whl', 'win32', 'x64', true],
-    ['torch-2.8.0-cp311-none-macosx_11_0_arm64.whl', 'darwin', 'arm64', true],
-    ['torch-2.8.0-cp311-none-macosx_11_0_arm64.whl', 'darwin', 'x64', false],
     ['six-1.16.0-py2.py3-none-any.whl', 'linux', 'x64', true],
   ] as const)('%s on %s %s: %s', (filename, platform, arch, expected) => {
     expect(wheelMatchesHost(filename, { platform, arch, pythonMinor: 11 })).toBe(expected);

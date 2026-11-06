@@ -12,7 +12,7 @@ beforeEach(() => {
   mocks.access.mockRejectedValue(new Error('missing'));
 });
 
-it('discovers native locations on all three platforms regardless of test host', () => {
+it('discovers native Windows and Linux locations regardless of test host', () => {
   expect(
     browserCandidates(
       'win32',
@@ -23,11 +23,6 @@ it('discovers native locations on all three platforms regardless of test host', 
     id: 'edge',
     name: 'Microsoft Edge',
     path: 'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
-  });
-  expect(browserCandidates('darwin', {}, '/Users/user')).toContainEqual({
-    id: 'chrome',
-    name: 'Google Chrome',
-    path: '/Users/user/Applications/Google Chrome.app',
   });
   const linux = browserCandidates('linux', { PATH: '/usr/bin:.:relative:/snap/bin' }, '/home/user');
   expect(linux).toContainEqual({

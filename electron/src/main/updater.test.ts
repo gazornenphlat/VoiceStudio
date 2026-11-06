@@ -489,8 +489,6 @@ describe('DesktopUpdater', () => {
 describe('update feed selection', () => {
   test('matches electron-updater platform manifest names', () => {
     expect(feedManifestName('win32', 'x64')).toBe('electron-stable-win32-x64.yml');
-    expect(feedManifestName('darwin', 'arm64')).toBe('electron-stable-darwin-arm64-mac.yml');
-    expect(feedManifestName('linux', 'x64')).toBe('electron-stable-linux-x64-linux.yml');
     expect(feedManifestName('win32', 'x64', 'microsoft-store')).toBe(
       'electron-microsoft-store-stable-win32-x64.yml',
     );

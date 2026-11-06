@@ -118,9 +118,6 @@ function platformTagMatches(tag: string, host: WheelHost): boolean {
     if (!machine) return false;
     return new RegExp(`^(manylinux(_\\d+_\\d+|1|2010|2014)|linux)_${machine}$`).test(tag);
   }
-  if (host.platform === 'darwin') {
-    return host.arch === 'arm64' && /^macosx_\d+_\d+_(arm64|universal2)$/.test(tag);
-  }
   return false;
 }
 

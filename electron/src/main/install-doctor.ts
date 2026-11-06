@@ -131,15 +131,6 @@ export async function collectTrustFacts(input: TrustProbeInput): Promise<TrustFa
     return { smartAppControl, ...trust };
   }
   if (!program) return {};
-  if (platform === 'darwin') {
-    // `xattr -p` exits non-zero when the attribute is absent.
-    return run('xattr', ['-p', 'com.apple.quarantine', program], {
-      timeoutMs: TRUST_PROBE_DEADLINE_MS,
-    }).then(
-      () => ({ quarantined: true }),
-      () => ({}),
-    );
-  }
   if (platform === 'linux') {
     const mountinfo = await (input.readMountInfo?.() ?? readFile('/proc/self/mountinfo', 'utf8')).catch(
       () => '',

@@ -57,21 +57,6 @@ describe('collectTrustFacts', () => {
     ).resolves.toEqual({ smartAppControl: 'unknown' });
   });
 
-  it('reads the macOS quarantine attribute', async () => {
-    const readSmartAppControl = sac;
-    await expect(
-      collectTrustFacts({ platform: 'darwin', program: '/a/python', run: async () => 'x', readSmartAppControl }),
-    ).resolves.toEqual({ quarantined: true });
-    await expect(
-      collectTrustFacts({
-        platform: 'darwin',
-        program: '/a/python',
-        run: () => Promise.reject(new Error('absent')),
-        readSmartAppControl,
-      }),
-    ).resolves.toEqual({});
-  });
-
   it('reads a noexec mount on Linux', async () => {
     const readMountInfo = async () =>
       '22 1 8:1 / / rw,relatime - ext4 /dev/sda1 rw\n40 22 8:2 / /mnt/data rw,noexec - ext4 /dev/sda2 rw\n';

@@ -14,28 +14,25 @@ const brands = [
     'chrome',
     'Google Chrome',
     'Google/Chrome/Application/chrome.exe',
-    'Google Chrome.app',
     'google-chrome',
   ],
   [
     'edge',
     'Microsoft Edge',
     'Microsoft/Edge/Application/msedge.exe',
-    'Microsoft Edge.app',
     'microsoft-edge',
   ],
-  ['firefox', 'Firefox', 'Mozilla Firefox/firefox.exe', 'Firefox.app', 'firefox'],
+  ['firefox', 'Firefox', 'Mozilla Firefox/firefox.exe', 'firefox'],
   [
     'brave',
     'Brave',
     'BraveSoftware/Brave-Browser/Application/brave.exe',
-    'Brave Browser.app',
     'brave-browser',
   ],
-  ['vivaldi', 'Vivaldi', 'Vivaldi/Application/vivaldi.exe', 'Vivaldi.app', 'vivaldi'],
-  ['opera', 'Opera', 'Programs/Opera/opera.exe', 'Opera.app', 'opera'],
-  ['chromium', 'Chromium', 'Chromium/Application/chrome.exe', 'Chromium.app', 'chromium'],
-  ['zen', 'Zen', 'Zen Browser/zen.exe', 'Zen.app', 'zen-browser'],
+  ['vivaldi', 'Vivaldi', 'Vivaldi/Application/vivaldi.exe', 'vivaldi'],
+  ['opera', 'Opera', 'Programs/Opera/opera.exe', 'opera'],
+  ['chromium', 'Chromium', 'Chromium/Application/chrome.exe', 'chromium'],
+  ['zen', 'Zen', 'Zen Browser/zen.exe', 'zen-browser'],
 ] as const;
 
 /** Known browser executables only; the renderer never supplies commands or paths. */
@@ -46,30 +43,24 @@ export function browserCandidates(
 ): BrowserApp[] {
   const candidates: BrowserApp[] = [];
   const { join, isAbsolute } = platform === 'win32' ? win32 : posix;
-  for (const [id, name, windows, mac, linux] of brands) {
+  for (const [id, name, windows, linux] of brands) {
     const paths =
       platform === 'win32'
         ? [env.LOCALAPPDATA, env.ProgramFiles, env['ProgramFiles(x86)']]
             .filter((root): root is string => Boolean(root && isAbsolute(root)))
             .map((root) => join(root, ...windows.split('/')))
-        : platform === 'darwin'
-          ? ['/Applications', join(home, 'Applications')].map((root) => join(root, mac))
-          : (env.PATH ?? '/usr/bin:/usr/local/bin:/snap/bin')
-              .split(':')
-              .filter(isAbsolute)
-              .flatMap((root) => [
-                join(root, linux),
-                ...(id === 'chromium'
-                  ? [join(root, 'chromium-browser')]
-                  : id === 'chrome'
-                    ? [join(root, 'google-chrome-stable')]
-                    : []),
-              ]);
+        : (env.PATH ?? '/usr/bin:/usr/local/bin:/snap/bin')
+            .split(':')
+            .filter(isAbsolute)
+            .flatMap((root) => [
+              join(root, linux),
+              ...(id === 'chromium'
+                ? [join(root, 'chromium-browser')]
+                : id === 'chrome'
+                  ? [join(root, 'google-chrome-stable')]
+                  : []),
+            ]);
     for (const path of paths) candidates.push({ id, name, path });
-  }
-  if (platform === 'darwin') {
-    candidates.push({ id: 'safari', name: 'Safari', path: '/Applications/Safari.app' });
-    candidates.push({ id: 'arc', name: 'Arc', path: '/Applications/Arc.app' });
   }
   return candidates;
 }
@@ -108,10 +99,7 @@ export async function openInBrowser(id: unknown, rawUrl: unknown): Promise<void>
   const browser = (await detectedBrowsers()).find((item) => item.id === id);
   if (!browser) throw new Error('Browser is no longer installed');
   await new Promise<void>((resolve, reject) => {
-    const child =
-      process.platform === 'darwin'
-        ? spawn('/usr/bin/open', ['-a', browser.path, url], { stdio: 'ignore', windowsHide: true })
-        : spawn(browser.path, [url], { stdio: 'ignore', windowsHide: true, shell: false });
+    const child = spawn(browser.path, [url], { stdio: 'ignore', windowsHide: true, shell: false });
     child.once('error', reject);
     child.once('spawn', () => {
       child.unref();

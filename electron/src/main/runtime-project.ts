@@ -439,7 +439,6 @@ async function ensureCudnn8Compat(
   signal: AbortSignal,
   variant: TorchVariant,
 ): Promise<void> {
-  if (process.platform === 'darwin') return;
   const python = runtimePython(project);
   const script = [
     'import json, sysconfig',
@@ -1238,9 +1237,6 @@ export async function installRuntime(
 ): Promise<void> {
   signal.throwIfAborted();
   phase('checking');
-  if (process.platform === 'darwin' && process.arch === 'x64') {
-    throw Object.assign(new Error('INTEL_MAC_UNSUPPORTED'), { code: 'INTEL_MAC_UNSUPPORTED' });
-  }
   await mkdir(project, { recursive: true });
   // A cancelled attempt leaves its unfinished wheels behind; uv cannot resume them.
   // Drop them before measuring free space, or they can block the retry that would free it.
@@ -1248,7 +1244,7 @@ export async function installRuntime(
   const torch = resolveTorchVariant();
   const windowsRocm = windowsRocmSelected(torch.variant);
   const requiredBytes =
-    torch.variant === 'cpu' || process.platform === 'darwin'
+    torch.variant === 'cpu'
       ? REQUIRED_CPU_ENV_BYTES
       : REQUIRED_ENV_BYTES;
   const disk = await statfs(project);

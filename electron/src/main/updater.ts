@@ -39,8 +39,7 @@ export function feedManifestName(
   distribution: DistributionTarget = CURRENT_DISTRIBUTION,
   channel: UpdateChannel = 'stable',
 ): string {
-  const suffix = platform === 'darwin' ? '-mac' : platform === 'linux' ? '-linux' : '';
-  return `${feedChannelName(platform, arch, distribution, channel)}${suffix}.yml`;
+  return `${feedChannelName(platform, arch, distribution, channel)}.yml`;
 }
 
 const RELEASE_DOWNLOAD = 'https://github.com/debpalash/VoiceStudio/releases/download';
