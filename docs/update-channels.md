@@ -20,19 +20,12 @@ It is locked while an update is downloading or waiting to restart.
 - **Switching back to Stable never downgrades.** If your beta is newer than the
   latest stable, you stay on it until the next stable release.
 - Beta builds are GitHub *prereleases*: they never become the `latest` release
-  and Stable users never see them. Microsoft Store, Snap Store and Mac App
-  Store builds are Stable-only.
-- Beta Linux AppImages update through the in-app updater, not AppImageUpdate.
+  and Stable users never see them. Microsoft Store builds are Stable-only.
 
 There is no separate preview desktop feed. To try changes between betas:
 
-- **Run `main` from source** — see the platform install guides
-  (macOS ·
-  [Windows](install/windows.md#building-from-source) ·
-  Linux), or build and install a
+- **Run `main` from source** — see the [Windows install guide](install/windows.md#building-from-source), or build and install a
   package from `main` with the [install script's `--main` mode](install/script.md#building-main).
-- **Docker** — `ghcr.io/debpalash/voicestudio:latest` follows `main`; see
-  image tags.
 
 Downloads show transferred size, total size, speed, percentage and ETA, and
 can continue while synthesis, transcription or dubbing work runs. VoiceStudio
@@ -45,9 +38,7 @@ platform/architecture-specific manifest from
 `github.com/debpalash/VoiceStudio/releases/latest/download/` (Stable), or, on
 Beta, from the newest beta or stable release found through the public GitHub
 releases list; it carries the
-package's SHA-512 checksum, and the app rejects a package that fails it. On
-Linux the in-app updater uses the AppImage; update a `.deb` installation by
-installing the newer `.deb`. Source checkouts do not self-update.
+package's SHA-512 checksum, and the app rejects a package that fails it. Source checkouts do not self-update.
 
 The archived Tauri app keeps its frozen, signed `latest.json` feeds at
 immutable URLs; they never offer Electron installers. Move to Electron with the

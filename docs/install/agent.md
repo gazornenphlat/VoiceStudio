@@ -14,8 +14,7 @@ points here. Complete the setup, not just a plan.
 
 ## Steps
 
-1. **Load context.** Read the install guide for this OS (macOS ·
-   [Windows](windows.md) · Linux; Docker is a headless backend, not the desktop app),
+1. **Load context.** Read the [Windows install guide](windows.md),
    [performance](../performance.md) and
    [`skills/voicestudio/SKILL.md`](../../skills/voicestudio/SKILL.md). If your agent
    supports skills, install it with `npx skills add debpalash/VoiceStudio`.
@@ -23,8 +22,8 @@ points here. Complete the setup, not just a plan.
    existing VoiceStudio install, backend or downloaded models.
 3. **Install.**
    - Default: the latest stable release asset named `VoiceStudio-<version>-*` for this
-     OS and architecture (`VoiceStudio-Electron-*` up to v0.5.7-beta.3) (macOS `.dmg`, Windows `.exe`, Linux `.AppImage` or `.deb`),
-     or the [install script](script.md).
+     architecture (`VoiceStudio-Electron-*` up to v0.5.7-beta.3) (Windows `.exe`),
+     or the [PowerShell install script](script.md).
    - From source: follow [`electron/README.md`](../../electron/README.md) —
      run `bun run dev` from the repository root. It installs the JavaScript and,
      for a supported local backend, Python dependencies before launch. Let
