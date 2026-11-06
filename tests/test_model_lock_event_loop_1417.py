@@ -32,8 +32,17 @@ import pytest
 @pytest.fixture
 def mm():
     """Resolve the module per test — binding it at collection lets another
-    suite's `sys.modules` rebinding make this exercise a different object."""
-    return importlib.import_module("services.model_manager")
+    suite's `sys.modules` rebinding make this exercise a different object.
+
+    Abandonment state is process-global. A loader given up on in an earlier
+    test stays "stuck" until it exits, and would make every load here fail
+    fast with ModelLoadAbandoned for the wrong reason, so start clean.
+    """
+    module = importlib.import_module("services.model_manager")
+    for flag in ("_load_in_progress", "_load_abandoned"):
+        if hasattr(module, flag):
+            getattr(module, flag).clear()
+    return module
 
 
 class _ServerLoopHoldingTheLock:
