@@ -20,14 +20,6 @@ import sys
 
 def flush_fd(fd: int) -> None:
     """Flush an open descriptor's data to stable storage (best-effort)."""
-    if sys.platform == "darwin":
-        try:
-            import fcntl
-
-            fcntl.fcntl(fd, fcntl.F_FULLFSYNC)
-            return
-        except (AttributeError, OSError):
-            pass  # filesystem without full-sync support: plain fsync below
     try:
         os.fsync(fd)
     except OSError:

@@ -299,7 +299,7 @@ def _app_version() -> str:
 def _platform() -> str:
     import platform as _pl
 
-    return {"darwin": "macos"}.get(_pl.system().lower(), _pl.system().lower() or "unknown")
+    return _pl.system().lower() or "unknown"
 
 
 def install_channel() -> str:

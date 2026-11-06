@@ -96,8 +96,6 @@ def preload() -> None:
     if _preloaded:
         return
     _preloaded = True
-    if sys.platform == "darwin":  # no CUDA on macOS
-        return
 
     import ctypes
 
