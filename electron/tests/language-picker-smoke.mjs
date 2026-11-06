@@ -12,7 +12,7 @@ const timings = [];
 try {
   for (const [platform, locale, width, columns] of [
     ['win32', 'en', 1200, 3],
-    ['darwin', 'de', 620, 2],
+    ['win32', 'de', 620, 2],
     ['linux', 'ar', 390, 1],
   ]) {
     const strings = JSON.parse(

@@ -32,9 +32,7 @@ export function electronExecutable() {
   const executable =
     process.platform === 'win32'
       ? join(dist, 'electron.exe')
-      : process.platform === 'darwin'
-        ? join(dist, 'Electron.app/Contents/MacOS/Electron')
-        : join(dist, 'electron');
+      : join(dist, 'electron');
   if (!existsSync(executable)) {
     throw new Error(
       `Electron binary missing at ${executable}. Run: node electron/node_modules/electron/install.js`,

@@ -8,22 +8,16 @@
 //
 // The backend verifies every file against bin/checksums.sha256. Code signing
 // rewrites the files it signs, so the manifest is recomputed after signing:
-// in afterPack on Windows (the .exe is signed while it is copied), and before
-// the bundle seal on macOS (signMac).
-import { execFileSync } from 'node:child_process';
+// in afterPack, once electron-builder has signed the .exe while copying it.
 import { createHash } from 'node:crypto';
 import {
-  chmodSync,
-  closeSync,
   existsSync,
-  openSync,
   readFileSync,
-  readSync,
   readdirSync,
   statSync,
   writeFileSync,
 } from 'node:fs';
-import { dirname, join, resolve, sep } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -35,13 +29,10 @@ export const OMNIVOICE_TTS_MANIFEST = 'checksums.sha256';
 /**
  * Binary slug the backend's `_platform_slug()` resolves on this installer
  * target, or null when the target has no bundled runtime. Windows on ARM runs
- * the emulated x64 Python runtime, which asks for the x64 binary. Intel Macs
- * cannot run the local backend at all (docs/install/macos.md).
+ * the emulated x64 Python runtime, which asks for the x64 binary.
  */
 export function omnivoiceTtsSlug(platform, arch) {
   if (platform === 'win32' && (arch === 'x64' || arch === 'arm64')) return 'windows-x86_64';
-  if (platform === 'darwin' && arch === 'arm64') return 'darwin-arm64';
-  if (platform === 'linux' && arch === 'x64') return 'linux-x86_64';
   return null;
 }
 
@@ -108,80 +99,12 @@ function packagedBinDir(context) {
 }
 
 /**
- * afterPack: restore the execute bits the artifact download drops and refresh
- * the manifest. On Windows electron-builder has already signed the runtime's
- * .exe while copying extraResources (when a certificate is configured), so the
- * manifest must describe the signed bytes. macOS signing happens in signMac.
+ * afterPack: refresh the manifest. electron-builder has already signed the
+ * runtime's .exe while copying extraResources (when a certificate is
+ * configured), so the manifest must describe the signed bytes.
  */
 export function finalizeOmnivoiceTts(context) {
   const binDir = packagedBinDir(context);
   if (!existsSync(join(binDir, OMNIVOICE_TTS_MANIFEST))) return;
-  if (context.electronPlatformName !== 'win32') {
-    for (const name of stagedFiles(binDir)) {
-      if (name !== OMNIVOICE_TTS_MANIFEST) chmodSync(join(binDir, name), 0o755);
-    }
-  }
   rewriteManifest(binDir);
-}
-
-const MACH_O_MAGICS = new Set([
-  'feedface',
-  'feedfacf',
-  'cefaedfe',
-  'cffaedfe',
-  'cafebabe',
-  'bebafeca',
-]);
-
-export function isMachO(path) {
-  const descriptor = openSync(path, 'r');
-  try {
-    const header = Buffer.alloc(4);
-    return readSync(descriptor, header, 0, 4, 0) === 4 && MACH_O_MAGICS.has(header.toString('hex'));
-  } finally {
-    closeSync(descriptor);
-  }
-}
-
-/** The codesign arguments @electron/osx-sign uses for one file. */
-export function codesignArgs(opts, file) {
-  const options = (opts.optionsForFile && opts.optionsForFile(file)) || {};
-  const args = ['--sign', opts.identity, '--force'];
-  if (opts.keychain) args.push('--keychain', opts.keychain);
-  if (options.requirements) args.push('--requirements', options.requirements);
-  args.push(options.timestamp ? `--timestamp=${options.timestamp}` : '--timestamp');
-  const flags = [options.signatureFlags ?? []]
-    .flat()
-    .flatMap((flag) => String(flag).split(','))
-    .map((flag) => flag.trim())
-    .filter(Boolean);
-  if (options.hardenedRuntime) flags.push('runtime');
-  if (flags.length) args.push('--options', [...new Set(flags)].join(','));
-  if (options.additionalArguments) args.push(...options.additionalArguments);
-  if (options.entitlements) args.push('--entitlements', options.entitlements);
-  args.push(file);
-  return args;
-}
-
-/**
- * mac.sign: sign the bundled runtime first with the app's identity and
- * options, refresh its manifest, then run electron-builder's default signing
- * for everything else (skipping the runtime, so its bytes keep matching the
- * manifest the bundle seal now covers).
- */
-export async function signMac(opts, packager) {
-  const binDir = join(opts.app, 'Contents', 'Resources', OMNIVOICE_TTS_RESOURCE_DIR);
-  let ignore = opts.ignore;
-  if (opts.identity && existsSync(join(binDir, OMNIVOICE_TTS_MANIFEST))) {
-    for (const name of stagedFiles(binDir)) {
-      const file = join(binDir, name);
-      if (isMachO(file)) execFileSync('codesign', codesignArgs(opts, file), { stdio: 'inherit' });
-    }
-    rewriteManifest(binDir);
-    const previous = [opts.ignore ?? []].flat();
-    ignore = (file) =>
-      file.startsWith(binDir + sep) ||
-      previous.some((rule) => (typeof rule === 'function' ? rule(file) : file.match(rule)));
-  }
-  return packager.doSign({ ...opts, ignore }, { sign: null }, { name: opts.identity });
 }

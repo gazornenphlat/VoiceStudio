@@ -1,5 +1,4 @@
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -31,14 +30,10 @@ function capture(source, pattern, label) {
   return yamlValue(value);
 }
 
-async function fileHashes(path, includeSha1) {
+async function fileHashes(path) {
   const sha512 = createHash('sha512');
-  const sha1 = includeSha1 ? createHash('sha1') : null;
-  for await (const chunk of createReadStream(path)) {
-    sha512.update(chunk);
-    sha1?.update(chunk);
-  }
-  return { sha512: sha512.digest('base64'), sha1: sha1?.digest('hex') };
+  for await (const chunk of createReadStream(path)) sha512.update(chunk);
+  return { sha512: sha512.digest('base64') };
 }
 
 const platform = option('platform', process.platform);
@@ -54,7 +49,7 @@ const expectedChannels =
     : [`electron-stable-${platform}-${arch}`, `electron-beta-${platform}-${arch}`];
 assert(expectedChannels.includes(channel), 'Distribution uses its dedicated update channel');
 
-assert(['win32', 'darwin', 'linux'].includes(platform), `Supported platform: ${platform}`);
+assert(platform === 'win32', `Supported platform: ${platform}`);
 assert(['x64', 'arm64'].includes(arch), `Supported architecture: ${arch}`);
 
 const priorTestArch = process.env.TEST_UPDATER_ARCH;
@@ -98,10 +93,10 @@ assert.equal(
   declaredSize,
   'Update metadata size matches artifact bytes',
 );
-const hashes = await fileHashes(artifactPath, platform === 'linux');
+const hashes = await fileHashes(artifactPath);
 assert.equal(hashes.sha512, fileSha, 'Update metadata SHA-512 matches artifact bytes');
 
-const osToken = platform === 'win32' ? 'win' : platform === 'darwin' ? 'mac' : 'linux';
+const osToken = 'win';
 const artifactBrand =
   process.env.VOICESTUDIO_DISTRIBUTION === 'microsoft-store'
     ? 'VoiceStudio-MicrosoftStore'
@@ -111,44 +106,8 @@ assert(
   'Update artifact preserves the branded version/platform/architecture name',
 );
 
-if (platform === 'win32') {
-  assert(fileUrl.endsWith('.exe'), 'Windows update artifact is the NSIS installer');
-  assert(existsSync(`${artifactPath}.blockmap`), 'Windows differential update blockmap exists');
-} else if (platform === 'darwin') {
-  assert(fileUrl.endsWith('.zip'), 'macOS update artifact is the updater ZIP');
-} else {
-  assert(fileUrl.endsWith('.AppImage'), 'Linux update artifact is the AppImage');
-  const runtimeSections = execFileSync('readelf', ['-SW', artifactPath], {
-    encoding: 'utf8',
-  });
-  assert.match(
-    runtimeSections,
-    /^\s*\[\s*\d+\]\s+\.static\s+PROGBITS/m,
-    'AppImage uses the FUSE2-independent static runtime',
-  );
-  const updateInfo = execFileSync(artifactPath, ['--appimage-updateinformation'], {
-    encoding: 'utf8',
-  }).trim();
-  // Stable images follow the latest stable release. A beta image is pinned to its
-  // own tag: `latest` skips prereleases and could roll it back to an older stable.
-  const updateRelease = channel.startsWith('electron-beta-') ? `v${version}` : 'latest';
-  assert.equal(
-    updateInfo,
-    `gh-releases-zsync|debpalash|VoiceStudio|${updateRelease}|VoiceStudio-*-linux-x64.AppImage.zsync`,
-    'External AppImage updaters follow the channel their image was built for',
-  );
-  const control = `${artifactPath}.zsync`;
-  assert(existsSync(control), 'Versioned AppImage zsync control file exists');
-  const header = readFileSync(control).subarray(0, 4096).toString('utf8');
-  assert(
-    header.includes(
-      `URL: https://github.com/debpalash/VoiceStudio/releases/download/v${expectedVersion}/${fileUrl}\n`,
-    ),
-    'zsync downloads the matching release artifact',
-  );
-  assert(header.includes(`Length: ${declaredSize}\n`), 'zsync describes final AppImage size');
-  assert(header.includes(`SHA-1: ${hashes.sha1}\n`), 'zsync verifies the final AppImage bytes');
-}
+assert(fileUrl.endsWith('.exe'), 'Windows update artifact is the NSIS installer');
+assert(existsSync(`${artifactPath}.blockmap`), 'Windows differential update blockmap exists');
 
 console.log(
   `PASS: ${basename(metadataPath)} -> ${fileUrl} (${declaredSize} bytes, SHA-512 verified)`,
