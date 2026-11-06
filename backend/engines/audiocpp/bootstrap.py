@@ -330,8 +330,6 @@ def _platform_slug() -> str:
     machine = platform.machine().lower()
     if system == "win32":
         return "windows-x64"
-    if system == "darwin":
-        return "darwin-arm64" if machine in ("arm64", "aarch64") else "darwin-x64"
     if machine in ("x86_64", "amd64"):
         return "linux-x64"
     return f"linux-{machine}"

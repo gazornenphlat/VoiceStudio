@@ -171,12 +171,7 @@ def reveal_in_folder(req: RevealRequest):
     folder = target if target_path.is_dir() else str(target_path.parent)
     system = platform.system()
     try:
-        if system == "Darwin":
-            if target_path.is_file():
-                subprocess.Popen(["open", "-R", target])
-            else:
-                subprocess.Popen(["open", folder])
-        elif system == "Windows":
+        if system == "Windows":
             if target_path.is_file():
                 subprocess.Popen(["explorer", "/select,", target.replace("/", "\\")])
             else:
