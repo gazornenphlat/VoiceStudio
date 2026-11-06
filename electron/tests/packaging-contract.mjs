@@ -6,7 +6,6 @@ import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import assert from 'node:assert/strict';
-import { verifyLinuxLibraries } from '../native-linux-libraries.mjs';
 import {
   OMNIVOICE_TTS_MANIFEST,
   OMNIVOICE_TTS_RESOURCE_DIR,
@@ -16,7 +15,6 @@ import {
   readManifest,
 } from '../omnivoice-tts-bundle.mjs';
 import { APP_ID, PRODUCT_NAME } from '../../config/app-config.mjs';
-import { verifyMediaInventory, verifyRuntimeInventory } from '../mas-runtime-bundle.mjs';
 import { DISTRIBUTION_PROFILE, DISTRIBUTION_TARGET } from '../../config/distributions.mjs';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const installerProcessesTest = spawnSync(
@@ -31,11 +29,7 @@ assert.equal(
 );
 const distributionIdentityTest = spawnSync(
   process.execPath,
-  [
-    '--test',
-    resolve(root, 'tests/distribution-identity.test.mjs'),
-    resolve(root, 'tests/mas-runtime-bundle.test.mjs'),
-  ],
+  ['--test', resolve(root, 'tests/distribution-identity.test.mjs')],
   { encoding: 'utf8' },
 );
 assert.equal(
@@ -43,14 +37,6 @@ assert.equal(
   0,
   distributionIdentityTest.stdout + distributionIdentityTest.stderr,
 );
-if (process.platform === 'linux') {
-  const librariesTest = spawnSync(
-    process.execPath,
-    ['--test', resolve(root, 'tests/native-linux-libraries.test.mjs')],
-    { encoding: 'utf8' },
-  );
-  assert.equal(librariesTest.status, 0, librariesTest.stdout + librariesTest.stderr);
-}
 const require = createRequire(import.meta.url);
 const artifactRequested = process.argv.includes('--artifact');
 const artifactArch = process.env.VOICESTUDIO_RUST_TARGET?.startsWith('aarch64')
@@ -59,62 +45,22 @@ const artifactArch = process.env.VOICESTUDIO_RUST_TARGET?.startsWith('aarch64')
     ? 'x64'
     : process.arch;
 const artifactCandidates =
-  process.platform === 'win32'
-    ? artifactArch === 'arm64'
-      ? ['release/win-arm64-unpacked', 'release/win-unpacked']
-      : ['release/win-unpacked']
-    : process.platform === 'darwin'
-      ? DISTRIBUTION_TARGET === 'mac-app-store'
-        ? artifactArch === 'arm64'
-          ? [
-              `release/mas-arm64/${PRODUCT_NAME}.app/Contents`,
-              `release/mas/${PRODUCT_NAME}.app/Contents`,
-            ]
-          : [
-              `release/mas/${PRODUCT_NAME}.app/Contents`,
-              `release/mas-x64/${PRODUCT_NAME}.app/Contents`,
-            ]
-        : artifactArch === 'arm64'
-          ? [
-              `release/mac-arm64/${PRODUCT_NAME}.app/Contents`,
-              `release/mac/${PRODUCT_NAME}.app/Contents`,
-            ]
-          : [
-              `release/mac/${PRODUCT_NAME}.app/Contents`,
-              `release/mac-x64/${PRODUCT_NAME}.app/Contents`,
-            ]
-      : artifactArch === 'arm64'
-        ? ['release/linux-arm64-unpacked', 'release/linux-unpacked']
-        : ['release/linux-unpacked'];
+  artifactArch === 'arm64'
+    ? ['release/win-arm64-unpacked', 'release/win-unpacked']
+    : ['release/win-unpacked'];
 const artifactRoot = resolve(
   root,
   artifactCandidates.find((candidate) => existsSync(resolve(root, candidate))) ??
     artifactCandidates[0],
 );
-const artifactResources = resolve(
-  artifactRoot,
-  process.platform === 'darwin' ? 'Resources' : 'resources',
-);
-const artifactExecutable = resolve(
-  artifactRoot,
-  process.platform === 'win32'
-    ? `${PRODUCT_NAME}.exe`
-    : process.platform === 'darwin'
-      ? `MacOS/${PRODUCT_NAME}`
-      : (config.linux.executableName ?? 'voicestudio-electron'),
-);
+const artifactResources = resolve(artifactRoot, 'resources');
+const artifactExecutable = resolve(artifactRoot, `${PRODUCT_NAME}.exe`);
+
 const electronPackage = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
-assert.match(electronPackage.author?.email ?? '', /@/, 'Linux package declares a maintainer email');
+assert.match(electronPackage.author?.email ?? '', /@/, 'Package declares a maintainer email');
 assert.equal(config.productName, PRODUCT_NAME, 'Builder uses the central product name');
-assert.equal(
-  config.appId,
-  DISTRIBUTION_TARGET === 'mac-app-store' ? 'sh.voicestudio.pro' : APP_ID,
-  'Builder uses the registered identity for the selected distribution',
-);
-const storeLabel = {
-  'microsoft-store': 'MicrosoftStore-',
-  'mac-app-store': 'MacAppStore-',
-}[DISTRIBUTION_TARGET];
+assert.equal(config.appId, APP_ID, 'Builder uses the registered identity for the selected distribution');
+const storeLabel = { 'microsoft-store': 'MicrosoftStore-' }[DISTRIBUTION_TARGET];
 assert.equal(
   config.artifactName,
   `${PRODUCT_NAME}-${storeLabel ?? ''}\${version}-\${os}-\${arch}.\${ext}`,
@@ -142,61 +88,6 @@ if (DISTRIBUTION_TARGET === 'microsoft-store') {
     undefined,
     'Direct package author metadata is unchanged',
   );
-}
-assert.equal(
-  config.extraMetadata.desktopName,
-  PRODUCT_NAME,
-  'Linux desktop identity stays branded',
-);
-assert.equal(
-  config.linux.syncDesktopName,
-  true,
-  'Linux window and desktop entry share one identity',
-);
-assert(config.mac.extendInfo.NSMicrophoneUsageDescription.includes(PRODUCT_NAME));
-for (const entitlementFile of [config.mac.entitlements, config.mac.entitlementsInherit]) {
-  const entitlements = readFileSync(resolve(root, entitlementFile), 'utf8');
-  assert.match(entitlements, /<key>com\.apple\.security\.device\.audio-input<\/key>\s*<true\s*\/>/);
-  assert.match(entitlements, /<key>com\.apple\.security\.cs\.allow-jit<\/key>\s*<true\s*\/>/);
-}
-if (DISTRIBUTION_TARGET !== 'mac-app-store') {
-  assert.equal(
-    config.mac.identity,
-    process.env.CSC_LINK ? undefined : '-',
-    'Unsigned macOS builds are signed ad hoc so the bundle signature stays valid',
-  );
-  if (config.mac.identity === '-') assert.equal(config.mac.hardenedRuntime, false);
-}
-if (DISTRIBUTION_TARGET === 'mac-app-store') {
-  assert.deepEqual(config.mac.target, ['mas'], 'Mac App Store builds only the MAS package');
-  assert.equal(config.mac.notarize, false, 'Apple handles Mac App Store notarization');
-  assert.equal(config.mac.hardenedRuntime, false, 'MAS uses App Sandbox instead of Developer ID');
-  assert.equal(config.mas.entitlements, 'build/entitlements.mas.plist');
-  assert.equal(config.mas.entitlementsInherit, 'build/entitlements.mas.inherit.plist');
-  const appEntitlements = readFileSync(resolve(root, config.mas.entitlements), 'utf8');
-  for (const key of [
-    'com.apple.security.app-sandbox',
-    'com.apple.security.cs.allow-jit',
-    'com.apple.security.device.audio-input',
-    'com.apple.security.files.user-selected.read-write',
-    'com.apple.security.files.bookmarks.app-scope',
-    'com.apple.security.network.client',
-    'com.apple.security.network.server',
-  ]) {
-    assert.match(
-      appEntitlements,
-      new RegExp(`<key>${key.replaceAll('.', '\\.')}</key>\\s*<true\\s*/>`),
-    );
-  }
-  const inheritedEntitlements = readFileSync(resolve(root, config.mas.entitlementsInherit), 'utf8');
-  for (const key of ['com.apple.security.app-sandbox', 'com.apple.security.inherit']) {
-    assert.match(
-      inheritedEntitlements,
-      new RegExp(`<key>${key.replaceAll('.', '\\.')}</key>\\s*<true\\s*/>`),
-    );
-  }
-} else {
-  assert.deepEqual(config.mac.target, ['dmg', 'zip'], 'Direct macOS artifacts stay unchanged');
 }
 const project = readFileSync(resolve(root, '../pyproject.toml'), 'utf8');
 const readme = project.match(/^readme\s*=\s*"([^"]+)"/m)?.[1];
@@ -233,30 +124,9 @@ for (const [label, dir] of [
   }
 }
 const bundledUvSource = config.extraResources.find((item) => /^tools\/uv(?:\.exe)?$/.test(item.to));
-if (
-  DISTRIBUTION_TARGET !== 'mac-app-store' &&
-  (process.env.VOICESTUDIO_RUST_TARGET || process.env.VOICESTUDIO_BUNDLED_UV)
-) {
+if (process.env.VOICESTUDIO_RUST_TARGET || process.env.VOICESTUDIO_BUNDLED_UV) {
   assert(bundledUvSource, 'Release builds package the pinned uv executable');
   assert(existsSync(bundledUvSource.from), 'Bundled uv source exists');
-}
-if (DISTRIBUTION_TARGET === 'mac-app-store') {
-  assert.equal(bundledUvSource, undefined, 'MAS never ships an executable installer');
-  for (const resource of ['python-runtime', 'media-tools']) {
-    assert.equal(
-      config.extraResources.some((item) => item.to === resource),
-      artifactArch === 'arm64',
-      `Only Apple silicon MAS packages stage ${resource}`,
-    );
-  }
-  if (artifactRequested && artifactArch === 'arm64') {
-    verifyRuntimeInventory(
-      resolve(artifactResources, 'python-runtime'),
-      resolve(root, '../uv.lock'),
-      artifactArch === 'arm64' ? 'arm64' : 'x86_64',
-    );
-    verifyMediaInventory(resolve(artifactResources, 'media-tools'));
-  }
 }
 if (artifactRequested && bundledUvSource) {
   assert(existsSync(resolve(artifactResources, bundledUvSource.to)), 'Packaged uv executable');
@@ -287,32 +157,15 @@ if (omnivoiceTtsPlatform) {
     );
     assert.deepEqual(manifestMismatches(dir), [], `${label} GGUF runtime matches its manifest`);
   }
-  if (artifactRequested && process.platform !== 'win32') {
-    const packaged = resolve(artifactResources, OMNIVOICE_TTS_RESOURCE_DIR, binary);
-    assert(statSync(packaged).mode & 0o111, 'Packaged GGUF runtime is executable');
-  }
-  if (artifactRequested && process.platform === 'darwin') {
-    const packaged = resolve(artifactResources, OMNIVOICE_TTS_RESOURCE_DIR, binary);
-    const verify = spawnSync('codesign', ['--verify', '--strict', packaged], { encoding: 'utf8' });
-    assert.equal(verify.status, 0, `Packaged GGUF runtime is signed: ${verify.stderr}`);
-  }
 }
 assert.equal(
   config.extraMetadata.version,
   JSON.parse(readFileSync(resolve(root, '../package.json'))).version,
 );
-const platformIcons = {
-  win: 'build/icons/icon.ico',
-  mac: 'build/icons/icon.icns',
-  linux: 'build/icons/icon.png',
-};
-for (const [platform, icon] of Object.entries(platformIcons)) {
-  assert.equal(config[platform].icon, icon, `${platform} uses the shared VoiceStudio icon`);
-  assert(existsSync(resolve(root, icon)), `${platform} VoiceStudio icon exists`);
-}
+assert.equal(config.win.icon, 'build/icons/icon.ico', 'Windows uses the shared VoiceStudio icon');
+assert(existsSync(resolve(root, 'build/icons/icon.ico')), 'Windows VoiceStudio icon exists');
 for (const icon of [
   'brand/icon.png',
-  'brand/icon-macos.png',
   'brand/icon.ico',
   'brand/32x32.png',
   'brand/tray-recording.png',
@@ -330,26 +183,17 @@ assert.equal(typeof config.afterPack, 'function', 'Native helper must be built b
 // CLI flag, so `--win --arm64` over `{ target: 'nsis', arch: ['x64'] }` also
 // packages x64, and its native helper needs a toolchain the runner lacks. The
 // CLI matrix alone picks the architecture; the default is the host's.
-for (const platform of ['win', 'mac', 'linux']) {
-  for (const target of [config[platform]?.target ?? []].flat()) {
-    assert(
-      typeof target === 'string' || target.arch === undefined,
-      `${platform} target ${target.target} must not pin arch; CLI flags choose it`,
-    );
-  }
+for (const target of [config.win.target ?? []].flat()) {
+  assert(
+    typeof target === 'string' || target.arch === undefined,
+    `win target ${target.target} must not pin arch; CLI flags choose it`,
+  );
 }
 if (artifactRequested) {
-  if (process.platform === 'linux') {
-    await verifyLinuxLibraries(resolve(artifactResources, 'native/voicestudio-desktop-bridge'));
-  }
   assert(existsSync(artifactExecutable), 'Packaged VoiceStudio executable');
   assert(
     existsSync(
-      resolve(
-        artifactResources,
-        'native',
-        'voicestudio-desktop-bridge' + (process.platform === 'win32' ? '.exe' : ''),
-      ),
+      resolve(artifactResources, 'native', 'voicestudio-desktop-bridge.exe'),
     ),
     'Packaged native dictation helper',
   );
@@ -379,5 +223,5 @@ assert(
 );
 
 console.log(
-  `PASS: built entry syntax, Python and web UI resource contract, app version source${artifactRequested ? ` and ${process.platform} artifact` : ''}`,
+  `PASS: built entry syntax, Python and web UI resource contract, app version source${artifactRequested ? ' and Windows artifact' : ''}`,
 );

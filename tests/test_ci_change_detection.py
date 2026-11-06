@@ -228,7 +228,7 @@ def test_the_electron_jobs_are_gated_on_the_detection_and_survive_its_failure():
     electron_steps = {s["name"] for s in jobs["test-electron"]["steps"] if "name" in s}
     assert {
         "Frontend unit tests", "Electron typecheck, tests and production contract",
-        "Snap artifact repair regression",
+        "OmniVoice runtime bundle regression",
     } <= electron_steps
     smoke_steps = {s["name"] for s in jobs["electron-smokes"]["steps"] if "name" in s}
     assert {"Install Playwright chromium", "Electron renderer workflow smokes"} <= smoke_steps
