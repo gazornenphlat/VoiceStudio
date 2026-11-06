@@ -52,28 +52,13 @@ def _read_machine_id() -> bytes:
     """Best-effort cross-platform machine identifier.
 
     Per RESEARCH.md Pattern 3:
-      - macOS: parse `ioreg -rd1 -c IOPlatformExpertDevice` for IOPlatformUUID
       - Linux: read /etc/machine-id (fallback /var/lib/dbus/machine-id)
       - Windows: read HKLM\\SOFTWARE\\Microsoft\\Cryptography MachineGuid via winreg
       - Final fallback: hostname + login user (warn-logged once)
     """
     plat = sys.platform
     try:
-        if plat == "darwin":
-            out = subprocess.check_output(
-                ["ioreg", "-rd1", "-c", "IOPlatformExpertDevice"],
-                stderr=subprocess.DEVNULL,
-                timeout=5,
-            ).decode("utf-8", errors="replace")
-            for line in out.splitlines():
-                if "IOPlatformUUID" in line:
-                    # Format: `    "IOPlatformUUID" = "abc-def..."`
-                    parts = line.split("=", 1)
-                    if len(parts) == 2:
-                        uuid = parts[1].strip().strip('"').strip()
-                        if uuid:
-                            return uuid.encode("utf-8")
-        elif plat.startswith("linux"):
+        if plat.startswith("linux"):
             for path in ("/etc/machine-id", "/var/lib/dbus/machine-id"):
                 if os.path.isfile(path):
                     with open(path, "r") as f:

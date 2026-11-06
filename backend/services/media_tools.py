@@ -84,8 +84,6 @@ _FFBIN_TREE = "v8.0"
 
 #: platform key → (sha256, size in bytes) of the zip at the pinned commit.
 _FFBIN_SHA256 = {
-    "darwin": ("70fd5b21cb37b6ea97c8b584cf76b3cc6a90179831c9c269811b9716c28605fb", 53079896),
-    "darwin_arm64": ("b2da44a8169c4d09a97db996250690c3346f72e4795521d23d3dbb1e72421207", 41925556),
     "linux": ("ca75b05e887c7a97676632f673031875847be83daa9794298fed9cef8cac14ad", 142008975),
     "linux_arm64": ("e03efe471c03b999f10988d5db62ae3bd94837463291b3c7755528b100e97d6f", 131816005),
     "win32": ("92662c2241e93fe71b3f3a01e94a0b0dc8cfad726019f96b83bc109ce44c5d0b", 72065209),
@@ -133,8 +131,6 @@ def _platform_key() -> str:
     is_arm = _p.machine().lower() in ("arm64", "aarch64")
     if sys.platform == "win32":
         return "win32"
-    if sys.platform == "darwin":
-        return "darwin_arm64" if is_arm else "darwin"
     if sys.platform.startswith("linux"):
         return "linux_arm64" if is_arm else "linux"
     return sys.platform

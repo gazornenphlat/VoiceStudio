@@ -29,15 +29,13 @@ CHOICE_KEYS = ("settings", "shortcuts", "favorites")
 
 def _platform() -> str:
     system = platform.system().lower()
-    return {"darwin": "macos", "windows": "windows"}.get(system, "linux")
+    return {"windows": "windows"}.get(system, "linux")
 
 
 def _os_version() -> str:
-    """Short OS label shown in the Devices list: "macOS 15.1", "Windows 10.0.22631", "Linux 6.12"."""
+    """Short OS label shown in the Devices list: "Windows 10.0.22631", "Linux 6.12"."""
     system = platform.system()
-    if system == "Darwin":
-        label = f"macOS {platform.mac_ver()[0]}".strip()
-    elif system == "Windows":
+    if system == "Windows":
         label = f"Windows {platform.version()}".strip()
     else:
         label = f"{system or 'Linux'} {platform.release().split('-')[0]}".strip()
