@@ -13,7 +13,7 @@ const state = vi.hoisted(() => ({
 vi.mock('./distribution', () => ({
   runtimeSetupSupported: () => !state.bundledOnly,
   currentDistributionProfile: () => ({
-    fileAccess: state.bundledOnly ? 'sandbox-scoped' : 'user-selected',
+    fileAccess: state.bundledOnly ? 'confined' : 'user-selected',
   }),
 }));
 vi.mock('./bundled-runtime', () => ({

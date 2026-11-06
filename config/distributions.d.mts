@@ -2,7 +2,7 @@ export type DistributionTarget = "direct" | "microsoft-store";
 
 export type ApplicationUpdateOwner = "application" | "store";
 export type RuntimeCodePolicy = "user-initiated-download" | "bundled-only";
-export type FileAccessPolicy = "user-selected" | "confined" | "sandbox-scoped";
+export type FileAccessPolicy = "user-selected" | "confined";
 export type SigningPolicy = "platform" | "authenticode" | "store-assertion" | "apple-distribution";
 
 export interface DistributionProfile {

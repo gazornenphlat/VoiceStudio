@@ -3,7 +3,6 @@ import { createHash, randomUUID } from 'node:crypto';
 import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join } from 'node:path';
 
-import { currentDistributionProfile } from './distribution';
 
 interface DirectoryGrant {
   id: string;
@@ -121,15 +120,9 @@ export function retainSecurityScopedDirectory(picked: Electron.OpenDialogReturnV
   picked.filePaths.forEach((path, index) => directories!.retain(path, picked.bookmarks?.[index]));
 }
 
-export function securityScopedFileAccessSupported(
-  packaged = app.isPackaged,
-  platform = process.platform,
-): boolean {
-  return (
-    packaged &&
-    platform === 'darwin' &&
-    currentDistributionProfile().fileAccess === 'sandbox-scoped'
-  );
+// Windows builds never use sandbox-scoped (macOS App Sandbox) file access.
+export function securityScopedFileAccessSupported(): boolean {
+  return false;
 }
 
 export function securityScopedDialogOptions<T extends object>(
