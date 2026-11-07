@@ -1529,23 +1529,6 @@ async def system_diagnose(
     return await asyncio.to_thread(run_diagnostics, network, deep)
 
 
-# ── Phase 1 Wave 3 — macOS Gatekeeper quarantine probe (#54) ────────────
-
-
-@router.get("/system/quarantine-status")
-def quarantine_status():
-    """Report whether the running .app bundle has the macOS quarantine xattr.
-
-    On non-macOS platforms or dev runs (not inside a .app bundle), always
-    returns ``{"quarantined": false, "error_class": null}``. The React
-    ErrorBoundary polls this endpoint on first load and renders the docs
-    deeplink when ``error_class`` is set (Plan 01-02 wired the deeplink).
-    """
-    from core import gatekeeper_detect
-
-    return gatekeeper_detect.quarantine_status()
-
-
 # ── Network sharing (loopback-only control surface) ──────────────────────────
 
 @router.get("/system/network/state")

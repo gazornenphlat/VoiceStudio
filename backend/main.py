@@ -1071,27 +1071,6 @@ async def _phase_b(app: FastAPI) -> None:
     record_startup_voices_root()
 
     _startup_progress.begin_step("services_start")
-    # Phase 1 Wave 3 — macOS Gatekeeper quarantine probe (#54). Informational
-    # only; we never auto-run `xattr -cr`.
-    try:
-        from core import event_bus, gatekeeper_detect
-        status = gatekeeper_detect.quarantine_status()
-        if status.get("quarantined"):
-            logger.warning(
-                "Gatekeeper quarantine detected on app bundle %s — "
-                "users must run `xattr -cr <bundle>` once. error_class=%s",
-                status.get("bundle_path"),
-                status.get("error_class"),
-            )
-            event_bus.emit(
-                "system_error",
-                {
-                    "error_class": status.get("error_class"),
-                    "bundle_path": status.get("bundle_path"),
-                },
-            )
-    except Exception:
-        logger.exception("Gatekeeper probe failed (non-fatal).")
     # #1174: arm model loads for THIS run — an in-process relaunch may carry a
     # stale shutting-down flag from a previous lifespan.
     model_loads_reset_shutdown()
