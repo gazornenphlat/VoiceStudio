@@ -18620,23 +18620,6 @@
     "summary": "System Notifications"
    }
   },
-  "/system/quarantine-status": {
-   "get": {
-    "description": "Report whether the running .app bundle has the macOS quarantine xattr.\n\nOn non-macOS platforms or dev runs (not inside a .app bundle), always\nreturns ``{\"quarantined\": false, \"error_class\": null}``. The React\nErrorBoundary polls this endpoint on first load and renders the docs\ndeeplink when ``error_class`` is set (Plan 01-02 wired the deeplink).",
-    "operationId": "quarantine_status_system_quarantine_status_get",
-    "responses": {
-     "200": {
-      "content": {
-       "application/json": {
-        "schema": {}
-       }
-      },
-      "description": "Successful Response"
-     }
-    },
-    "summary": "Quarantine Status"
-   }
-  },
   "/system/set-env": {
    "post": {
     "description": "Set an environment variable for the running backend.\n\nKeys in ``PERSISTENT_KEYS`` are saved in prefs.json and restored during\nstartup in main.py. HF_TOKEN is saved by\n``token_resolver.persist_hub_token()`` and cleared through the shared\ntoken-file helper. Other accepted keys affect only this process.\n\nThe loopback-origin gate that previously lived inline here is now applied at the router level via `dependencies=[Depends(require_admin)]` on `router` \u2014 see the top of this file. Every route on this router is gated, including this one. The 403 body and behavior are unchanged.",

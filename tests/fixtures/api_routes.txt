@@ -178,7 +178,6 @@ GET /system/logs/tauri
 GET /system/network/check
 GET /system/network/state
 GET /system/notifications
-GET /system/quarantine-status
 GET /system/tailscale/status
 GET /tasks/stream/{task_id}
 GET /tools/effects
