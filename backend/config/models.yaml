@@ -89,26 +89,8 @@ models:
     role: ASR
     engines: [faster-whisper, faster-whisper-isolated, whisperx]
     size_gb: 2.9
-    curated_on: [cuda, rocm, cpu, darwin-x86_64]
+    curated_on: [cuda, rocm, cpu]
     note: "The universal pick: best word-timestamp robustness for dubbing, runs on CUDA and CPU everywhere. On Apple Silicon prefer the MLX build."
-
-  - repo_id: "mlx-community/whisper-large-v3-mlx"
-    label: "Whisper large-v3 (MLX — best for Apple Silicon)"
-    role: ASR
-    engines: [mlx-whisper]
-    size_gb: 3.0
-    platforms: [darwin-arm64]
-    curated_on: [darwin-arm64]
-    note: "Metal-accelerated on Apple Silicon — the curated dubbing/transcription pick on this hardware."
-
-  - repo_id: "mlx-community/whisper-large-v3-turbo"
-    label: "Whisper large-v3 Turbo (MLX — fastest dictation)"
-    role: ASR
-    engines: [mlx-whisper]
-    size_gb: 1.6
-    platforms: [darwin-arm64]
-    curated_on: [darwin-arm64]
-    note: "5× faster than large-v3, 0.8B params. Best for live dictation on Apple Silicon."
 
   - repo_id: "openai/whisper-large-v3"
     label: "Whisper large-v3 (PyTorch — GPU path for AMD/ROCm)"
@@ -118,13 +100,6 @@ models:
     platforms: [cuda, rocm]
     curated_on: [rocm]
     note: "CTranslate2 has no ROCm backend, so on AMD GPUs this PyTorch build is the accelerated route."
-
-  - repo_id: "mlx-community/whisper-tiny-mlx"
-    label: "Whisper tiny (MLX ASR — fast fallback)"
-    role: ASR
-    engines: [mlx-whisper]
-    size_gb: 0.08
-    platforms: [darwin-arm64]
 
   - repo_id: "deepdml/faster-whisper-large-v3-turbo-ct2"
     label: "Whisper large-v3 Turbo (5× faster, 0.8B)"
@@ -180,15 +155,6 @@ models:
     size_gb: 1.2
     platforms: [cuda]
     note: "English-optimized with punctuation/capitalization. Requires nemo_toolkit[asr]."
-
-  - repo_id: "mlx-community/parakeet-tdt-0.6b-v3"
-    label: "Parakeet TDT 0.6B v3 (MLX — Apple Silicon, 25 EU langs)"
-    role: ASR
-    engines: [parakeet-mlx]
-    size_gb: 1.2
-    platforms: [darwin-arm64]
-    curated_on: [darwin-arm64]
-    note: "The Parakeet tier for Apple Silicon: 25 European languages, TDT word timestamps, ~2 GB unified memory, dictation-grade speed on the GPU via parakeet-mlx. Installing it makes dictation/capture prefer it automatically when your system language is one of the 25 covered (European) languages — other languages (CJK, Arabic, …) keep the multilingual Whisper engine so dictation coverage never regresses."
 
   - repo_id: "UsefulSensors/moonshine-base"
     label: "Moonshine base (edge-optimized, 61M, ONNX)"
@@ -377,76 +343,3 @@ models:
     curated_on: [cuda]
 
   # ── mlx-audio engines (Apple Silicon only) ────────────────────────────
-
-  - repo_id: "mlx-community/Kokoro-82M-bf16"
-    label: "Kokoro 82M (8 langs, small, mlx-audio default)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 0.15
-    curated_on: [darwin-arm64]
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/csm-1b-8bit"
-    label: "CSM 1B (voice cloning, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 1.1
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-4bit"
-    label: "Qwen3-TTS 1.7B 4bit (voice design, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 1.4
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/Dia-1.6B"
-    label: "Dia 1.6B (expressive, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 3.2
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/Llama-OuteTTS-1.0-1B-4bit"
-    label: "Llama-OuteTTS 1.0 1B 4bit (voice clone, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 0.8
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/whisper-large-v3-turbo-asr-fp16"
-    label: "Whisper large-v3 Turbo (OuteTTS voice-clone reader, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 1.6
-    note: "Apple Silicon only — OuteTTS reads the reference clip with it."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/VoxCPM2-8bit"
-    label: "VoxCPM2 8-bit (30 languages, 48 kHz, mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 3.3
-    note: "Apple Silicon only — via mlx-audio backend. Speaks the text as written; voice cloning and design stay on the full VoxCPM2 engine."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/Chatterbox-TTS-4bit"
-    label: "Chatterbox TTS 4bit (mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 0.5
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]
-
-  - repo_id: "mlx-community/MeloTTS-English-v3-MLX"
-    label: "MeloTTS English v3 (mlx-audio)"
-    role: TTS
-    engines: [mlx-audio]
-    size_gb: 0.2
-    note: "Apple Silicon only — via mlx-audio backend."
-    platforms: [darwin-arm64]

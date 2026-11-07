@@ -371,25 +371,6 @@ def test_offline_auto_detect_never_picks_parakeet_mlx(monkeypatch):
     assert ab._auto_detect() == "mlx-whisper"
 
 
-def test_pinned_parakeet_mlx_is_preflighted_not_silently_downloaded(monkeypatch):
-    """A user who PINS parakeet-mlx as the offline engine with no weights on
-    disk gets the typed asr_model_missing payload (download CTA), never a
-    silent first-load download."""
-    from api.routers.setup import models as setup_models
-    monkeypatch.setattr(ab, "active_backend_id", lambda: "parakeet-mlx")
-    monkeypatch.setattr(setup_models, "is_cached", lambda repo_id: False)
-    monkeypatch.setattr(setup_models, "cache_is_complete", lambda meta: True)
-    # The catalog entry is darwin-arm64-only; make the host check deterministic
-    # so the recommended-pick assertion holds on Linux CI too.
-    monkeypatch.setattr(setup_models, "_model_supported", lambda m: True)
-    payload = ab.asr_model_missing_error()
-    assert payload is not None
-    assert payload["error"] == "asr_model_missing"
-    assert payload["missing_repo_id"] == ab._PARAKEET_MLX_DEFAULT
-    # The catalog carries the model, so the CTA recommends exactly it.
-    assert payload["recommended"]["repo_id"] == ab._PARAKEET_MLX_DEFAULT
-
-
 def test_parakeet_mlx_token_to_word_mapping():
     """Subword tokens (leading space = word start) merge into whisper-shaped
     word dicts with the span's start/end."""

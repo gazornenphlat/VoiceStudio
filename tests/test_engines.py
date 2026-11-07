@@ -850,14 +850,6 @@ def test_outetts_missing_whisper_fails_fast_without_downloading(monkeypatch, tmp
     assert [p.name for p in tmp_path.iterdir()] == ["ref.wav"]
 
 
-def test_outetts_whisper_is_in_the_catalogue():
-    import yaml
-
-    with open(os.path.join("backend", "config", "models.yaml")) as f:
-        repos = {m["repo_id"] for m in yaml.safe_load(f)["models"]}
-    assert tts_backend._OUTETTS_WHISPER_REPO in repos
-
-
 def test_mlx_audio_eos_ids_accept_single_int_from_transformers_5(monkeypatch):
     import sys
 

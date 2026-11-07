@@ -282,10 +282,6 @@ def metal_host(monkeypatch):
     return models
 
 
-def test_metal_whisper_is_the_installed_model_the_mlx_backend_loads(metal_host):
-    assert _installed_mlx_whisper_model()["repo_id"] == "mlx-community/whisper-large-v3-mlx"
-
-
 def test_metal_whisper_needs_a_metal_host(metal_host, monkeypatch):
     from services import asr_backend
 

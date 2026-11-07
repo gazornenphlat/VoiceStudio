@@ -203,7 +203,7 @@
       "engines": [
         "mlx-whisper"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "mit",
@@ -237,7 +237,7 @@
       "engines": [
         "mlx-whisper"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "NOASSERTION",
@@ -271,7 +271,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "NOASSERTION",
@@ -339,7 +339,7 @@
       "engines": [
         "mlx-whisper"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "NOASSERTION",
@@ -621,7 +621,7 @@
       "engines": [
         "parakeet-mlx"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "cc-by-4.0",
@@ -1260,7 +1260,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "apache-2.0",
@@ -1294,7 +1294,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "apache-2.0",
@@ -1328,7 +1328,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "apache-2.0",
@@ -1362,7 +1362,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "apache-2.0",
@@ -1396,7 +1396,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "apache-2.0",
@@ -1430,7 +1430,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "CC-BY-NC-SA-4.0 AND Llama-3.2",
@@ -1464,7 +1464,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "NOASSERTION",
@@ -1498,7 +1498,7 @@
       "engines": [
         "mlx-audio"
       ],
-      "catalogued": true,
+      "catalogued": false,
       "registry_version": "2026-10-09.draft1",
       "registry_digest": "ca729ed45035d3fc8ace59240fd3ae480d5146753fd8fd2e6b4d6c79e2c7f197",
       "license": "mit",

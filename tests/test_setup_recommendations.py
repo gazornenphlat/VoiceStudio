@@ -37,18 +37,6 @@ def test_required_models_is_tts_only():
     assert [rid for rid, _ in REQUIRED_MODELS] == ["k2-fsa/OmniVoice"]
 
 
-def test_mac_arm_curates_mlx_whisper_not_ct2(client):
-    ids = _ids(_recommend(client, ["darwin", "darwin-arm64"]))
-    assert "k2-fsa/OmniVoice" in ids
-    assert "mlx-community/whisper-large-v3-mlx" in ids
-    assert "mlx-community/whisper-large-v3-turbo" in ids
-    # The CT2 build stays available in the full catalog but is not the
-    # Apple Silicon curated pick — MLX is Metal-accelerated, CT2 is CPU-only there.
-    assert "Systran/faster-whisper-large-v3" not in ids
-    assert "csukuangfj/sherpa-onnx-whisper-tiny" in ids
-    assert "csukuangfj/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8" not in ids
-
-
 def test_cuda_curates_ct2_whisper_and_turbo(client):
     ids = _ids(_recommend(client, ["linux", "linux-x86_64", "cuda"]))
     assert "k2-fsa/OmniVoice" in ids
