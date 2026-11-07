@@ -479,7 +479,6 @@ def gguf(monkeypatch, tmp_path):
     fake_bin.chmod(0o755)
     monkeypatch.setattr(gguf_backend, "_REPO_ROOT", root)
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: fake_bin)
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
     # Readiness covers the weights too, so the fixture installs the pinned
     # pair in a throwaway cache: a test that expects "ready" has to supply
     # the weights it claims to have. The manifest checks below still decide

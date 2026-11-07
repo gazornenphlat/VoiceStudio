@@ -110,7 +110,6 @@ def test_speech_gguf_placeholder_rejected_at_engine_selection(client, monkeypatc
 
     monkeypatch.setitem(module_globals, "_binary_path", lambda slug=None: placeholder)
     monkeypatch.setitem(module_globals, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setitem(module_globals, "_is_macos_quarantined", lambda p: False)
 
     res = client.post("/v1/audio/speech", json={
         "model": "omnivoice-gguf", "input": "hello",

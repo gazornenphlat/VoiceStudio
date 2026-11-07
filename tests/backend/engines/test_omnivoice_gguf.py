@@ -121,9 +121,6 @@ def test_is_available_when_sha_mismatch(monkeypatch, tmp_path):
         "_load_checksum_manifest",
         lambda: {"omnivoice-tts-linux-x86_64": "0" * 64},
     )
-    # macOS quarantine detection is no-op on non-darwin; on darwin we
-    # also need to short-circuit it for this test.
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     ok, reason = cls.is_available()
     assert ok is False
@@ -172,7 +169,6 @@ def test_is_available_passes_when_manifest_absent(monkeypatch, tmp_path, cached_
     fake_bin.write_bytes(b"\x7fELF-real-enough")
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: fake_bin)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     ok, reason = cls.is_available()
     assert ok is True, reason
@@ -188,7 +184,6 @@ def test_probe_load_timeout(monkeypatch, tmp_path):
     fake_bin.write_bytes(b"\x7fELF-real-enough")
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: fake_bin)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     def _hang(*a, **kw):
         raise subprocess.TimeoutExpired(cmd=a[0] if a else "x", timeout=0.1)
@@ -532,7 +527,6 @@ def test_is_available_rejects_zero_byte_placeholder(monkeypatch, tmp_path):
     placeholder.chmod(0o755)  # mode of the shipped placeholder in the report
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: placeholder)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     ok, reason = cls.is_available()
     assert ok is False
@@ -552,7 +546,6 @@ def test_is_available_rejects_garbage_binary(monkeypatch, tmp_path):
     fake_bin.write_bytes(b"<html>503 Service Unavailable</html>")
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: fake_bin)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     ok, reason = cls.is_available()
     assert ok is False
@@ -580,7 +573,6 @@ def test_is_available_does_not_chmod_placeholder(monkeypatch, tmp_path):
     placeholder.chmod(0o644)
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: placeholder)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     ok, _reason = cls.is_available()
     assert ok is False
@@ -647,6 +639,5 @@ def test_select_default_falls_back_on_zero_byte_placeholder(monkeypatch, tmp_pat
     placeholder.chmod(0o755)
     monkeypatch.setattr(gguf_backend, "_binary_path", lambda slug=None: placeholder)
     monkeypatch.setattr(gguf_backend, "_load_checksum_manifest", lambda: {})
-    monkeypatch.setattr(gguf_backend, "_is_macos_quarantined", lambda p: False)
 
     assert gguf_backend.select_default_engine() == "omnivoice"

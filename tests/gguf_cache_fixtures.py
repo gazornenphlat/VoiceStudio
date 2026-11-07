@@ -85,7 +85,6 @@ def gguf_binary(monkeypatch, tmp_path, gguf_engine):
     fake.write_bytes(b"\x7fELF-real-enough")
     monkeypatch.setattr(gguf_engine, "_binary_path", lambda slug=None: fake)
     monkeypatch.setattr(gguf_engine, "_load_checksum_manifest", dict)
-    monkeypatch.setattr(gguf_engine, "_is_macos_quarantined", lambda p: False)
     return fake
 
 

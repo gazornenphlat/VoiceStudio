@@ -467,35 +467,6 @@ def _load_checksum_manifest() -> dict[str, str]:
     return out
 
 
-def _is_macos_quarantined(p: Path) -> bool:
-    """Return True if the macOS quarantine xattr is set on ``p``.
-
-    No-op on non-Darwin platforms (returns False). Uses ``/usr/bin/xattr``
-    via subprocess because the Python ``os.getxattr`` API is not present
-    on macOS (it's Linux-only). Catches errors silently — if we can't tell,
-    we assume the binary is usable rather than blocking on a false-positive
-    quarantine flag.
-    """
-    if sys.platform != "darwin":
-        return False
-    try:
-        proc = subprocess.run(
-            ["/usr/bin/xattr", "-p", "com.apple.quarantine", str(p)],
-            capture_output=True,
-            text=True,
-            errors="replace",
-            timeout=2,
-        )
-        # Exit code 0 means the xattr exists; non-zero usually means
-        # "no such xattr" (the binary is fine).
-        return proc.returncode == 0 and bool(proc.stdout.strip())
-    except Exception:
-        return False
-
-
-# ── TTSBackend subclass ─────────────────────────────────────────────────────
-
-
 def _import_tts_backend():
     """Lazy-import ``services.tts_backend.TTSBackend``.
 
@@ -644,15 +615,6 @@ def _make_backend_class():
                             f"VoiceStudio or rebuild with "
                             f"`scripts/build-omnivoice-tts.sh`."
                         )
-                # macOS Gatekeeper quarantine detection (Pitfall 3).
-                if _is_macos_quarantined(bin_path):
-                    return False, (
-                        f"GGUF binary {bin_path.name} is quarantined by "
-                        f"macOS Gatekeeper. Run:\n\n"
-                        f"    xattr -cr '/Applications/VoiceStudio.app'\n\n"
-                        f"This clears the quarantine on the .app and its "
-                        f"bundled binaries. See docs/install/troubleshooting.md#gatekeeper_quarantine."
-                    )
                 # Execute bit (issue #437). A `git clone` / zip extract on POSIX
                 # can drop +x, which only surfaces at spawn time as
                 # "[Errno 13] Permission denied" — and the generic synth handler
@@ -1111,7 +1073,7 @@ def select_default_engine() -> str:
     """Return the engine id for the default cloning engine on this host.
 
     Returns ``"omnivoice-gguf"`` when:
-        * the binary is present, checksum matches, not Gatekeeper-quarantined
+        * the binary is present, checksum matches, 
         * ``probe_load`` succeeds (binary actually executes)
 
     Returns ``"omnivoice"`` (the existing in-process default) on any
